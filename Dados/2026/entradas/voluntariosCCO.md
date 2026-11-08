@@ -22,7 +22,17 @@ Relação oficial de atletas convocados formalmente por seus clubes para atuarem
 | 2ª | 786 | Wladimir Sant'Anna |
 | 3ª | 17369 | Wesley Nunes da Silva |
 
+## Árbitros Convocados pela FECORI
+
+| Etapa | CBO | Árbitro | QA/FECORI |
+| :---: | :---: | :--- | :---: |
+| 1ª | 4316 | Jorge Saraiva de Amorim | 65 |
+| 2ª | 10641 | Antonio Marden Oliveira de Sousa | 80 |
+| 3ª | 3607 | Paulo Antônio da Costa Mazulo Júnior | 54 |
+| 4ª | 16127 | Ronald Luis Rodrigues do Nascimento | 74 |
+
 ## Penalidades do Art. 23, Parágrafo Único (Etapa Não Passível de Descarte)
 
 | Etapa | CBO | Atleta | Motivo |
 | :---: | :---: | :--- | :--- |
+

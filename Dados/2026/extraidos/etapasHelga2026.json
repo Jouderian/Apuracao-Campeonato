@@ -1738,6 +1738,17 @@
       "clubeFiliadoCBO": true,
       "categoriaPadrao": "D65N"
     },
+    "16127": {
+      "cbo": 16127,
+      "nome": "Ronald Luis Rodrigues do Nascimento",
+      "sexo": 1,
+      "anoNascimento": 1984,
+      "clubeId": 325,
+      "clubeSigla": "CODL",
+      "clubeNome": "Clube de Orientação Desporto e Lazer",
+      "clubeFiliadoCBO": true,
+      "categoriaPadrao": "H35B"
+    },
     "786": {
       "cbo": 786,
       "nome": "Wladimir Chagas de Sant'anna",
