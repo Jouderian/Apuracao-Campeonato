@@ -391,7 +391,7 @@ TOPO_CABECALHO = 45.00
 ALTURA_CABECALHO = 15.96
 ALTURA_LINHA = 16.32
 LINHAS_POR_PAGINA = 45
-LIMITE_LINHAS_ULTIMA_PAGINA = 36   # acima disso, o bloco de totais e observação vai para uma página nova
+LIMITE_LINHAS_ULTIMA_PAGINA = 30   # acima disso, o bloco de totais e observação vai para uma página nova
 Y_BASELINE_TITULO = 28.5
 Y_RODAPE = 823.5
 
@@ -416,6 +416,8 @@ COR_ROSA_TEXTO = (0.612, 0.0, 0.024)    # #9C0006
 COR_VERMELHO = (1.0, 0.0, 0.0)          # #FF0000
 COR_PRETO = (0.0, 0.0, 0.0)
 COR_BRANCO = (1.0, 1.0, 1.0)
+COR_DESCARTE_TEXTO = (0.45, 0.45, 0.45) # #737373 cinza atenuado
+COR_DESCARTE_LINHA = (0.45, 0.45, 0.45) # #737373 traço tachado (strikethrough)
 
 
 def _contarInscricoesPorEtapa(linhas: list[ClassificacaoAtletaCategoria]) -> dict[int, int]:
@@ -437,8 +439,8 @@ def _paginarLinhasParcial(linhas: list[ClassificacaoAtletaCategoria]) -> list[li
 
 def _montarTextoObservacao(
     resultadoApuracao: dict[str, Any],
-) -> tuple[list[tuple[str, str]], list[tuple[str, str]]]:
-    """Monta as duas primeiras linhas do bloco OBSERVAÇÃO como trechos (texto, estilo).
+) -> list[list[list[tuple[str, str]]]]:
+    """Monta os itens em bullet point do bloco OBSERVAÇÃO.
 
     Estilos: 'r' regular, 'b' negrito, 'i' itálico.
     """
@@ -447,38 +449,84 @@ def _montarTextoObservacao(
     pendentesVol = [et for et in ETAPAS_CAMPEONATO if et not in etapasComVol]
     pendentesArb = [et for et in ETAPAS_CAMPEONATO if et not in etapasComArb]
 
+    linhasVol: list[list[tuple[str, str]]]
     if not etapasComVol and not etapasComArb:
-        return (
-            [("OBSERVAÇÃO:", "b"), (" Este resultado não é oficial e não inclui os ", "r"), ("voluntários", "i")],
+        linhasVol = [
+            [("Este resultado não é oficial e não inclui os ", "r"), ("voluntários", "i")],
             [
                 ("que participaram das etapas nem os ", "r"), ("árbitros", "i"),
                 (" convocados pela ", "r"), ("FECORI", "b"), (".", "r"),
             ],
-        )
-    if pendentesVol:
+        ]
+    elif pendentesVol:
         etStr = ", ".join(f"{e}ª" for e in pendentesVol)
-        inicioL1 = [("OBSERVAÇÃO:", "b"), (" Este resultado não é oficial e ainda não inclui os ", "r"), ("voluntários", "i")]
+        inicioL1 = [("Este resultado não é oficial e ainda não inclui os ", "r"), ("voluntários", "i")]
         if not pendentesArb:
             trecho = f"da {etStr} etapa (os " if len(pendentesVol) == 1 else f"das etapas ({etStr}) (os "
-            return (
+            linhasVol = [
                 inicioL1,
                 [
                     (trecho, "r"), ("árbitros", "i"), (" convocados pela ", "r"),
                     ("FECORI", "b"), (" já estão incluídos).", "r"),
                 ],
-            )
-        trecho = f"da {etStr} etapa nem eventuais " if len(pendentesVol) == 1 else f"das etapas ({etStr}) nem eventuais "
-        return (
-            inicioL1,
-            [(trecho, "r"), ("árbitros", "i"), (" pendentes na ", "r"), ("FECORI", "b"), (".", "r")],
-        )
-    return (
-        [("OBSERVAÇÃO:", "b"), (" Este resultado não é oficial e contempla os ", "r"), ("voluntários", "i")],
-        [
-            ("informados pelas etapas e os ", "r"), ("árbitros", "i"),
-            (" convocados pela ", "r"), ("FECORI", "b"), (".", "r"),
-        ],
+            ]
+        else:
+            trecho = f"da {etStr} etapa nem eventuais " if len(pendentesVol) == 1 else f"das etapas ({etStr}) nem eventuais "
+            linhasVol = [
+                inicioL1,
+                [(trecho, "r"), ("árbitros", "i"), (" pendentes na ", "r"), ("FECORI", "b"), (".", "r")],
+            ]
+    else:
+        linhasVol = [
+            [("Este resultado não é oficial e contempla os ", "r"), ("voluntários", "i")],
+            [
+                ("informados pelas etapas e os ", "r"), ("árbitros", "i"),
+                (" convocados pela ", "r"), ("FECORI", "b"), (".", "r"),
+            ],
+        ]
+
+    itensBullet: list[list[list[tuple[str, str]]]] = [linhasVol]
+    houveDescarte = any(
+        f.etapaDescartada is not None
+        for cat in resultadoApuracao.get("fichasPorCategoria", {}).values()
+        for f in cat
     )
+    if houveDescarte:
+        itensBullet.append([
+            [
+                (
+                    "O valor total já considera o descarte da pontuação mais baixa, conforme estabelecido",
+                    "r",
+                ),
+            ],
+            [
+                (
+                    "no Art. 34 do Regulamento. A etapa descartada encontra-se destacada em cinza",
+                    "r",
+                ),
+            ],
+            [
+                (
+                    "e com o texto riscado.",
+                    "r",
+                ),
+            ],
+        ])
+
+    itensBullet.append([
+        [
+            ("Caso identifique alguma inconformidade, envie um ", "r"),
+            ("eMail", "i"),
+            (" para", "r"),
+        ],
+        [
+            ("jouderian@gmail.com", "m"),
+            (", para que possamos analisá-la e implementar", "r"),
+        ],
+        [("melhorias nas próximas edições.", "r")],
+    ])
+
+    return itensBullet
 
 
 def _desenharTituloParcial(
@@ -553,7 +601,18 @@ def _desenharLinhaAtletaParcial(
         des = f.etapas[et]
         if des.inscrito or des.atuouComoVoluntario:
             texto = formatarPontoTabelaParcial(des.pontosFinais)
-            _inserirTextoAlinhado(page, x0, x1, y, texto, fRegular, 10.0, "center", COR_PRETO)
+            if des.descartada:
+                _inserirTextoAlinhado(page, x0, x1, y, texto, fRegular, 10.0, "center", COR_DESCARTE_TEXTO)
+                larguraTxt = fRegular[2].text_length(texto, fontsize=10.0)
+                xInicio = x0 + ((x1 - x0) - larguraTxt) / 2.0
+                page.draw_line(
+                    fitz.Point(xInicio - 1.5, y - 3.2),
+                    fitz.Point(xInicio + larguraTxt + 1.5, y - 3.2),
+                    color=COR_DESCARTE_LINHA,
+                    width=1.0,
+                )
+            else:
+                _inserirTextoAlinhado(page, x0, x1, y, texto, fRegular, 10.0, "center", COR_PRETO)
 
     texto = formatarPontoTabelaParcial(f.pontuacaoTotal)
     _inserirTextoAlinhado(page, X_TOTAL_ESQ, X_DIR, y, texto, fBold, 10.2, "center", COR_BRANCO)
@@ -570,8 +629,8 @@ def _desenharTotaisEObservacao(
     """Linha de totais de inscrições por etapa e bloco OBSERVAÇÃO em vermelho (última página)."""
     import pymupdf as fitz
 
-    fBold = fontes["bold"]
-    estilos = {"r": fontes["regular"], "b": fBold, "i": fontes["italic"], "m": fontes["mono"]}
+    fRegular, fBold = fontes["regular"], fontes["bold"]
+    estilos = {"r": fRegular, "b": fBold, "i": fontes["italic"], "m": fontes["mono"]}
 
     page.draw_line(fitz.Point(X_ESQ, yLinha), fitz.Point(X_DIR, yLinha), color=COR_PRETO, width=0.8)
     yBaseTot = yLinha + 11.8
@@ -583,30 +642,22 @@ def _desenharTotaisEObservacao(
     page.draw_line(fitz.Point(X_ESQ, yFimTot), fitz.Point(X_DIR, yFimTot), color=COR_PRETO, width=0.8)
     page.draw_line(fitz.Point(X_ESQ, yFimTot + 2.0), fitz.Point(X_DIR, yFimTot + 2.0), color=COR_PRETO, width=0.8)
 
-    linhasL1, linhasL2 = _montarTextoObservacao(resultadoApuracao)
-    yObs = yFimTot + 44.0
-    yObs2 = yObs + 19.0
-    yObs3 = yObs2 + 38.0
-    yObs4 = yObs3 + 19.0
-    yObs5 = yObs4 + 19.0
-    blocos = [
-        (yObs, linhasL1),
-        (yObs2, linhasL2),
-        (yObs3, [
-            ("Caso identifique alguma inconformidade, envie um ", "r"),
-            ("eMail", "i"),
-            (" para", "r"),
-        ]),
-        (yObs4, [
-            ("jouderian@gmail.com", "m"),
-            (", para que possamos analisá-la e implementar", "r"),
-        ]),
-        (yObs5, [("melhorias nas próximas edições.", "r")]),
-    ]
-    for yBase, trechos in blocos:
-        xCur = 18.0
-        for txt, est in trechos:
-            xCur = _inserirTextoAlinhado(page, xCur, X_DIR, yBase, txt, estilos[est], 14.5, "left", COR_VERMELHO)
+    itensBullet = _montarTextoObservacao(resultadoApuracao)
+    yAtual = yFimTot + 28.0
+
+    _inserirTextoAlinhado(page, 18.0, X_DIR, yAtual, "OBSERVAÇÕES:", fBold, 14.5, "left", COR_VERMELHO)
+    yAtual += 20.0
+
+    for idxItem, linhasItem in enumerate(itensBullet):
+        for idxLinha, linha in enumerate(linhasItem):
+            if idxLinha == 0:
+                _inserirTextoAlinhado(page, 18.0, X_DIR, yAtual, "•", fRegular, 14.5, "left", COR_VERMELHO)
+            xCur = 30.0
+            for txt, est in linha:
+                xCur = _inserirTextoAlinhado(page, xCur, X_DIR, yAtual, txt, estilos[est], 14.5, "left", COR_VERMELHO)
+            yAtual += 18.0
+        if idxItem < len(itensBullet) - 1:
+            yAtual += 10.0
 
 
 def gerarPdfResultadoParcialAtletas(

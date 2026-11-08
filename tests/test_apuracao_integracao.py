@@ -159,6 +159,43 @@ class TestPdfParcial(unittest.TestCase):
         pagina = self._gerar("comLogo.pdf", self.caminhoLogo)
         self.assertEqual(len(pagina.get_images()), 1)
 
+    def test_descarte_destacado_com_traco_tachado_e_avisos_no_pdf(self):
+        caminho = os.path.join(self.pasta.name, "descarte.pdf")
+        gerarPdfResultadoParcialAtletas(2026, "XX", self.resultado, [caminho], caminhoLogo=None)
+        import pymupdf as fitz
+
+        doc = fitz.open(caminho)
+        self.addCleanup(doc.close)
+
+        # Rodapé não deve conter o texto de descarte
+        for pag in doc:
+            textoPag = pag.get_text("text").replace("\xa0", " ")
+            self.assertNotIn("descarte da pontuação mais baixa", textoPag.split("\n")[-3:])
+
+        ultimaPagTexto = doc[-1].get_text("text").replace("\xa0", " ").replace("\u2010", "-")
+        self.assertNotIn("DESCARTE:", ultimaPagTexto)
+        self.assertIn("OBSERVAÇÕES:", ultimaPagTexto)
+        self.assertIn(
+            "• O valor total já considera o descarte da pontuação mais baixa, conforme "
+            "estabelecido no Art. 34 do Regulamento. A etapa descartada encontra-se "
+            "destacada em cinza e com o texto riscado.",
+            ultimaPagTexto.replace("\n", " "),
+        )
+        self.assertIn(
+            "• Este resultado não é oficial e ainda não inclui os voluntários",
+            ultimaPagTexto.replace("\n", " "),
+        )
+        self.assertIn(
+            "• Caso identifique alguma inconformidade, envie um eMail para",
+            ultimaPagTexto.replace("\n", " "),
+        )
+
+        desenhosDescarte = [
+            d for pag in doc for d in pag.get_drawings()
+            if d.get("color") and abs(d["color"][0] - geradorExcelPdf.COR_DESCARTE_LINHA[0]) < 0.01
+        ]
+        self.assertGreater(len(desenhosDescarte), 0)
+
     def test_planilha_excel_e_gerada_com_as_quatro_abas(self):
         caminho = os.path.join(self.pasta.name, "apuracao.xlsx")
         gerarPlanilhaExcelApuracao(2026, "XX CCO", "XX", self.resultado, caminho)
