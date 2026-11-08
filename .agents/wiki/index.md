@@ -13,6 +13,7 @@ description: Índice da base de conhecimento do projeto — decisões arquitetur
 | ADR | Assunto | Resumo |
 | :--- | :--- | :--- |
 | [ADR-001](decisions/ADR-001-arquitetura-python-e-extracao-access.md) | Arquitetura Python e Extração Higienizada do Access | Uso de Python 3.12+, separação entre leitura ODBC do Access (`.mdb`/`.accdb`) e motor de cálculo puro, com proteção LGPD e hash SHA-256 |
+| [ADR-002](decisions/ADR-002-licenciamento-polyform-noncommercial-e-relacao-com-o-regulamento.md) | Licenciamento PolyForm Noncommercial | Código sob PolyForm Noncommercial 1.0.0; regras esportivas permanecem das entidades e da CC BY 4.0 do repositório de regulamentos; licenças independentes |
 
 ## Páginas Técnicas
 

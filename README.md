@@ -32,5 +32,7 @@ python .agents/scripts/verificar-projeto.py
 
 ## Licença
 
-Distribuído sob a licença [PolyForm Noncommercial 1.0.0](LICENSE).
+O **código-fonte** é distribuído sob a licença [PolyForm Noncommercial 1.0.0](LICENSE). Você pode usar, estudar, modificar e redistribuir para qualquer finalidade não comercial, o que inclui clubes, federações sem fins lucrativos, ensino e pesquisa. O uso comercial, como vender o motor ou oferecê-lo como serviço pago, exige autorização do autor.
+
+As **regras esportivas** vêm do repositório [Regulamentos-de-Orientacao](https://github.com/Jouderian/Regulamentos-de-Orientacao), cuja organização e formatação estão sob a [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.pt_BR). O conteúdo das regras pertence à FECORI e à CBO, e as citações dele neste repositório continuam atribuídas a elas. As duas licenças são independentes, e a [ADR-002](.agents/wiki/decisions/ADR-002-licenciamento-polyform-noncommercial-e-relacao-com-o-regulamento.md) registra o motivo.
 
