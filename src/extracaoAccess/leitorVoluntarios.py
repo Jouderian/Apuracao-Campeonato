@@ -10,6 +10,7 @@ def lerVoluntariosMarkdown(textoMd: str) -> dict[str, Any]:
     Espera tabelas com colunas `| Etapa | CBO | Voluntário / Convocado |` (ex.: `1ª | 10641 | Nome`).
     """
     voluntarios: list[dict[str, Any]] = []
+    arbitros: list[dict[str, Any]] = []
     penalidadesArt23: list[dict[str, Any]] = []
     secaoAtual = "voluntarios"
 
@@ -19,6 +20,8 @@ def lerVoluntariosMarkdown(textoMd: str) -> dict[str, Any]:
             titulo = linhaLimpa[3:].strip().lower()
             if "penalidade" in titulo or "art. 23" in titulo:
                 secaoAtual = "penalidades"
+            elif "árbitro" in titulo or "arbitro" in titulo:
+                secaoAtual = "arbitros"
             else:
                 secaoAtual = "voluntarios"
             continue
@@ -39,17 +42,27 @@ def lerVoluntariosMarkdown(textoMd: str) -> dict[str, Any]:
         if not mEtapa or not mCbo:
             continue
 
-        registro = {
+        registro: dict[str, Any] = {
             "etapa": int(mEtapa.group(1)),
             "cbo": int(mCbo.group(1)),
             "nome": celulas[2],
+            "funcao": "arbitro" if secaoAtual == "arbitros" else "voluntario",
         }
+        if secaoAtual == "arbitros" and len(celulas) >= 4:
+            mQa = re.search(r"(\d+)", celulas[3])
+            if mQa:
+                registro["qaFecori"] = int(mQa.group(1))
+
         if secaoAtual == "penalidades":
             penalidadesArt23.append(registro)
         else:
             voluntarios.append(registro)
+            if secaoAtual == "arbitros":
+                arbitros.append(registro)
 
     return {
         "voluntarios": voluntarios,
+        "arbitros": arbitros,
         "penalidadesArt23": penalidadesArt23,
     }
+
