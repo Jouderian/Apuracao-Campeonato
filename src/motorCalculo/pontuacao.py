@@ -88,7 +88,44 @@ class ClassificacaoAtletaCategoria:
     etapasParticipadas: int = 0
     elegivelPremiacao: bool = False
     colocacaoFinal: int = 0
+    colocacaoNaCategoria: int = 0
     categoriaValidaFinal: bool = True
+    competiuEmMultiplasCategorias: bool = False
+
+
+MAPA_CATEGORIA_PADRAO_CBO: dict[str, str] = {
+    "D10N": "D Infant N", "D12N": "D Infant N", "D12B": "D Infant B",
+    "D14N": "D Juven N", "D14B": "D Juven B", "D14A": "D Juven A",
+    "D16N": "D Juven N", "D16B": "D Juven B", "D16A": "D Juven A",
+    "D18N": "D Juven N", "D18B": "D Juven B", "D18A": "D Juven A",
+    "D20N": "D Junior N", "D20B": "D Junior B", "D20A": "D Junior A", "D20E": "D Junior E",
+    "D21N": "D Adulto N", "D21B": "D Adulto B", "D21A": "D Adulto A", "D21E": "D Adulto E",
+    "D35N": "D Master N", "D35B": "D Master B", "D35A": "D Master A",
+    "D40N": "D Master N", "D40B": "D Master B", "D40A": "D Master A",
+    "D45N": "D Sênior N", "D45B": "D Sênior B", "D45A": "D Sênior A",
+    "D50N": "D Sênior N", "D50B": "D Sênior B", "D50A": "D Sênior A",
+    "D55N": "D Vet N", "D55B": "D Vet B", "D55A": "D Vet A",
+    "D60N": "D Vet N", "D60B": "D Vet B", "D60A": "D Vet A",
+    "H10N": "H Infant N", "H12N": "H Infant N", "H12B": "H Infant B",
+    "H14N": "H Juven N", "H14B": "H Juven B", "H14A": "H Juven A",
+    "H16N": "H Juven N", "H16B": "H Juven B", "H16A": "H Juven A",
+    "H18N": "H Juven N", "H18B": "H Juven B", "H18A": "H Juven A",
+    "H20N": "H Junior N", "H20B": "H Junior B", "H20A": "H Junior A", "H20E": "H Junior E",
+    "H21N": "H Adulto N", "H21B": "H Adulto B", "H21A": "H Adulto A", "H21E": "H Adulto E",
+    "H35N": "H Master N", "H35B": "H Master B", "H35A": "H Master A",
+    "H40N": "H Master N", "H40B": "H Master B", "H40A": "H Master A",
+    "H45N": "H Sênior N", "H45B": "H Sênior B", "H45A": "H Sênior A",
+    "H50N": "H Sênior N", "H50B": "H Sênior B", "H50A": "H Sênior A",
+    "H55N": "H Vet N", "H55B": "H Vet B", "H55A": "H Vet A",
+    "H60N": "H Vet N", "H60B": "H Vet B", "H60A": "H Vet A",
+}
+
+
+def normalizarCategoriaPadraoCBO(categoria: str) -> str:
+    """Converte código CBO da tabela Runners (ex.: D21B) para categoria aglutinada do CCO quando aplicável."""
+    limpa = categoria.strip()
+    return MAPA_CATEGORIA_PADRAO_CBO.get(limpa.upper(), limpa)
+
 
 
 def ehCategoriaSemPontuacao(categoria: str) -> bool:
@@ -315,7 +352,7 @@ def apurarCampeonatoCCO(
             catAlvo = sorted(cats)[0]
         else:
             perfilVol = perfis.get(str(cboVol), {})
-            catAlvo = perfilVol.get("categoriaPadrao") or "Sem Categoria"
+            catAlvo = normalizarCategoriaPadraoCBO(perfilVol.get("categoriaPadrao") or "Sem Categoria")
             categoriasDoAtleta.setdefault(cboVol, set()).add(catAlvo)
         inscricoesPorAtletaCat.setdefault((cboVol, catAlvo), {})
 
@@ -449,10 +486,17 @@ def apurarCampeonatoCCO(
 
     # 4. Regra de troca de categoria (Art. 32): pontuação não acumula; vale a de melhor resultado (ou mais recente)
     porAtleta: dict[int, list[ClassificacaoAtletaCategoria]] = {}
+    porNomeNormalizado: dict[str, list[ClassificacaoAtletaCategoria]] = {}
     for f in fichasPorAtletaCat:
         porAtleta.setdefault(f.cbo, []).append(f)
+        if not ehCategoriaSemPontuacao(f.categoria):
+            porNomeNormalizado.setdefault(f.nome.strip().upper(), []).append(f)
 
     for cbo, listaFichas in porAtleta.items():
+        fichasCompetitivas = [f for f in listaFichas if not ehCategoriaSemPontuacao(f.categoria)]
+        if len(fichasCompetitivas) > 1:
+            for f in fichasCompetitivas:
+                f.competiuEmMultiplasCategorias = True
         if len(listaFichas) <= 1:
             continue
 
@@ -467,6 +511,11 @@ def apurarCampeonatoCCO(
         for f in listaFichas:
             f.categoriaValidaFinal = (f is melhor)
 
+    for _, listaMesmoNome in porNomeNormalizado.items():
+        if len(listaMesmoNome) > 1:
+            for f in listaMesmoNome:
+                f.competiuEmMultiplasCategorias = True
+
     # 5. Ordenar classificação individual por categoria e aplicar desempate (Art. 34, § 2º)
     # Art. 34, § 2º: melhor resultado no último percurso -> percurso anterior sucessivamente -> maior idade (menor anoNascimento)
     fichasPorCategoria: dict[str, list[ClassificacaoAtletaCategoria]] = {}
@@ -480,7 +529,6 @@ def apurarCampeonatoCCO(
             # Maior idade = menor ano de nascimento; se None, fica por último no desempate de idade
             pesoIdade = -(f.anoNascimento if f.anoNascimento and f.anoNascimento > 0 else 9999)
             return (
-                1 if f.categoriaValidaFinal else 0,
                 f.pontuacaoTotal,
                 *notasReversas,
                 pesoIdade,
@@ -488,11 +536,12 @@ def apurarCampeonatoCCO(
             )
 
         lista.sort(key=chaveOrdenacaoIndividual, reverse=True)
-        posAtual = 1
-        for f in lista:
+        posFinal = 1
+        for idxCat, f in enumerate(lista, start=1):
+            f.colocacaoNaCategoria = idxCat
             if f.categoriaValidaFinal and not ehCategoriaSemPontuacao(cat) and f.pontuacaoTotal > 0:
-                f.colocacaoFinal = posAtual
-                posAtual += 1
+                f.colocacaoFinal = posFinal
+                posFinal += 1
             else:
                 f.colocacaoFinal = 0
 
@@ -567,8 +616,21 @@ def apurarCampeonatoCCO(
         reverse=True,
     )
 
+    etapasComVoluntarios = sorted({
+        int(v["etapa"])
+        for v in dadosVoluntarios.get("voluntarios", [])
+        if v.get("funcao", "voluntario") != "arbitro"
+    })
+    etapasComArbitros = sorted({
+        int(v["etapa"])
+        for v in dadosVoluntarios.get("voluntarios", [])
+        if v.get("funcao") == "arbitro"
+    })
+
     return {
         "etapas": etapasInfo,
+        "etapasComVoluntarios": etapasComVoluntarios,
+        "etapasComArbitros": etapasComArbitros,
         "fichasPorCategoria": fichasPorCategoria,
         "classificacaoClubes": listaClubesOrdenada,
     }
