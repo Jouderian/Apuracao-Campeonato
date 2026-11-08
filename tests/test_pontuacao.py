@@ -16,8 +16,13 @@ from src.motorCalculo.pontuacao import (
     calcularPontuacaoClubeNaEtapa,
     ehCategoriaSemPontuacao,
     exigirMinimoEtapasVoluntarioCCO,
+    normalizarCategoriaPadraoCBO,
     selecionarIndiceDescarte,
     temDireitoDescarteCCO,
+)
+from src.relatorios.geradorExcelPdf import (
+    formatarPontoTabelaParcial,
+    sanitizarCelulaExcel,
 )
 
 
@@ -84,14 +89,24 @@ class TestDescarteEVoluntarios(unittest.TestCase):
             "| Etapa | CBO | Voluntário / Convocado |\n"
             "| :---: | :---: | :--- |\n"
             "| 1ª | 10641 | Antonio Marden Oliveira de Sousa |\n"
-            "| 2ª | 786 | Wladimir Sant'Anna |\n"
+            "| 2ª | 786 | Wladimir Sant'Anna |\n\n"
+            "## Árbitros Convocados pela FECORI\n\n"
+            "| Etapa | CBO | Árbitro | QA/FECORI |\n"
+            "| :---: | :---: | :--- | :---: |\n"
+            "| 1ª | 4316 | Jorge Saraiva de Amorim | 65 |\n"
         )
         lido = lerVoluntariosMarkdown(md)
-        self.assertEqual(len(lido['voluntarios']), 2)
+        self.assertEqual(len(lido['voluntarios']), 3)
+        self.assertEqual(len(lido['arbitros']), 1)
         self.assertEqual(lido['voluntarios'][0]['etapa'], 1)
         self.assertEqual(lido['voluntarios'][0]['cbo'], 10641)
+        self.assertEqual(lido['voluntarios'][0]['funcao'], 'voluntario')
         self.assertEqual(lido['voluntarios'][1]['etapa'], 2)
         self.assertEqual(lido['voluntarios'][1]['cbo'], 786)
+        self.assertEqual(lido['arbitros'][0]['etapa'], 1)
+        self.assertEqual(lido['arbitros'][0]['cbo'], 4316)
+        self.assertEqual(lido['arbitros'][0]['qaFecori'], 65)
+        self.assertEqual(lido['arbitros'][0]['funcao'], 'arbitro')
 
 
 class TestPontuacaoClubes(unittest.TestCase):
@@ -118,6 +133,13 @@ class TestPontuacaoClubes(unittest.TestCase):
             calcularPontuacaoClubeNaEtapa(pontosPorCategoria, clubeFiliadoCBO=False),
             Decimal('0.00'),
         )
+
+    def test_normalizacao_categoria_padrao_e_formatacao_relatorio(self):
+        self.assertEqual(normalizarCategoriaPadraoCBO('D21B'), 'D Adulto B')
+        self.assertEqual(normalizarCategoriaPadraoCBO('H65A'), 'H65A')
+        self.assertEqual(formatarPontoTabelaParcial(Decimal('40.00')), '40')
+        self.assertEqual(formatarPontoTabelaParcial(Decimal('36.50')), '36,5')
+        self.assertEqual(sanitizarCelulaExcel('=SUM(A1:A2)'), "'=SUM(A1:A2)")
 
 
 if __name__ == '__main__':
