@@ -6,6 +6,7 @@ Executado pelo CI (.github/workflows/ci.yml) e localmente antes de qualquer comm
 
     python .agents/scripts/verificar-projeto.py
 """
+import json
 import os
 import re
 import sys
@@ -127,6 +128,46 @@ def checar_manifesto_sha256(raiz):
 
 
 # --------------------------------------------------------------------------
+# 4b. Origem dos extraídos: o sha256Fonte de cada JSON deve constar no manifesto.
+# --------------------------------------------------------------------------
+def checar_origem_extraidos(raiz):
+    manifesto = os.path.join(raiz, 'Dados', 'arquivosCongelados.sha256')
+    if not os.path.isfile(manifesto):
+        return
+    congelados = {}
+    for linha in ler(manifesto).splitlines():
+        if linha.strip() and not linha.strip().startswith('#'):
+            partes = linha.split()
+            if len(partes) == 2:
+                congelados[partes[1]] = partes[0]
+
+    pasta_dados = os.path.join(raiz, 'Dados')
+    for ano in sorted(os.listdir(pasta_dados)):
+        pasta = os.path.join(pasta_dados, ano, 'extraidos')
+        if not os.path.isdir(pasta):
+            continue
+        for nome in sorted(os.listdir(pasta)):
+            if not nome.endswith('.json'):
+                continue
+            rel = f'Dados/{ano}/extraidos/{nome}'
+            try:
+                with open(os.path.join(pasta, nome), encoding='utf-8') as fh:
+                    dados = json.load(fh)
+            except (OSError, ValueError) as erro:
+                falha(rel, 0, f'JSON ilegível: {erro}')
+                continue
+            fonte, hash_fonte = dados.get('fonte'), dados.get('sha256Fonte')
+            if not fonte or not hash_fonte:
+                falha(rel, 0, 'JSON extraído sem "fonte" e "sha256Fonte"')
+                continue
+            esperado = congelados.get(f'{ano}/{fonte}')
+            if esperado is None:
+                falha(rel, 0, f'"{ano}/{fonte}" ausente de Dados/arquivosCongelados.sha256')
+            elif esperado != hash_fonte:
+                falha(rel, 0, f'sha256Fonte diverge do manifesto para {ano}/{fonte}')
+
+
+# --------------------------------------------------------------------------
 # 5. Execução da suíte de testes unitários em tests/.
 # --------------------------------------------------------------------------
 def rodar_testes(raiz):
@@ -154,6 +195,7 @@ def main():
 
     checar_indice_specs(RAIZ)
     checar_manifesto_sha256(RAIZ)
+    checar_origem_extraidos(RAIZ)
     total_testes = rodar_testes(RAIZ)
 
     print(f'Arquivos Markdown verificados: {total_md} | Testes executados: {total_testes}')

@@ -33,6 +33,10 @@ Motor determinístico em [`src/motorCalculo/`](../../../src/motorCalculo/) que r
    - **Elegibilidade à Premiação Final (Art. 39 § 1º):** indicação se o atleta cumpriu o mínimo de metade das etapas/percursos realizados e filiação regular à CBO.
 
 ## Critérios de Aceitação
-- [ ] Cobertura de 100% das regras acima com testes unitários automatizados em `tests/`.
-- [ ] Geração de relatório detalhando memória de cálculo (notas por etapa, nota descartada, média de voluntário e top 3 por categoria/clube).
+- [x] Cobertura de 100% das regras acima com testes unitários automatizados em `tests/`.
+- [x] Geração de relatórios detalhando memória de cálculo (notas por etapa, nota descartada, média de voluntário e top 3 por categoria/clube) em Markdown (`.md`), Excel (`.xlsx`) e PDF (`.pdf`).
+- [x] Testes de integração com dados sintéticos cobrem a apuração completa (`apurarCampeonatoCCO`: colocação, descarte, média de voluntário e pontuação de clubes), o PDF parcial (ausência da logo e "NÃO OFICIAL" à direita) e a planilha Excel (`tests/test_apuracao_integracao.py`).
+- [x] A numeração romana da edição é calculada a partir do ano (2026 = XX), sem tabela fixa.
+- [x] Geração do PDF de Resultado Parcial dos Atletas (`resultadoParcialCCO.pdf`) sem a logo da edição (por ser não oficial) e com o texto "NÃO OFICIAL" alinhado à direita da folha, na linha do título; a logo oficial (`logoCCO.jpeg`) só aparece nos relatórios gerados com `--oficial`. O PDF traz destaque rosa (`#FFC7CE`) para atletas inscritos em mais de uma categoria (Art. 32), linha totalizadora de inscrições por etapa e bloco de observação em vermelho sobre pendências de voluntários/ajustes da FECORI. Os relatórios finais (`resultadoIndividualCCO.pdf`, `resultadoClubesCCO.pdf` e `resultadoClubesCCO.md`) só podem ser gerados após a conclusão da revisão do `resultadoParcialCCO.pdf` e autorização pela FECORI (`--oficial`).
+
 
