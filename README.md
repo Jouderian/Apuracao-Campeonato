@@ -24,11 +24,19 @@ Os arquivos brutos do Microsoft Access (`.mdb` / `.accdb`) não são versionados
 
 ## Verificação e Testes
 
+Instale as dependências (Excel e PDF) uma vez:
+
+```bash
+pip install -r requirements.txt
+```
+
 Antes de qualquer commit ou pull request, execute:
 
 ```bash
 python .agents/scripts/verificar-projeto.py
 ```
+
+A verificação confere links e frontmatter dos `.md`, o índice de specs, o manifesto SHA-256 (inclusive o `sha256Fonte` de cada JSON extraído) e roda os testes unitários e de integração.
 
 ## Licença
 
