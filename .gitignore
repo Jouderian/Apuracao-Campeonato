@@ -14,6 +14,9 @@ htmlcov/
 *.ldb
 *.laccdb
 
+# Resultado parcial (não oficial): PDF regenerável a cada apuração, não é versionado
+Dados/*/resultados/resultadoParcial*.pdf
+
 # Arquivos temporários de Office e sistema
 ~$*.doc
 ~$*.docx

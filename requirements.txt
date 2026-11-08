@@ -1,0 +1,6 @@
+# Dependências de execução e de testes (geração de Excel e PDF).
+# A extração do Access (src/extracaoAccess/) usa PowerShell + driver ODBC do Windows;
+# o pacote opcional pyodbc só é necessário para src/extracaoAccess/inspecionarBanco.py.
+openpyxl>=3.1
+pillow>=10.0
+pymupdf>=1.24.3
