@@ -15,7 +15,7 @@ O projeto tem dois repositórios públicos que se complementam: [Regulamentos-de
 A CC BY 4.0 não se destina a software e não restringe o uso comercial. Licenças de software de código aberto convencionais (MIT, Apache) também não restringem.
 
 ## Decisão
-1. O **código-fonte** é licenciado sob a [PolyForm Noncommercial 1.0.0](https://polyformproject.org/licenses/noncommercial/1.0.0), com o texto oficial em inglês e uma tradução não oficial para conveniência no `LICENSE`.
+1. O **código-fonte** é licenciado sob a [PolyForm Noncommercial 1.0.0](https://polyformproject.org/licenses/noncommercial/1.0.0), com o texto oficial em inglês no arquivo [`LICENSE`](../../../LICENSE) e resumo explicativo em português no [`README.md`](../../../README.md).
 2. As **regras esportivas** não são relicenciadas aqui. Citações do regulamento em specs, comentários e relatórios indicam a entidade e o artigo de origem (FECORI ou CBO) e não recebem a licença do código.
 3. A licença do código é **independente** da CC BY 4.0 do repositório de regulamentos: usar um repositório não sujeita o outro às condições do primeiro.
 
