@@ -11,7 +11,7 @@ trigger: always_on
 
 - Documentação, código-fonte (módulos, funções, variáveis, classes), comentários e mensagens de commit em **pt-BR**.
 - **Duas zonas de nomenclatura:**
-  - **Código e dados do projeto** (`src/`, `Dados/`): **camelCase** em pt-BR (`apurarCampeonato.py`, `motorCalculo/`, `resultadoEtapa1.json`).
+  - **Código e dados do projeto** (`src/`, `Dados/`): **camelCase** em pt-BR (`apurarCampeonato.py`, `motorCalculo/`, `voluntariosCCO.md`).
   - **Configuração e SDD** (`.agents/`): **kebab-case** (`project-vision/spec.md`, `verificar-projeto.py`).
 - Exceções canônicas: `AGENTS.md`, `CLAUDE.md`, `README.md`, `LICENSE` e arquivos de teste do `pytest` (`tests/test_*.py`).
 
@@ -41,11 +41,14 @@ trigger: always_on
 9. No máximo 5 itens por lista de julgamento; listas de fatos são completas.
 10. Sem recapitulação ou despedida.
 
-## Privacidade (LGPD) e Auditabilidade dos Dados
+## Privacidade (LGPD), Organização de Dados e Auditabilidade
 
 - **Proibido versionar banco bruto com dados pessoais:** arquivos `.mdb` e `.accdb` ficam no `.gitignore` para evitar exposição de CPF, RG, endereço, telefone, e-mail ou data de nascimento completa em repositório público.
 - **Congelamento por SHA-256:** todo arquivo `.mdb`/`.accdb` oficial utilizado na apuração de uma etapa tem seu hash SHA-256 registrado em [`Dados/arquivosCongelados.sha256`](../../Dados/arquivosCongelados.sha256).
-- **Dados extraídos higienizados:** em `Dados/<ano>/entradas/` entram apenas os campos estritamente necessários à classificação esportiva e ao desempate regulamentar.
+- **Separação de pastas em `Dados/<ano>/`:**
+  - `Dados/<ano>/entradas/`: contém exclusivamente o banco bruto `.mdb`/`.accdb` (local) e o arquivo Markdown de voluntários/convocados (`voluntariosCCO.md`), facilitando a auditoria humana.
+  - `Dados/<ano>/extraidos/`: armazena os arquivos `.json` higienizados extraídos do banco Access.
+  - `Dados/<ano>/resultados/`: armazena os relatórios finais calculados (`.md`, `.pdf`, `.xlsx`).
 
 ## Controle de Pendências
 
@@ -60,10 +63,10 @@ trigger: always_on
 
   | Escopo | Quando usar |
   | :--- | :--- |
-  | `access` | Extração, conectores e leitura de arquivos `.mdb`/`.accdb` (`src/extracaoAccess/`) |
+  | `access` | Extração, conectores e leitura de arquivos `.mdb`/`.accdb` e Markdown de entrada (`src/extracaoAccess/`) |
   | `calculo` | Motor de pontuação, descarte, voluntários, clubes e desempates (`src/motorCalculo/`) |
   | `relatorios` | Geração de saídas Markdown, PDF e Excel (`src/relatorios/`) |
-  | `dados` | Entradas higienizadas, resultados por ano e manifesto `arquivosCongelados.sha256` (`Dados/`) |
+  | `dados` | Entradas em Markdown, extraídos higienizados, resultados por ano e manifesto `arquivosCongelados.sha256` (`Dados/`) |
   | `tests` | Testes automatizados (`tests/`) |
   | `agents` | Artefatos de `.agents/` (regras, specs, workflows, wiki, scripts) |
   | `ci` | Automação e templates em `.github/` |
@@ -73,4 +76,3 @@ trigger: always_on
 - **Autoria humana exclusiva:** nenhum rodapé de coautoria ou geração por IA (`Co-Authored-By:`, `Generated with` ou equivalente).
 - **Antes do commit:** `python .agents/scripts/verificar-projeto.py` deve passar sem erros.
 - **Antes de pedir autorização:** apresente a lista exata de arquivos e a mensagem exata do commit. `git push`, abertura e mesclagem de PR só ocorrem com autorização expressa do usuário ([`atualizar-repositorio.md`](../workflows/atualizar-repositorio.md)).
-

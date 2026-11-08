@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """Extrai os dados higienizados (LGPD) de um arquivo Helga (.mdb/.accdb)
-para JSON estruturado em Dados/<ano>/entradas/ e registra seu SHA-256.
+para JSON estruturado em Dados/<ano>/extraidos/ e registra seu SHA-256.
 """
 import argparse
 import hashlib
@@ -10,6 +10,12 @@ import os
 import subprocess
 import sys
 from typing import Any
+
+RAIZ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if RAIZ not in sys.path:
+    sys.path.insert(0, RAIZ)
+
+from src.extracaoAccess.leitorVoluntarios import lerVoluntariosMarkdown
 
 
 def calcularSha256(caminhoArquivo: str) -> str:
@@ -201,13 +207,13 @@ def main() -> int:
     )
     parser.add_argument(
         "--saida",
-        default="Dados/2026/entradas/etapasHelga2026.json",
+        default="Dados/2026/extraidos/etapasHelga2026.json",
         help="Caminho do arquivo JSON higienizado de saída",
     )
     parser.add_argument(
         "--voluntarios",
-        default="Dados/2026/entradas/voluntariosCCO2026.json",
-        help="Arquivo de voluntários para garantir inclusão do perfil base se necessário",
+        default="Dados/2026/entradas/voluntariosCCO.md",
+        help="Arquivo Markdown de voluntários para garantir inclusão do perfil base se necessário",
     )
     args = parser.parse_args()
 
@@ -221,7 +227,7 @@ def main() -> int:
     cbosNasEtapas = {str(r["cbo"]) for r in dadosBrutos["registros"]}
     if os.path.isfile(args.voluntarios):
         with open(args.voluntarios, encoding="utf-8") as fh:
-            volData = json.load(fh)
+            volData = lerVoluntariosMarkdown(fh.read())
         for v in volData.get("voluntarios", []):
             cbosNasEtapas.add(str(v["cbo"]))
 
@@ -268,4 +274,3 @@ def main() -> int:
 
 if __name__ == "__main__":
     sys.exit(main())
-

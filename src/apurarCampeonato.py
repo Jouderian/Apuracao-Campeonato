@@ -10,6 +10,7 @@ RAIZ = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 if RAIZ not in sys.path:
     sys.path.insert(0, RAIZ)
 
+from src.extracaoAccess.leitorVoluntarios import lerVoluntariosMarkdown
 from src.motorCalculo.pontuacao import apurarCampeonatoCCO
 from src.relatorios.geradorMarkdown import (
     gerarRelatorioClubesMarkdown,
@@ -31,19 +32,19 @@ def main() -> int:
     args = parser.parse_args()
 
     pastaAno = os.path.join(RAIZ, 'Dados', str(args.ano))
-    arqEtapas = os.path.join(pastaAno, 'entradas', f'etapasHelga{args.ano}.json')
-    arqVoluntarios = os.path.join(pastaAno, 'entradas', f'voluntarios{args.competicao}{args.ano}.json')
+    arqEtapas = os.path.join(pastaAno, 'extraidos', f'etapasHelga{args.ano}.json')
+    arqVoluntariosMd = os.path.join(pastaAno, 'entradas', f'voluntarios{args.competicao}.md')
 
     if not os.path.isfile(arqEtapas):
-        print(f"Arquivo de entradas não encontrado: {arqEtapas}", file=sys.stderr)
+        print(f"Arquivo extraído não encontrado: {arqEtapas}", file=sys.stderr)
         return 1
 
     with open(arqEtapas, encoding='utf-8') as fh:
         dadosHelga = json.load(fh)
 
-    if os.path.isfile(arqVoluntarios):
-        with open(arqVoluntarios, encoding='utf-8') as fh:
-            dadosVoluntarios = json.load(fh)
+    if os.path.isfile(arqVoluntariosMd):
+        with open(arqVoluntariosMd, encoding='utf-8') as fh:
+            dadosVoluntarios = lerVoluntariosMarkdown(fh.read())
     else:
         dadosVoluntarios = {"voluntarios": [], "penalidadesArt23": []}
 
@@ -63,6 +64,7 @@ def main() -> int:
         fh.write(gerarRelatorioIndividualMarkdown(args.ano, edicao, resultado))
 
     print(f"Apuração do {edicao} ({args.ano}) concluída:")
+    print(f"  - Voluntários lidos ({len(dadosVoluntarios['voluntarios'])}): {os.path.relpath(arqVoluntariosMd, RAIZ)}")
     print(f"  - Clubes:     {os.path.relpath(arqClubesMd, RAIZ)}")
     print(f"  - Individual: {os.path.relpath(arqIndivMd, RAIZ)}")
     return 0

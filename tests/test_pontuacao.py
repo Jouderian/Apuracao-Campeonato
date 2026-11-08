@@ -3,6 +3,7 @@
 from decimal import Decimal
 import unittest
 
+from src.extracaoAccess.leitorVoluntarios import lerVoluntariosMarkdown
 from src.motorCalculo.pontuacao import (
     STATUS_CC,
     STATUS_NC,
@@ -76,6 +77,21 @@ class TestDescarteEVoluntarios(unittest.TestCase):
             participouEtapasTotais=3,
         )
         self.assertEqual(media, Decimal('37.50'))
+
+    def test_leitura_voluntarios_markdown(self):
+        md = (
+            "## Voluntários por Etapa\n\n"
+            "| Etapa | CBO | Voluntário / Convocado |\n"
+            "| :---: | :---: | :--- |\n"
+            "| 1ª | 10641 | Antonio Marden Oliveira de Sousa |\n"
+            "| 2ª | 786 | Wladimir Sant'Anna |\n"
+        )
+        lido = lerVoluntariosMarkdown(md)
+        self.assertEqual(len(lido['voluntarios']), 2)
+        self.assertEqual(lido['voluntarios'][0]['etapa'], 1)
+        self.assertEqual(lido['voluntarios'][0]['cbo'], 10641)
+        self.assertEqual(lido['voluntarios'][1]['etapa'], 2)
+        self.assertEqual(lido['voluntarios'][1]['cbo'], 786)
 
 
 class TestPontuacaoClubes(unittest.TestCase):

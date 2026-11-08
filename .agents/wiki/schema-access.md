@@ -10,10 +10,10 @@ Esta página documenta a estrutura real das tabelas do software de apuração **
 
 ## Como extrair os dados higienizados de um banco Helga
 
-Coloque o arquivo `HelgaDat.mdb` em `Dados/<ano>/entradas/` (protegido pelo `.gitignore`) e execute:
+Coloque o arquivo `HelgaDat.mdb` em `Dados/<ano>/entradas/` (protegido pelo `.gitignore`) junto com `voluntariosCCO.md` e execute:
 
 ```powershell
-python src/extracaoAccess/extrairHelga.py --mdb "Dados/2026/entradas/HelgaDat.mdb" --saida "Dados/2026/entradas/etapasHelga2026.json"
+python src/extracaoAccess/extrairHelga.py --mdb "Dados/2026/entradas/HelgaDat.mdb" --saida "Dados/2026/extraidos/etapasHelga2026.json"
 ```
 
 ## Tabelas Principais do `HelgaDat.mdb`
