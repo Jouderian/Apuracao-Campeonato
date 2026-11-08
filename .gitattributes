@@ -1,0 +1,25 @@
+# Normaliza finais de linha: LF no repositório, nativo na árvore de trabalho.
+* text=auto eol=lf
+
+# Documentos-fonte e código do projeto.
+*.md   text eol=lf
+*.py   text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+*.json text eol=lf
+*.csv  text eol=lf
+*.txt  text eol=lf
+
+# Binários: nunca normalizar nem tentar diff textual.
+*.mdb    binary
+*.accdb  binary
+*.pdf    binary
+*.xlsx   binary
+*.docx   binary
+*.jpeg   binary
+*.jpg    binary
+*.png    binary
+
+# Diff de Markdown com reconhecimento de cabeçalhos como contexto de hunk.
+*.md diff=markdown
+

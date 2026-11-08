@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Microsoft Access — bancos brutos (proteção LGPD) e arquivos de lock
+*.mdb
+*.accdb
+*.ldb
+*.laccdb
+
+# Arquivos temporários de Office e sistema
+~$*.doc
+~$*.docx
+~$*.xlsx
+~$*.pdf
+*.tmp
+*.bak
+Thumbs.db
+Desktop.ini
+.DS_Store
+
