@@ -11,6 +11,5 @@ Consulte este índice antes de abrir uma spec: a `concluída` só serve de hist�
 | Spec | Situação | Resumo |
 | :--- | :--- | :--- |
 | [project-vision](project-vision/spec.md) | ativa | Visão fundacional, atores, arquitetura em camadas e restrições inegociáveis do projeto |
-| [access-ingestion](access-ingestion/spec.md) | ativa | Ingestão, mapeamento de tabelas e higienização (LGPD) dos arquivos do Microsoft Access |
 | [scoring-engine](scoring-engine/spec.md) | ativa | Motor de cálculo de pontuação individual, descarte, voluntários, clubes e desempates |
-
+| [access-ingestion](access-ingestion/spec.md) | concluída | Ingestão, mapeamento de tabelas e higienização (LGPD) dos arquivos do Microsoft Access (`HelgaDat.mdb`) |

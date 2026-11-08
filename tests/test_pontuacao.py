@@ -1,11 +1,17 @@
 # -*- coding: utf-8 -*-
-"""Testes unitários do motor de cálculo de pontuação (Regulamento Arts. 23, 31, 33, 34 e 35)."""
+"""Testes unitários do motor de cálculo de pontuação (Regulamento 2026, Arts. 23, 31 a 35 e 39)."""
 from decimal import Decimal
 import unittest
 
 from src.motorCalculo.pontuacao import (
+    STATUS_CC,
+    STATUS_NC,
+    STATUS_NP,
+    STATUS_OK,
+    STATUS_OT,
     calcularMediaVoluntarioCCO,
     calcularPontosEtapa,
+    calcularPontosStatusHelga,
     calcularPontuacaoClubeNaEtapa,
     ehCategoriaSemPontuacao,
     exigirMinimoEtapasVoluntarioCCO,
@@ -29,6 +35,13 @@ class TestPontuacaoEtapa(unittest.TestCase):
     def test_nao_classificado_ou_percurso_anulado_recebe_1_ponto(self):
         self.assertEqual(calcularPontosEtapa('D21E', False, None), 1)
         self.assertEqual(calcularPontosEtapa('D21E', True, 1, percursoAnulado=True), 1)
+
+    def test_status_helga_ok_nc_ot_np_cc(self):
+        self.assertEqual(calcularPontosStatusHelga('H Adulto E', STATUS_OK, 1), 40)
+        self.assertEqual(calcularPontosStatusHelga('H Adulto E', STATUS_NC, None), 1)
+        self.assertEqual(calcularPontosStatusHelga('D Master B', STATUS_OT, None), 1)
+        self.assertEqual(calcularPontosStatusHelga('H Vet A', STATUS_NP, None), 0)
+        self.assertEqual(calcularPontosStatusHelga('H Vet B', STATUS_CC, None), 0)
 
     def test_categorias_acompanhadas_e_abertas_nao_pontuam(self):
         for cat in ('HN1', 'DN2', 'Acompanhado Adulto', 'Aberto Curto'):
@@ -57,9 +70,6 @@ class TestDescarteEVoluntarios(unittest.TestCase):
         self.assertEqual(exigirMinimoEtapasVoluntarioCCO(3), 1)
 
     def test_media_voluntario_cco_aplica_descarte_antes_da_media(self):
-        # Campeonato de 4 etapas (>3, logo tem descarte).
-        # Atleta atuou como voluntário na 1ª etapa e se inscreveu nas etapas 2, 3 e 4,
-        # obtendo 40, 35 e 10 pontos. Descarta-se 10; média entre 40 e 35 = 37.50.
         media = calcularMediaVoluntarioCCO(
             etapasRealizadasNoCampeonato=4,
             resultadosInscritosExcetoVoluntario=[(40, True), (35, True), (10, True)],
@@ -83,7 +93,6 @@ class TestPontuacaoClubes(unittest.TestCase):
                 (Decimal('35'), True),
             ],
         }
-        # H21E soma 40 + 37 + 33 = 110; D21E soma 40 + 35 = 75 -> Total = 185.00
         total = calcularPontuacaoClubeNaEtapa(pontosPorCategoria, clubeFiliadoCBO=True)
         self.assertEqual(total, Decimal('185.00'))
 
@@ -97,4 +106,3 @@ class TestPontuacaoClubes(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-
