@@ -41,11 +41,10 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 23787 | Francisca Nathalya Lopes De Gois | COqueiro | 40,00 (1º) | ~~37,00 (2º)~~ | 40,00 (1º) | 40,00 (1º) | **120,00** | Sim |
 | **2º** | 23734 | Antonia Giovana Gonçalves Ferreira | CORR | ~~37,00 (2º)~~ | 40,00 (1º) | 37,00 (2º) | 37,00 (2º) | **114,00** | Sim |
-| **3º** | 24314 | Kyra Delgado Gomes | COFORT | ~~0,00 (-)~~ | 0,00 (-) | 32,00 (5º) | 35,00 (3º) | **67,00** | Sim |
-| 4º | 24219 | Samilla Pontes Braga | TRILHA NORTE | ~~0,00 (-)~~ | 0,00 (-) | 35,00 (3º) | 0,00 (NP) | 35,00 | Não (1/4) |
-| 5º | 990004 | Samilla Pontes Braga | Individual | ~~0,00 (-)~~ | 35,00 (3º) | 0,00 (-) | 0,00 (-) | 35,00 | Não (1/4) |
-| 6º | 116957 | Ana Melissa Morais Ribeiro | COFORT | ~~0,00 (-)~~ | 0,00 (-) | 33,00 (4º) | 0,00 (-) | 33,00 | Não (1/4) |
-| 7º | 999007 | Bruna Vitória Pontes Silveira Coelho | Individual | ~~0,00 (-)~~ | 0,00 (-) | 31,00 (6º) | 0,00 (-) | 31,00 | Não (1/4) |
+| **3º** | 24219 | Samilla Pontes Braga | TRILHA NORTE | ~~0,00 (-)~~ | 35,00 (3º) | 35,00 (3º) | 0,00 (NP) | **70,00** | Sim |
+| 4º | 24314 | Kyra Delgado Gomes | COFORT | ~~0,00 (-)~~ | 0,00 (-) | 32,00 (5º) | 35,00 (3º) | 67,00 | Sim |
+| 5º | 116957 | Ana Melissa Morais Ribeiro | COFORT | ~~0,00 (-)~~ | 0,00 (-) | 33,00 (4º) | 0,00 (-) | 33,00 | Não (1/4) |
+| 6º | 999007 | Bruna Vitória Pontes Silveira Coelho | Individual | ~~0,00 (-)~~ | 0,00 (-) | 31,00 (6º) | 0,00 (-) | 31,00 | Não (1/4) |
 | - | 999001 | Camila Barboza Carvalho | INDIV | ~~0,00 (NP)~~ | 0,00 (-) | 0,00 (-) | 0,00 (-) | 0,00 | Não (0/4) |
 
 ## Categoria: D Juven B

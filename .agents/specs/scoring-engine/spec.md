@@ -31,6 +31,8 @@ Motor determinístico em [`src/motorCalculo/`](../../../src/motorCalculo/) que r
    - **Individual:** melhor resultado no último percurso → percurso anterior sucessivamente → maior idade.
    - **Clubes:** maior número de 1ºs lugares → 2ºs lugares → sucessivamente.
    - **Elegibilidade à Premiação Final (Art. 39 § 1º):** indicação se o atleta cumpriu o mínimo de metade das etapas/percursos realizados e filiação regular à CBO.
+7. **Unificação de Cadastros (CBO Provisório para CBO Oficial):**
+   - Quando um atleta participa de etapa inicial com código provisório no Helga (`>= 100000`) e regulariza sua filiação à CBO/clube nas etapas seguintes, o mapeamento registrado na seção `## Unificação de Cadastros` de `voluntariosCCO.md` consolida as inscrições sob o CBO oficial e o respectivo clube filiado.
 
 ## Critérios de Aceitação
 - [x] Cobertura de 100% das regras acima com testes unitários automatizados em `tests/`.

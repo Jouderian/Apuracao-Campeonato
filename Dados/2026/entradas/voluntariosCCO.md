@@ -36,3 +36,10 @@ Relação oficial de atletas convocados formalmente por seus clubes para atuarem
 | Etapa | CBO | Atleta | Motivo |
 | :---: | :---: | :--- | :--- |
 
+## Unificação de Cadastros (CBO Provisório para CBO Oficial)
+
+| CBO Provisório | CBO Oficial | Atleta | Clube Oficial |
+| :---: | :---: | :--- | :---: |
+| 990004 | 24219 | Samilla Pontes Braga | TRILHA NORTE |
+
+

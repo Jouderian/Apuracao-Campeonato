@@ -5,13 +5,15 @@ from typing import Any
 
 
 def lerVoluntariosMarkdown(textoMd: str) -> dict[str, Any]:
-    """Lê as tabelas Markdown de voluntários/convocados e penalidades do Art. 23.
+    """Lê as tabelas Markdown de voluntários/convocados, penalidades do Art. 23 e unificações de CBO.
 
-    Espera tabelas com colunas `| Etapa | CBO | Voluntário / Convocado |` (ex.: `1ª | 10641 | Nome`).
+    Espera tabelas com colunas `| Etapa | CBO | Voluntário / Convocado |` (ex.: `1ª | 10641 | Nome`)
+    ou `| CBO Provisório | CBO Oficial | Atleta | Clube Oficial |` na seção de unificação.
     """
     voluntarios: list[dict[str, Any]] = []
     arbitros: list[dict[str, Any]] = []
     penalidadesArt23: list[dict[str, Any]] = []
+    unificacoesCbo: list[dict[str, Any]] = []
     secaoAtual = "voluntarios"
 
     for linha in textoMd.splitlines():
@@ -22,6 +24,8 @@ def lerVoluntariosMarkdown(textoMd: str) -> dict[str, Any]:
                 secaoAtual = "penalidades"
             elif "árbitro" in titulo or "arbitro" in titulo:
                 secaoAtual = "arbitros"
+            elif "unificação" in titulo or "unificacao" in titulo:
+                secaoAtual = "unificacoes"
             else:
                 secaoAtual = "voluntarios"
             continue
@@ -34,7 +38,23 @@ def lerVoluntariosMarkdown(textoMd: str) -> dict[str, Any]:
         celulas = [c.strip() for c in linhaLimpa.strip("|").split("|")]
         if len(celulas) < 3:
             continue
-        if celulas[0].lower() in ("etapa", "percurso"):
+        primeiraColuna = celulas[0].lower()
+        if primeiraColuna in ("etapa", "percurso") or primeiraColuna.startswith("cbo"):
+            continue
+
+        if secaoAtual == "unificacoes":
+            mProv = re.search(r"(\d+)", celulas[0])
+            mOfic = re.search(r"(\d+)", celulas[1])
+            if not mProv or not mOfic:
+                continue
+            itemUnif: dict[str, Any] = {
+                "cboProvisorio": int(mProv.group(1)),
+                "cboOficial": int(mOfic.group(1)),
+                "nome": celulas[2],
+            }
+            if len(celulas) >= 4 and celulas[3]:
+                itemUnif["clubeSigla"] = celulas[3]
+            unificacoesCbo.append(itemUnif)
             continue
 
         mEtapa = re.search(r"(\d+)", celulas[0])
@@ -64,5 +84,6 @@ def lerVoluntariosMarkdown(textoMd: str) -> dict[str, Any]:
         "voluntarios": voluntarios,
         "arbitros": arbitros,
         "penalidadesArt23": penalidadesArt23,
+        "unificacoesCbo": unificacoesCbo,
     }
 

@@ -230,6 +230,8 @@ def main() -> int:
             volData = lerVoluntariosMarkdown(fh.read())
         for v in volData.get("voluntarios", []):
             cbosNasEtapas.add(str(v["cbo"]))
+        for u in volData.get("unificacoesCbo", []):
+            cbosNasEtapas.add(str(u["cboOficial"]))
 
     perfisFiltrados = {
         cbo: perfil

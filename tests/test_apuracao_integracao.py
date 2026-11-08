@@ -95,6 +95,30 @@ class TestApuracaoCompleta(unittest.TestCase):
     def test_voluntarios_pendentes_sao_informados(self):
         self.assertEqual(self.resultado["etapasComVoluntarios"], [2])
 
+    def test_unificacao_cbo_provisorio_consolida_atleta_e_clube(self):
+        dadosHelga, dadosVoluntarios = montarDadosSinteticos()
+        regProv = _registro(2, 990004, "Samilla", 1300)
+        regProv.update({"clubeId": 361, "clubeSigla": "Individual", "clubeNome": "Individual", "clubeFiliadoCBO": False})
+        regOfic = _registro(3, 24219, "Samilla", 1300)
+        dadosHelga["registrosEtapas"].extend([regProv, regOfic])
+        dadosHelga["perfisAtletas"]["24219"] = {
+            "cbo": 24219, "nome": "Samilla", "clubeId": 1, "clubeSigla": "AAA",
+            "clubeNome": "Clube A", "clubeFiliadoCBO": True, "anoNascimento": 1995,
+        }
+        dadosVoluntarios["unificacoesCbo"] = [{"cboProvisorio": 990004, "cboOficial": 24219, "nome": "Samilla"}]
+
+        res = apurarCampeonatoCCO(dadosHelga, dadosVoluntarios)
+        fichas = {f.cbo: f for f in res["fichasPorCategoria"][CATEGORIA]}
+        self.assertNotIn(990004, fichas)
+        self.assertIn(24219, fichas)
+        fichaSamilla = fichas[24219]
+        self.assertEqual(fichaSamilla.clubeSigla, "AAA")
+        self.assertEqual(fichaSamilla.etapasParticipadas, 2)
+        self.assertTrue(fichaSamilla.elegivelPremiacao)
+        self.assertFalse(fichaSamilla.competiuEmMultiplasCategorias)
+        self.assertEqual(fichaSamilla.pontuacaoTotal, Decimal("68.00"))   # 35 (3ª na 2ª et.) + 33 (4ª na 3ª et.)
+
+
 
 class TestPdfParcial(unittest.TestCase):
     @classmethod

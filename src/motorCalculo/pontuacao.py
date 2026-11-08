@@ -299,17 +299,48 @@ def apurarCampeonatoCCO(
     totalEtapasRealizadas = len(numerosEtapas)
     minimoEtapasPremiacaoEVoluntario = exigirMinimoEtapasVoluntarioCCO(totalEtapasRealizadas)
 
+    mapaUnificacaoCbo: dict[int, int] = {
+        int(u["cboProvisorio"]): int(u["cboOficial"])
+        for u in dadosVoluntarios.get("unificacoesCbo", [])
+    }
+
     voluntariosSet: set[tuple[int, int]] = {
-        (int(v["etapa"]), int(v["cbo"]))
+        (int(v["etapa"]), mapaUnificacaoCbo.get(int(v["cbo"]), int(v["cbo"])))
         for v in dadosVoluntarios.get("voluntarios", [])
     }
     penalidadesArt23Set: set[tuple[int, int]] = {
-        (int(p["etapa"]), int(p["cbo"]))
+        (int(p["etapa"]), mapaUnificacaoCbo.get(int(p["cbo"]), int(p["cbo"])))
         for p in dadosVoluntarios.get("penalidadesArt23", [])
     }
 
     perfis = dadosHelga["perfisAtletas"]
-    registros = dadosHelga["registrosEtapas"]
+    registrosOriginais = dadosHelga["registrosEtapas"]
+
+    perfisOficiaisFallback: dict[int, dict[str, Any]] = {}
+    for r in registrosOriginais:
+        cboReg = int(r["cbo"])
+        if cboReg not in perfisOficiaisFallback:
+            perfisOficiaisFallback[cboReg] = r
+
+    registros: list[dict[str, Any]] = []
+    for r in registrosOriginais:
+        cboOrig = int(r["cbo"])
+        if cboOrig in mapaUnificacaoCbo:
+            cboOficial = mapaUnificacaoCbo[cboOrig]
+            baseOficial = perfis.get(str(cboOficial)) or perfisOficiaisFallback.get(cboOficial, {})
+            rUnificado = dict(r)
+            rUnificado["cbo"] = cboOficial
+            if baseOficial:
+                rUnificado["nome"] = baseOficial.get("nome", r["nome"])
+                rUnificado["clubeId"] = baseOficial.get("clubeId", r["clubeId"])
+                rUnificado["clubeSigla"] = baseOficial.get("clubeSigla", r["clubeSigla"])
+                rUnificado["clubeNome"] = baseOficial.get("clubeNome", r["clubeNome"])
+                rUnificado["clubeFiliadoCBO"] = baseOficial.get("clubeFiliadoCBO", r["clubeFiliadoCBO"])
+                if baseOficial.get("anoNascimento") is not None:
+                    rUnificado["anoNascimento"] = baseOficial["anoNascimento"]
+            registros.append(rUnificado)
+        else:
+            registros.append(r)
 
     # 1. Calcular colocações dentro de cada etapa e categoria (Status_FK == 0 e ClassifyYN == True, ordenado por tempo)
     porEtapaCategoria: dict[tuple[int, str], list[dict[str, Any]]] = {}

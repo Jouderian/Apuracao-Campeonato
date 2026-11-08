@@ -93,11 +93,16 @@ class TestDescarteEVoluntarios(unittest.TestCase):
             "## Árbitros Convocados pela FECORI\n\n"
             "| Etapa | CBO | Árbitro | QA/FECORI |\n"
             "| :---: | :---: | :--- | :---: |\n"
-            "| 1ª | 4316 | Jorge Saraiva de Amorim | 65 |\n"
+            "| 1ª | 4316 | Jorge Saraiva de Amorim | 65 |\n\n"
+            "## Unificação de Cadastros (CBO Provisório para CBO Oficial)\n\n"
+            "| CBO Provisório | CBO Oficial | Atleta | Clube Oficial |\n"
+            "| :---: | :---: | :--- | :---: |\n"
+            "| 990004 | 24219 | Samilla Pontes Braga | TRILHA NORTE |\n"
         )
         lido = lerVoluntariosMarkdown(md)
         self.assertEqual(len(lido['voluntarios']), 3)
         self.assertEqual(len(lido['arbitros']), 1)
+        self.assertEqual(len(lido['unificacoesCbo']), 1)
         self.assertEqual(lido['voluntarios'][0]['etapa'], 1)
         self.assertEqual(lido['voluntarios'][0]['cbo'], 10641)
         self.assertEqual(lido['voluntarios'][0]['funcao'], 'voluntario')
@@ -107,6 +112,9 @@ class TestDescarteEVoluntarios(unittest.TestCase):
         self.assertEqual(lido['arbitros'][0]['cbo'], 4316)
         self.assertEqual(lido['arbitros'][0]['qaFecori'], 65)
         self.assertEqual(lido['arbitros'][0]['funcao'], 'arbitro')
+        self.assertEqual(lido['unificacoesCbo'][0]['cboProvisorio'], 990004)
+        self.assertEqual(lido['unificacoesCbo'][0]['cboOficial'], 24219)
+        self.assertEqual(lido['unificacoesCbo'][0]['clubeSigla'], 'TRILHA NORTE')
 
 
 class TestPontuacaoClubes(unittest.TestCase):
