@@ -7,7 +7,8 @@ Art. 23, Parágrafo Único e Art. 39, § 1º do Regulamento das Competições Ce
 from dataclasses import dataclass, field
 from decimal import Decimal, ROUND_HALF_UP
 import math
-from typing import Any, Sequence
+from collections.abc import Sequence
+from typing import Any
 
 TABELA_PONTOS_COLOCACAO: tuple[int, ...] = (
     40, 37, 35, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24,
@@ -80,7 +81,6 @@ class ClassificacaoAtletaCategoria:
     clubeSigla: str
     clubeNome: str
     clubeFiliadoCBO: bool
-    anoNascimento: int | None
     categoria: str
     etapas: dict[int, DesempenhoEtapaCalculado] = field(default_factory=dict)
     etapaDescartada: int | None = None
@@ -91,6 +91,7 @@ class ClassificacaoAtletaCategoria:
     colocacaoNaCategoria: int = 0
     categoriaValidaFinal: bool = True
     competiuEmMultiplasCategorias: bool = False
+    empateNaoResolvido: bool = False
 
 
 MAPA_CATEGORIA_PADRAO_CBO: dict[str, str] = {
@@ -336,8 +337,6 @@ def apurarCampeonatoCCO(
                 rUnificado["clubeSigla"] = baseOficial.get("clubeSigla", r["clubeSigla"])
                 rUnificado["clubeNome"] = baseOficial.get("clubeNome", r["clubeNome"])
                 rUnificado["clubeFiliadoCBO"] = baseOficial.get("clubeFiliadoCBO", r["clubeFiliadoCBO"])
-                if baseOficial.get("anoNascimento") is not None:
-                    rUnificado["anoNascimento"] = baseOficial["anoNascimento"]
             registros.append(rUnificado)
         else:
             registros.append(r)
@@ -377,7 +376,7 @@ def apurarCampeonatoCCO(
         categoriasDoAtleta.setdefault(cbo, set()).add(cat)
 
     # Garantir que voluntários que não estavam inscritos na tabela Course naquela etapa entrem na sua categoria
-    for etapaVol, cboVol in sorted(voluntariosSet):
+    for _etapaVol, cboVol in sorted(voluntariosSet):
         cats = categoriasDoAtleta.get(cboVol)
         if cats:
             catAlvo = sorted(cats)[0]
@@ -397,7 +396,6 @@ def apurarCampeonatoCCO(
         clubeSigla = (amostraReg["clubeSigla"] if amostraReg else perfil.get("clubeSigla", ""))
         clubeNome = (amostraReg["clubeNome"] if amostraReg else perfil.get("clubeNome", ""))
         clubeFiliado = bool(amostraReg["clubeFiliadoCBO"] if amostraReg else perfil.get("clubeFiliadoCBO", False))
-        anoNasc = amostraReg["anoNascimento"] if amostraReg else perfil.get("anoNascimento")
 
         ficha = ClassificacaoAtletaCategoria(
             cbo=cbo,
@@ -406,23 +404,22 @@ def apurarCampeonatoCCO(
             clubeSigla=clubeSigla,
             clubeNome=clubeNome,
             clubeFiliadoCBO=clubeFiliado,
-            anoNascimento=anoNasc,
             categoria=categoria,
         )
 
         # Primeiro passo: pontos brutos das etapas em que não foi voluntário
         for etapaNum in numerosEtapas:
-            reg = mapaEtapas.get(etapaNum)
+            regEtapa = mapaEtapas.get(etapaNum)
             ehVol = (etapaNum, cbo) in voluntariosSet
             penalizado23 = (etapaNum, cbo) in penalidadesArt23Set
 
             if ehVol:
                 ficha.etapas[etapaNum] = DesempenhoEtapaCalculado(
                     etapa=etapaNum,
-                    inscrito=reg is not None,
+                    inscrito=regEtapa is not None,
                     participou=True,
                     atuouComoVoluntario=True,
-                    statusCodigo=reg["statusCodigo"] if reg else None,
+                    statusCodigo=regEtapa["statusCodigo"] if regEtapa else None,
                     statusSigla="VOL",
                     tempo=None,
                     colocacao=None,
@@ -430,8 +427,8 @@ def apurarCampeonatoCCO(
                     pontosFinais=Decimal('0.00'),
                     passivelDescarte=not penalizado23,
                 )
-            elif reg is not None:
-                stCod = int(reg["statusCodigo"])
+            elif regEtapa is not None:
+                stCod = int(regEtapa["statusCodigo"])
                 coloc = colocacoesNaEtapa.get((etapaNum, categoria, cbo))
                 pts = calcularPontosStatusHelga(
                     categoria=categoria,
@@ -446,8 +443,8 @@ def apurarCampeonatoCCO(
                     participou=participouNaPista,
                     atuouComoVoluntario=False,
                     statusCodigo=stCod,
-                    statusSigla=reg["statusSigla"],
-                    tempo=reg["tempo"] if stCod != STATUS_NP else None,
+                    statusSigla=regEtapa["statusSigla"],
+                    tempo=regEtapa["tempo"] if stCod != STATUS_NP else None,
                     colocacao=coloc,
                     pontosBrutos=Decimal(pts),
                     pontosFinais=Decimal(pts),
@@ -523,7 +520,7 @@ def apurarCampeonatoCCO(
         if not ehCategoriaSemPontuacao(f.categoria):
             porNomeNormalizado.setdefault(f.nome.strip().upper(), []).append(f)
 
-    for cbo, listaFichas in porAtleta.items():
+    for listaFichas in porAtleta.values():
         fichasCompetitivas = [f for f in listaFichas if not ehCategoriaSemPontuacao(f.categoria)]
         if len(fichasCompetitivas) > 1:
             for f in fichasCompetitivas:
@@ -548,7 +545,9 @@ def apurarCampeonatoCCO(
                 f.competiuEmMultiplasCategorias = True
 
     # 5. Ordenar classificação individual por categoria e aplicar desempate (Art. 34, § 2º)
-    # Art. 34, § 2º: melhor resultado no último percurso -> percurso anterior sucessivamente -> maior idade (menor anoNascimento)
+    # Art. 34, § 2º: melhor resultado no último percurso -> percurso anterior sucessivamente.
+    # O critério "maior idade" não é aplicado: o ano de nascimento não é extraído (ADR-003).
+    # Persistindo o empate, a ficha é sinalizada (empateNaoResolvido) e a ordem segue o CBO.
     fichasPorCategoria: dict[str, list[ClassificacaoAtletaCategoria]] = {}
     for f in fichasPorAtletaCat:
         fichasPorCategoria.setdefault(f.categoria, []).append(f)
@@ -557,16 +556,20 @@ def apurarCampeonatoCCO(
     for cat, lista in fichasPorCategoria.items():
         def chaveOrdenacaoIndividual(f: ClassificacaoAtletaCategoria) -> tuple[Any, ...]:
             notasReversas = tuple(f.etapas[et].pontosFinais for et in etapasReversas)
-            # Maior idade = menor ano de nascimento; se None, fica por último no desempate de idade
-            pesoIdade = -(f.anoNascimento if f.anoNascimento and f.anoNascimento > 0 else 9999)
             return (
                 f.pontuacaoTotal,
                 *notasReversas,
-                pesoIdade,
                 -f.cbo,
             )
 
         lista.sort(key=chaveOrdenacaoIndividual, reverse=True)
+        if not ehCategoriaSemPontuacao(cat):
+            classificaveis = [f for f in lista if f.categoriaValidaFinal and f.pontuacaoTotal > 0]
+            for anterior, atual in zip(classificaveis, classificaveis[1:], strict=False):
+                # Compara todos os critérios do regulamento (a chave sem o CBO final).
+                if chaveOrdenacaoIndividual(anterior)[:-1] == chaveOrdenacaoIndividual(atual)[:-1]:
+                    anterior.empateNaoResolvido = True
+                    atual.empateNaoResolvido = True
         posFinal = 1
         for idxCat, f in enumerate(lista, start=1):
             f.colocacaoNaCategoria = idxCat

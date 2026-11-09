@@ -11,6 +11,7 @@ if RAIZ not in sys.path:
     sys.path.insert(0, RAIZ)
 
 from src.extracaoAccess.leitorVoluntarios import lerVoluntariosMarkdown
+from src.extracaoAccess.validarEntrada import conferirHashNoManifesto, validarDadosHelga
 from src.motorCalculo.pontuacao import apurarCampeonatoCCO
 from src.relatorios.geradorExcelPdf import (
     gerarPdfResultadoClubes,
@@ -99,8 +100,14 @@ def main() -> int:
         print(f"Arquivo extraído não encontrado: {arqEtapas}", file=sys.stderr)
         return 1
 
-    with open(arqEtapas, encoding='utf-8') as fh:
-        dadosHelga = json.load(fh)
+    try:
+        with open(arqEtapas, encoding='utf-8') as fh:
+            dadosHelga = json.load(fh)
+        validarDadosHelga(dadosHelga)
+        conferirHashNoManifesto(dadosHelga, args.ano, os.path.join(RAIZ, 'Dados'))
+    except (ValueError, OSError) as erro:
+        print(f"Entrada recusada ({arqEtapas}): {erro}", file=sys.stderr)
+        return 1
 
     if os.path.isfile(arqVoluntariosMd):
         with open(arqVoluntariosMd, encoding='utf-8') as fh:
@@ -158,6 +165,15 @@ def main() -> int:
             caminhoLogo=caminhoLogo,
         )
 
+    empatados = sorted(
+        {(f.categoria, f.cbo) for lista in resultado["fichasPorCategoria"].values() for f in lista if f.empateNaoResolvido}
+    )
+    if empatados:
+        print(
+            "ATENÇÃO: empate não resolvido (Art. 34, § 2º; critério de idade não aplicado, ADR-003) em: "
+            + ", ".join(f"{cat} CBO {cbo}" for cat, cbo in empatados),
+            file=sys.stderr,
+        )
     print(f"Apuração do {edicao} ({args.ano}) concluída:")
     print(f"  - Voluntários lidos ({len(dadosVoluntarios['voluntarios'])}): {os.path.relpath(arqVoluntariosMd, RAIZ)}")
     if caminhoLogo:
