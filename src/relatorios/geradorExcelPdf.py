@@ -7,6 +7,7 @@ import os
 from typing import Any
 
 from openpyxl import Workbook
+from openpyxl.worksheet.worksheet import Worksheet
 from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 from openpyxl.utils import get_column_letter
 
@@ -112,7 +113,7 @@ def _inserirTextoAlinhado(
         fontfile=fontfile,
         color=cor,
     )
-    return x + larguraTxt
+    return float(x + larguraTxt)
 
 
 def _descreverEtapaPlanilha(des: DesempenhoEtapaCalculado) -> str:
@@ -159,6 +160,7 @@ def gerarPlanilhaExcelApuracao(
     preenchimentoCabecalho = PatternFill(start_color="4472C4", end_color="4472C4", fill_type="solid")
     preenchimentoCinzaParcial = PatternFill(start_color="D9D9D9", end_color="D9D9D9", fill_type="solid")
     preenchimentoRosaDuplicado = PatternFill(start_color="FFC7CE", end_color="FFC7CE", fill_type="solid")
+    preenchimentoAmareloVoluntario = PatternFill(start_color="FFFF00", end_color="FFFF00", fill_type="solid")
     preenchimentoZebraClubes = PatternFill(start_color="D9E1F2", end_color="D9E1F2", fill_type="solid")
     bordaFina = Border(
         left=Side(style="thin", color="BFBFBF"),
@@ -169,6 +171,8 @@ def gerarPlanilhaExcelApuracao(
 
     # 1. Aba: resultadoParcial (idêntica ao layout do PDF de Resultado Parcial dos Atletas)
     wsParcial = wb.active
+    if not isinstance(wsParcial, Worksheet):
+        raise RuntimeError("A planilha nova deveria abrir com uma aba de dados.")
     wsParcial.title = "resultadoParcial"
     wsParcial["A1"] = f"Resultado parcial do {edicaoRomanos} Campeonato Cearense de Orientação NÃO OFICIAL"
     wsParcial["A1"].font = fonteTitulo
@@ -221,6 +225,13 @@ def gerarPlanilhaExcelApuracao(
             if colIdx == 4 and f.competiuEmMultiplasCategorias:
                 cel.fill = preenchimentoRosaDuplicado
                 cel.font = fonteRosa
+            if 6 <= colIdx <= 9:
+                et = colIdx - 5
+                des = f.etapas[et]
+                if des.atuouComoVoluntario:
+                    cel.fill = preenchimentoAmareloVoluntario
+                if des.descartada:
+                    cel.font = fonteDescarte
             if colIdx == 10:
                 cel.fill = preenchimentoCabecalho
                 cel.font = fonteTotalBranca
@@ -373,9 +384,9 @@ def gerarPlanilhaExcelApuracao(
                     linhaMem += 1
 
     for ws in (wsParcial, wsClubes, wsIndiv, wsMem):
-        for col in ws.columns:
+        for indiceCol, col in enumerate(ws.columns, start=1):
             maxLen = max((len(str(cell.value or "")) for cell in col), default=10)
-            colLetter = get_column_letter(col[0].column)
+            colLetter = get_column_letter(indiceCol)
             ws.column_dimensions[colLetter].width = min(max(maxLen + 3, 8), 42)
 
     os.makedirs(os.path.dirname(os.path.abspath(caminhoSaidaXlsx)), exist_ok=True)
@@ -413,6 +424,7 @@ COR_AZUL = (0.267, 0.447, 0.769)        # #4472C4
 COR_CINZA = (0.851, 0.851, 0.851)       # #D9D9D9
 COR_ROSA_FUNDO = (1.0, 0.780, 0.808)    # #FFC7CE
 COR_ROSA_TEXTO = (0.612, 0.0, 0.024)    # #9C0006
+COR_AMARELO_FUNDO = (1.0, 1.0, 0.0)      # #FFFF00 amarelo destaque voluntários e árbitros
 COR_VERMELHO = (1.0, 0.0, 0.0)          # #FF0000
 COR_PRETO = (0.0, 0.0, 0.0)
 COR_BRANCO = (1.0, 1.0, 1.0)
@@ -437,55 +449,142 @@ def _paginarLinhasParcial(linhas: list[ClassificacaoAtletaCategoria]) -> list[li
     return paginas
 
 
+def _agruparTrechosEmUnidades(
+    trechos: list[tuple[str, str]],
+) -> list[tuple[bool, list[tuple[str, str]]]]:
+    """Agrupa trechos estilizados em unidades (palavras com formatação e pontuação acoplada).
+
+    Retorna lista de tuplas (temEspacoAntes, partesDaPalavra).
+    """
+    import re
+
+    unidades: list[tuple[bool, list[tuple[str, str]]]] = []
+    temEspaco = False
+    partesAtual: list[tuple[str, str]] = []
+
+    for txt, est in trechos:
+        tokens = re.split(r"(\s+)", txt)
+        for t in tokens:
+            if not t:
+                continue
+            if t.isspace():
+                if partesAtual:
+                    unidades.append((temEspaco, partesAtual))
+                    partesAtual = []
+                temEspaco = True
+            else:
+                partesAtual.append((t, est))
+    if partesAtual:
+        unidades.append((temEspaco, partesAtual))
+    return unidades
+
+
+def _quebrarItemObservacaoEmLinhas(
+    trechos: list[tuple[str, str]],
+    larguraMax: float,
+    estilos: dict[str, tuple[str, str | None, Any]],
+    fontsize: float,
+) -> list[list[tuple[str, str]]]:
+    """Quebra um item de observação em linhas preenchendo o espaço disponível antes da quebra."""
+    unidades = _agruparTrechosEmUnidades(trechos)
+    fonteRegular = estilos["r"][2]
+    larguraEspaco = fonteRegular.text_length(" ", fontsize=fontsize)
+
+    linhas: list[list[tuple[str, str]]] = []
+    linhaAtual: list[tuple[str, str]] = []
+    larguraAtual = 0.0
+
+    for temEspaco, partes in unidades:
+        larguraUnidade = sum(
+            estilos[est][2].text_length(txt, fontsize=fontsize)
+            for txt, est in partes
+        )
+        espAdicional = larguraEspaco if (temEspaco and linhaAtual) else 0.0
+
+        if linhaAtual and (larguraAtual + espAdicional + larguraUnidade > larguraMax):
+            linhas.append(linhaAtual)
+            linhaAtual = []
+            larguraAtual = 0.0
+            espAdicional = 0.0
+
+        if espAdicional > 0:
+            if linhaAtual and linhaAtual[-1][1] == "r":
+                linhaAtual[-1] = (linhaAtual[-1][0] + " ", "r")
+            else:
+                linhaAtual.append((" ", "r"))
+            larguraAtual += espAdicional
+
+        for txt, est in partes:
+            if linhaAtual and linhaAtual[-1][1] == est:
+                linhaAtual[-1] = (linhaAtual[-1][0] + txt, est)
+            else:
+                linhaAtual.append((txt, est))
+        larguraAtual += larguraUnidade
+
+    if linhaAtual:
+        linhas.append(linhaAtual)
+    return linhas
+
+
 def _montarTextoObservacao(
     resultadoApuracao: dict[str, Any],
-) -> list[list[list[tuple[str, str]]]]:
-    """Monta os itens em bullet point do bloco OBSERVAÇÃO.
+) -> list[list[tuple[str, str]]]:
+    """Monta os itens em bullet point do bloco OBSERVAÇÃO como sequências de (texto, estilo).
 
-    Estilos: 'r' regular, 'b' negrito, 'i' itálico.
+    Estilos: 'r' regular, 'b' negrito, 'i' itálico, 'm' mono.
     """
     etapasComVol = set(resultadoApuracao.get("etapasComVoluntarios", []))
     etapasComArb = set(resultadoApuracao.get("etapasComArbitros", []))
     pendentesVol = [et for et in ETAPAS_CAMPEONATO if et not in etapasComVol]
     pendentesArb = [et for et in ETAPAS_CAMPEONATO if et not in etapasComArb]
 
-    linhasVol: list[list[tuple[str, str]]]
+    trechosVol: list[tuple[str, str]]
     if not etapasComVol and not etapasComArb:
-        linhasVol = [
-            [("Este resultado não é oficial e não inclui os ", "r"), ("voluntários", "i")],
-            [
-                ("que participaram das etapas nem os ", "r"), ("árbitros", "i"),
-                (" convocados pela ", "r"), ("FECORI", "b"), (".", "r"),
-            ],
+        trechosVol = [
+            ("Este resultado não é oficial e não inclui os ", "r"),
+            ("voluntários", "i"),
+            (" que participaram das etapas nem os ", "r"),
+            ("árbitros", "i"),
+            (" convocados pela ", "r"),
+            ("FECORI", "b"),
+            (".", "r"),
         ]
     elif pendentesVol:
         etStr = ", ".join(f"{e}ª" for e in pendentesVol)
-        inicioL1 = [("Este resultado não é oficial e ainda não inclui os ", "r"), ("voluntários", "i")]
+        inicio = [
+            ("Este resultado não é oficial e ainda não inclui os ", "r"),
+            ("voluntários", "i"),
+        ]
         if not pendentesArb:
-            trecho = f"da {etStr} etapa (os " if len(pendentesVol) == 1 else f"das etapas ({etStr}) (os "
-            linhasVol = [
-                inicioL1,
-                [
-                    (trecho, "r"), ("árbitros", "i"), (" convocados pela ", "r"),
-                    ("FECORI", "b"), (" já estão incluídos).", "r"),
-                ],
+            trecho = f" da {etStr} etapa (os " if len(pendentesVol) == 1 else f" das etapas ({etStr}) (os "
+            trechosVol = inicio + [
+                (trecho, "r"),
+                ("árbitros", "i"),
+                (" convocados pela ", "r"),
+                ("FECORI", "b"),
+                (" já estão incluídos).", "r"),
             ]
         else:
-            trecho = f"da {etStr} etapa nem eventuais " if len(pendentesVol) == 1 else f"das etapas ({etStr}) nem eventuais "
-            linhasVol = [
-                inicioL1,
-                [(trecho, "r"), ("árbitros", "i"), (" pendentes na ", "r"), ("FECORI", "b"), (".", "r")],
+            trecho = f" da {etStr} etapa nem eventuais " if len(pendentesVol) == 1 else f" das etapas ({etStr}) nem eventuais "
+            trechosVol = inicio + [
+                (trecho, "r"),
+                ("árbitros", "i"),
+                (" pendentes na ", "r"),
+                ("FECORI", "b"),
+                (".", "r"),
             ]
     else:
-        linhasVol = [
-            [("Este resultado não é oficial e contempla os ", "r"), ("voluntários", "i")],
-            [
-                ("informados pelas etapas e os ", "r"), ("árbitros", "i"),
-                (" convocados pela ", "r"), ("FECORI", "b"), (".", "r"),
-            ],
+        trechosVol = [
+            ("Este resultado não é oficial e contempla os ", "r"),
+            ("voluntários", "i"),
+            (" informados pelas etapas e os ", "r"),
+            ("árbitros", "i"),
+            (" convocados pela ", "r"),
+            ("FECORI", "b"),
+            (".", "r"),
         ]
 
-    itensBullet: list[list[list[tuple[str, str]]]] = [linhasVol]
+    itensBullet: list[list[tuple[str, str]]] = [trechosVol]
     houveDescarte = any(
         f.etapaDescartada is not None
         for cat in resultadoApuracao.get("fichasPorCategoria", {}).values()
@@ -493,37 +592,19 @@ def _montarTextoObservacao(
     )
     if houveDescarte:
         itensBullet.append([
-            [
-                (
-                    "O valor total já considera o descarte da pontuação mais baixa, conforme estabelecido",
-                    "r",
-                ),
-            ],
-            [
-                (
-                    "no Art. 34 do Regulamento. A etapa descartada encontra-se destacada em cinza",
-                    "r",
-                ),
-            ],
-            [
-                (
-                    "e com o texto riscado.",
-                    "r",
-                ),
-            ],
+            (
+                "O valor total já considera o descarte da pontuação mais baixa, conforme estabelecido no Art. 34 "
+                "do Regulamento. A etapa descartada encontra-se destacada em cinza e com o texto riscado.",
+                "r",
+            ),
         ])
 
     itensBullet.append([
-        [
-            ("Caso identifique alguma inconformidade, envie um ", "r"),
-            ("eMail", "i"),
-            (" para", "r"),
-        ],
-        [
-            ("jouderian@gmail.com", "m"),
-            (", para que possamos analisá-la e implementar", "r"),
-        ],
-        [("melhorias nas próximas edições.", "r")],
+        ("Caso identifique alguma inconformidade, envie um ", "r"),
+        ("eMail", "i"),
+        (" para ", "r"),
+        ("jouderian@gmail.com", "m"),
+        (", para que possamos analisá-la e implementar melhorias nas próximas edições.", "r"),
     ])
 
     return itensBullet
@@ -587,6 +668,13 @@ def _desenharLinhaAtletaParcial(
             color=None,
             fill=COR_ROSA_FUNDO,
         )
+    for et, (x0, x1) in COLS_ETAPAS.items():
+        if f.etapas[et].atuouComoVoluntario:
+            page.draw_rect(
+                fitz.Rect(x0, yLinha, x1, yLinha + ALTURA_LINHA),
+                color=None,
+                fill=COR_AMARELO_FUNDO,
+            )
     page.draw_rect(fitz.Rect(X_TOTAL_ESQ, yLinha, X_DIR, yLinha + ALTURA_LINHA), color=None, fill=COR_AZUL)
 
     y = yLinha + 11.6
@@ -644,17 +732,22 @@ def _desenharTotaisEObservacao(
 
     itensBullet = _montarTextoObservacao(resultadoApuracao)
     yAtual = yFimTot + 28.0
+    tamFonteObs = 14.0
+    larguraDisponivelTexto = X_DIR - 30.0
 
-    _inserirTextoAlinhado(page, 18.0, X_DIR, yAtual, "OBSERVAÇÕES:", fBold, 14.5, "left", COR_VERMELHO)
+    _inserirTextoAlinhado(page, 18.0, X_DIR, yAtual, "OBSERVAÇÕES:", fBold, tamFonteObs, "left", COR_VERMELHO)
     yAtual += 20.0
 
-    for idxItem, linhasItem in enumerate(itensBullet):
+    for idxItem, trechosItem in enumerate(itensBullet):
+        linhasItem = _quebrarItemObservacaoEmLinhas(trechosItem, larguraDisponivelTexto, estilos, tamFonteObs)
         for idxLinha, linha in enumerate(linhasItem):
             if idxLinha == 0:
-                _inserirTextoAlinhado(page, 18.0, X_DIR, yAtual, "•", fRegular, 14.5, "left", COR_VERMELHO)
+                _inserirTextoAlinhado(page, 18.0, X_DIR, yAtual, "•", fRegular, tamFonteObs, "left", COR_VERMELHO)
             xCur = 30.0
             for txt, est in linha:
-                xCur = _inserirTextoAlinhado(page, xCur, X_DIR, yAtual, txt, estilos[est], 14.5, "left", COR_VERMELHO)
+                xCur = _inserirTextoAlinhado(
+                    page, xCur, X_DIR, yAtual, txt, estilos[est], tamFonteObs, "left", COR_VERMELHO
+                )
             yAtual += 18.0
         if idxItem < len(itensBullet) - 1:
             yAtual += 10.0

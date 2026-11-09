@@ -19,7 +19,7 @@ CATEGORIA = "H Adulto A"
 def _registro(etapa: int, cbo: int, nome: str, segundos: int) -> dict:
     return {
         "competitionId": 30 + etapa, "runnerPk": cbo * 10 + etapa, "cbo": cbo, "nome": nome, "sexo": 1,
-        "anoNascimento": 1990, "clubeId": 1, "clubeSigla": "AAA", "clubeNome": "Clube A",
+        "clubeId": 1, "clubeSigla": "AAA", "clubeNome": "Clube A",
         "clubeFiliadoCBO": True, "categoriaId": 1, "categoria": CATEGORIA,
         "statusCodigo": STATUS_OK, "statusSigla": "OK", "classifyYN": True,
         "tempo": f"00:{segundos // 60:02d}:{segundos % 60:02d}", "tempoSegundos": segundos,
@@ -103,7 +103,7 @@ class TestApuracaoCompleta(unittest.TestCase):
         dadosHelga["registrosEtapas"].extend([regProv, regOfic])
         dadosHelga["perfisAtletas"]["24219"] = {
             "cbo": 24219, "nome": "Samilla", "clubeId": 1, "clubeSigla": "AAA",
-            "clubeNome": "Clube A", "clubeFiliadoCBO": True, "anoNascimento": 1995,
+            "clubeNome": "Clube A", "clubeFiliadoCBO": True,
         }
         dadosVoluntarios["unificacoesCbo"] = [{"cboProvisorio": 990004, "cboOficial": 24219, "nome": "Samilla"}]
 
@@ -196,6 +196,12 @@ class TestPdfParcial(unittest.TestCase):
         ]
         self.assertGreater(len(desenhosDescarte), 0)
 
+        desenhosAmarelos = [
+            d for pag in doc for d in pag.get_drawings()
+            if d.get("fill") and all(abs(c1 - c2) < 0.01 for c1, c2 in zip(d["fill"], geradorExcelPdf.COR_AMARELO_FUNDO, strict=False))
+        ]
+        self.assertGreater(len(desenhosAmarelos), 0)
+
     def test_planilha_excel_e_gerada_com_as_quatro_abas(self):
         caminho = os.path.join(self.pasta.name, "apuracao.xlsx")
         gerarPlanilhaExcelApuracao(2026, "XX CCO", "XX", self.resultado, caminho)
@@ -206,6 +212,17 @@ class TestPdfParcial(unittest.TestCase):
             wb.sheetnames,
             ["resultadoParcial", "resultadoClubes", "resultadoIndividual", "memoriaClubesTop3"],
         )
+        wsParcial = wb["resultadoParcial"]
+        # Caio (CBO 3) foi voluntário na 2ª etapa (coluna 7) -> célula em amarelo (FFFF00)
+        linhaCaio = None
+        for r in range(4, wsParcial.max_row):
+            if wsParcial.cell(row=r, column=3).value == 3:
+                linhaCaio = r
+                break
+        self.assertIsNotNone(linhaCaio)
+        celulaVol = wsParcial.cell(row=linhaCaio, column=7)
+        self.assertIsNotNone(celulaVol.fill)
+        self.assertIn("FFFF00", str(celulaVol.fill.start_color.rgb))
 
 
 class TestEdicaoRomana(unittest.TestCase):
