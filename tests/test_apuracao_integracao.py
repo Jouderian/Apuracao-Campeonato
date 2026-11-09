@@ -192,7 +192,7 @@ class TestPdfParcial(unittest.TestCase):
         self.assertIn(
             "• O valor total já considera o descarte da pontuação mais baixa, conforme "
             "estabelecido no Art. 34 do Regulamento. A etapa descartada encontra-se "
-            "destacada em cinza e com o texto riscado.",
+            "em cinza e com o texto riscado.",
             ultimaPagTexto.replace("\n", " "),
         )
         self.assertIn(

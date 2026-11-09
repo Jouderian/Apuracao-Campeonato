@@ -624,7 +624,7 @@ def _montarTextoObservacao(
         itensBullet.append([
             (
                 "O valor total já considera o descarte da pontuação mais baixa, conforme estabelecido no Art. 34 "
-                "do Regulamento. A etapa descartada encontra-se destacada em cinza e com o texto riscado.",
+                "do Regulamento. A etapa descartada encontra-se em cinza e com o texto riscado.",
                 "r",
             ),
         ])
