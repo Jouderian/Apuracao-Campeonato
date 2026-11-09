@@ -24,10 +24,11 @@ Os arquivos brutos do Microsoft Access (`.mdb` / `.accdb`) não são versionados
 
 ## Verificação e Testes
 
-Instale as dependências (Excel e PDF) uma vez:
+Instale as dependências uma vez. Os arquivos `requirements*.txt` trazem versões fixas e hashes, por isso a instalação exige `--require-hashes`:
 
 ```bash
-pip install -r requirements.txt
+pip install --require-hashes -r requirements.txt        # só para apurar (Excel e PDF)
+pip install --require-hashes -r requirements-dev.txt    # para contribuir (inclui mypy, ruff, bandit e testes de propriedade)
 ```
 
 Antes de qualquer commit ou pull request, execute:
@@ -36,7 +37,7 @@ Antes de qualquer commit ou pull request, execute:
 python .agents/scripts/verificar-projeto.py
 ```
 
-A verificação confere links e frontmatter dos `.md`, o índice de specs, o manifesto SHA-256 (inclusive o `sha256Fonte` de cada JSON extraído) e roda os testes unitários e de integração.
+A verificação confere links e frontmatter dos `.md`, o índice de specs, o manifesto SHA-256 (inclusive o `sha256Fonte` de cada JSON extraído), a validação dos JSON extraídos (sem dados pessoais proibidos), Actions fixadas por SHA, dependências com hash, a análise estática (`mypy`, `ruff` e `bandit`) e roda os testes unitários e de integração. A rotina de revisão está em [`revisao-seguranca.md`](.agents/workflows/revisao-seguranca.md).
 
 ## Licença
 
