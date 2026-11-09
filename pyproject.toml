@@ -1,0 +1,35 @@
+# Configuração das verificações estáticas do projeto (executadas por verificar-projeto.py e pelo CI).
+# O pacote não é instalável: este arquivo só concentra a configuração das ferramentas.
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+files = ["src"]
+warn_unreachable = true
+
+# PyMuPDF não publica anotações para estas chamadas; o restante do módulo continua em modo estrito.
+[[tool.mypy.overrides]]
+module = ["src.relatorios.geradorExcelPdf"]
+disallow_untyped_calls = false
+
+[tool.ruff]
+target-version = "py312"
+line-length = 120
+extend-exclude = ["Dados"]
+
+[tool.ruff.lint]
+# E/F: erros e pyflakes; B: armadilhas (bugbear); S: segurança (bandit); UP: sintaxe moderna.
+select = ["E", "F", "B", "S", "UP"]
+# E501: tabelas Markdown, SQL e PowerShell embutidos têm linhas longas por natureza.
+# UP009: a declaração de codificação UTF-8 é mantida por padrão do projeto.
+ignore = ["E501", "UP009"]
+
+[tool.ruff.lint.per-file-ignores]
+# Scripts de entrada ajustam o sys.path antes de importar os módulos do projeto.
+"src/apurarCampeonato.py" = ["E402"]
+"src/extracaoAccess/extrairHelga.py" = ["E402"]
+# assert e dados sintéticos são normais em testes.
+"tests/*" = ["S101", "S105", "S106"]
+
+[tool.bandit]
+exclude_dirs = ["tests"]

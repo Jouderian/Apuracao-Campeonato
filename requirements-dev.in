@@ -1,0 +1,10 @@
+# Ferramentas de verificação (análise estática, segurança e testes de propriedade).
+# Não são necessárias para apurar um campeonato; o CI e quem contribui com código as instalam.
+-r requirements.in
+mypy
+ruff
+bandit
+pip-audit
+pip-tools
+hypothesis
+types-openpyxl
