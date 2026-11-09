@@ -7,7 +7,8 @@ import argparse
 import hashlib
 import json
 import os
-import subprocess
+# Uso restrito a um executável fixo, sem shell (ver extrairDadosViaPowerShellOdbc).
+import subprocess  # nosec B404
 import sys
 from typing import Any
 
@@ -27,31 +28,38 @@ def calcularSha256(caminhoArquivo: str) -> str:
     return hasher.hexdigest()
 
 
+def _caminhoPowerShell() -> str:
+    """Caminho absoluto do Windows PowerShell, para não depender do PATH do usuário."""
+    raizWindows = os.environ.get("SystemRoot", r"C:\Windows")
+    return os.path.join(raizWindows, "System32", "WindowsPowerShell", "v1.0", "powershell.exe")
+
+
 def extrairDadosViaPowerShellOdbc(caminhoMdb: str) -> dict[str, Any]:
     """Lê as tabelas Competition, Club, Categories, Person e Course via .NET OdbcConnection
     no Windows PowerShell (64-bit), retornando apenas os campos esportivos higienizados.
     """
-    caminhoAbs = os.path.abspath(caminhoMdb).replace("'", "''")
-    psScript = f"""
+    psScript = """
 $ErrorActionPreference = 'Stop'
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-$conn = New-Object System.Data.Odbc.OdbcConnection("Driver={{Microsoft Access Driver (*.mdb, *.accdb)}};Dbq={caminhoAbs};ReadOnly=1;")
+# O caminho chega por variável de ambiente e é entre chaves (escape ODBC), nunca interpolado no script.
+$dbq = '{' + $env:CCO_MDB_CAMINHO.Replace('}', '}}') + '}'
+$conn = New-Object System.Data.Odbc.OdbcConnection("Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=$dbq;ReadOnly=1;")
 $conn.Open()
 
-function Get-Rows($sql) {{
+function Get-Rows($sql) {
     $cmd = $conn.CreateCommand()
     $cmd.CommandText = $sql
     $da = New-Object System.Data.Odbc.OdbcDataAdapter($cmd)
     $dt = New-Object System.Data.DataTable
     [void]$da.Fill($dt)
     return $dt.Rows
-}}
+}
 
 $etapasRows = Get-Rows "SELECT c.ID, c.Site, c.OrganisingClub_FK, cl.Short_Name AS OrgShort, c.Event_FK, c.CompDate, c.Description FROM Competition c LEFT JOIN Club cl ON c.OrganisingClub_FK = cl.ID WHERE c.Event_FK >= 2 ORDER BY c.ID"
 $etapas = @()
 $idx = 1
-foreach ($r in $etapasRows) {{
-    $etapas += [ordered]@{{
+foreach ($r in $etapasRows) {
+    $etapas += [ordered]@{
         numeroEtapa = $idx
         competitionId = [int]$r.ID
         eventId = [int]$r.Event_FK
@@ -60,24 +68,24 @@ foreach ($r in $etapasRows) {{
         data = ([datetime]$r.CompDate).ToString('yyyy-MM-dd')
         clubeOrganizadorId = [int]$r.OrganisingClub_FK
         clubeOrganizadorSigla = "$($r.OrgShort)".Trim()
-    }}
+    }
     $idx++
-}}
+}
 
 $clubesRows = Get-Rows "SELECT cl.ID, cl.Code, cl.Name, cl.Short_Name, cl.Federation_FK, f.Name AS FedSigla FROM Club cl LEFT JOIN Federation f ON cl.Federation_FK = f.ID ORDER BY cl.ID"
 $clubes = @()
-foreach ($r in $clubesRows) {{
-    $fedId = if ($r.Federation_FK -isnot [System.DBNull] -and "$($r.Federation_FK)" -ne "") {{ [int]$r.Federation_FK }} else {{ $null }}
-    $clubes += [ordered]@{{
+foreach ($r in $clubesRows) {
+    $fedId = if ($r.Federation_FK -isnot [System.DBNull] -and "$($r.Federation_FK)" -ne "") { [int]$r.Federation_FK } else { $null }
+    $clubes += [ordered]@{
         clubeId = [int]$r.ID
         codigoCBO = [int]$r.Code
         sigla = "$($r.Short_Name)".Trim()
         nome = "$($r.Name)".Trim()
         federacaoId = $fedId
-        federacaoSigla = if ($r.FedSigla -isnot [System.DBNull]) {{ "$($r.FedSigla)".Trim() }} else {{ $null }}
+        federacaoSigla = if ($r.FedSigla -isnot [System.DBNull]) { "$($r.FedSigla)".Trim() } else { $null }
         filiadoCBO = [bool]($fedId -ne $null -and $fedId -gt 0 -and [int]$r.ID -notin @(30, 361))
-    }}
-}}
+    }
+}
 
 $sqlCourse = @"
 SELECT
@@ -87,8 +95,6 @@ SELECT
     p.Firstname,
     p.Name AS Lastname,
     p.Gender,
-    p.YearOfBirth,
-    Format(p.Birthdate, 'yyyy') AS BirthYearFromDate,
     c.Club_FK,
     cl.Short_Name AS ClubShort,
     cl.Name AS ClubName,
@@ -111,30 +117,22 @@ ORDER BY c.Competition_PK, cat.Name, c.Status_FK, c.CourseTime
 
 $courseRows = Get-Rows $sqlCourse
 $registros = @()
-foreach ($r in $courseRows) {{
+foreach ($r in $courseRows) {
     $nomeCompleto = ("$($r.Firstname) $($r.Lastname)").Trim()
-    $anoNasc = if ($r.YearOfBirth -isnot [System.DBNull] -and [int]$r.YearOfBirth -gt 0) {{
-        [int]$r.YearOfBirth
-    }} elseif ($r.BirthYearFromDate -isnot [System.DBNull] -and "$($r.BirthYearFromDate)" -match '^\\d{{4}}$') {{
-        [int]$r.BirthYearFromDate
-    }} else {{
-        $null
-    }}
-    $tempoStr = if ($r.TempoStr -isnot [System.DBNull] -and "$($r.TempoStr)" -ne "") {{ "$($r.TempoStr)" }} else {{ $null }}
+    $tempoStr = if ($r.TempoStr -isnot [System.DBNull] -and "$($r.TempoStr)" -ne "") { "$($r.TempoStr)" } else { $null }
     $tempoSeg = $null
-    if ($tempoStr -match '^(\\d{{2}}):(\\d{{2}}):(\\d{{2}})$') {{
+    if ($tempoStr -match '^(\\d{2}):(\\d{2}):(\\d{2})$') {
         $tempoSeg = ([int]$Matches[1] * 3600) + ([int]$Matches[2] * 60) + [int]$Matches[3]
-    }}
-    $fedId = if ($r.Federation_FK -isnot [System.DBNull] -and "$($r.Federation_FK)" -ne "") {{ [int]$r.Federation_FK }} else {{ $null }}
-    $clubeId = if ($r.Club_FK -isnot [System.DBNull]) {{ [int]$r.Club_FK }} else {{ 0 }}
+    }
+    $fedId = if ($r.Federation_FK -isnot [System.DBNull] -and "$($r.Federation_FK)" -ne "") { [int]$r.Federation_FK } else { $null }
+    $clubeId = if ($r.Club_FK -isnot [System.DBNull]) { [int]$r.Club_FK } else { 0 }
 
-    $registros += [ordered]@{{
+    $registros += [ordered]@{
         competitionId = [int]$r.Competition_PK
         runnerPk = [int]$r.Runner_PK
         cbo = [int]$r.CBO
         nome = $nomeCompleto
-        sexo = if ($r.Gender -isnot [System.DBNull]) {{ [int]$r.Gender }} else {{ $null }}
-        anoNascimento = $anoNasc
+        sexo = if ($r.Gender -isnot [System.DBNull]) { [int]$r.Gender } else { $null }
         clubeId = $clubeId
         clubeSigla = "$($r.ClubShort)".Trim()
         clubeNome = "$($r.ClubName)".Trim()
@@ -146,54 +144,50 @@ foreach ($r in $courseRows) {{
         classifyYN = [bool]$r.ClassifyYN
         tempo = $tempoStr
         tempoSegundos = $tempoSeg
-        tempoMs = if ($r.CourseTime_ms -isnot [System.DBNull] -and "$($r.CourseTime_ms)" -ne "") {{ [int]$r.CourseTime_ms }} else {{ 0 }}
-    }}
-}}
+        tempoMs = if ($r.CourseTime_ms -isnot [System.DBNull] -and "$($r.CourseTime_ms)" -ne "") { [int]$r.CourseTime_ms } else { 0 }
+    }
+}
 
-$pRows = Get-Rows "SELECT p.ID, p.Code AS CBO, p.Firstname, p.Name AS Lastname, p.Gender, p.YearOfBirth, Format(p.Birthdate, 'yyyy') AS BirthYearFromDate, p.Club_FK, cl.Short_Name AS ClubShort, cl.Name AS ClubName, cl.Federation_FK, p.Category_FK, cat.Name AS CatName FROM (Person p LEFT JOIN Club cl ON p.Club_FK = cl.ID) LEFT JOIN Categories cat ON p.Category_FK = cat.ID WHERE p.Code > 0"
-$cadastroAtletas = @{{}}
-foreach ($r in $pRows) {{
+$pRows = Get-Rows "SELECT p.ID, p.Code AS CBO, p.Firstname, p.Name AS Lastname, p.Gender, p.Club_FK, cl.Short_Name AS ClubShort, cl.Name AS ClubName, cl.Federation_FK, p.Category_FK, cat.Name AS CatName FROM (Person p LEFT JOIN Club cl ON p.Club_FK = cl.ID) LEFT JOIN Categories cat ON p.Category_FK = cat.ID WHERE p.Code > 0"
+$cadastroAtletas = @{}
+foreach ($r in $pRows) {
     $cboKey = "$([int]$r.CBO)"
-    $anoNasc = if ($r.YearOfBirth -isnot [System.DBNull] -and [int]$r.YearOfBirth -gt 0) {{
-        [int]$r.YearOfBirth
-    }} elseif ($r.BirthYearFromDate -isnot [System.DBNull] -and "$($r.BirthYearFromDate)" -match '^\\d{{4}}$') {{
-        [int]$r.BirthYearFromDate
-    }} else {{
-        $null
-    }}
-    $fedId = if ($r.Federation_FK -isnot [System.DBNull] -and "$($r.Federation_FK)" -ne "") {{ [int]$r.Federation_FK }} else {{ $null }}
-    $clubeId = if ($r.Club_FK -isnot [System.DBNull]) {{ [int]$r.Club_FK }} else {{ 0 }}
-    $cadastroAtletas[$cboKey] = [ordered]@{{
+    $fedId = if ($r.Federation_FK -isnot [System.DBNull] -and "$($r.Federation_FK)" -ne "") { [int]$r.Federation_FK } else { $null }
+    $clubeId = if ($r.Club_FK -isnot [System.DBNull]) { [int]$r.Club_FK } else { 0 }
+    $cadastroAtletas[$cboKey] = [ordered]@{
         cbo = [int]$r.CBO
         nome = ("$($r.Firstname) $($r.Lastname)").Trim()
-        sexo = if ($r.Gender -isnot [System.DBNull]) {{ [int]$r.Gender }} else {{ $null }}
-        anoNascimento = $anoNasc
+        sexo = if ($r.Gender -isnot [System.DBNull]) { [int]$r.Gender } else { $null }
         clubeId = $clubeId
         clubeSigla = "$($r.ClubShort)".Trim()
         clubeNome = "$($r.ClubName)".Trim()
         clubeFiliadoCBO = [bool]($fedId -ne $null -and $fedId -gt 0 -and $clubeId -notin @(0, 30, 361))
-        categoriaPadrao = if ($r.CatName -isnot [System.DBNull]) {{ "$($r.CatName)".Trim() }} else {{ $null }}
-    }}
-}}
+        categoriaPadrao = if ($r.CatName -isnot [System.DBNull]) { "$($r.CatName)".Trim() } else { $null }
+    }
+}
 
 $conn.Close()
 
-$out = [ordered]@{{
+$out = [ordered]@{
     etapas = $etapas
     clubes = $clubes
     registros = $registros
     cadastroPorCBO = $cadastroAtletas
-}}
+}
 $out | ConvertTo-Json -Depth 6 -Compress
 """
-    res = subprocess.run(
-        ["powershell", "-NoProfile", "-Command", psScript],
+    ambiente = {**os.environ, "CCO_MDB_CAMINHO": os.path.abspath(caminhoMdb)}
+    # Executável fixo, sem shell; o caminho do banco vai por variável de ambiente, não pelo script.
+    res = subprocess.run(  # noqa: S603  # nosec B603
+        [_caminhoPowerShell(), "-NoProfile", "-NonInteractive", "-Command", psScript],
         capture_output=True,
         text=True,
         encoding="utf-8",
         check=True,
+        env=ambiente,
     )
-    return json.loads(res.stdout.strip())
+    dados: dict[str, Any] = json.loads(res.stdout.strip())
+    return dados
 
 
 def main() -> int:

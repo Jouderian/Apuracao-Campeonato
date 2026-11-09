@@ -3,6 +3,9 @@
 import re
 from typing import Any
 
+# Número isolado de até 9 dígitos: evita converter sequências enormes e ignora texto colado (ex.: "1ª").
+_NUMERO = re.compile(r"(?<!\d)(\d{1,9})(?!\d)")
+
 
 def lerVoluntariosMarkdown(textoMd: str) -> dict[str, Any]:
     """Lê as tabelas Markdown de voluntários/convocados, penalidades do Art. 23 e unificações de CBO.
@@ -43,8 +46,8 @@ def lerVoluntariosMarkdown(textoMd: str) -> dict[str, Any]:
             continue
 
         if secaoAtual == "unificacoes":
-            mProv = re.search(r"(\d+)", celulas[0])
-            mOfic = re.search(r"(\d+)", celulas[1])
+            mProv = re.search(_NUMERO, celulas[0])
+            mOfic = re.search(_NUMERO, celulas[1])
             if not mProv or not mOfic:
                 continue
             itemUnif: dict[str, Any] = {
@@ -57,8 +60,8 @@ def lerVoluntariosMarkdown(textoMd: str) -> dict[str, Any]:
             unificacoesCbo.append(itemUnif)
             continue
 
-        mEtapa = re.search(r"(\d+)", celulas[0])
-        mCbo = re.search(r"(\d+)", celulas[1])
+        mEtapa = re.search(_NUMERO, celulas[0])
+        mCbo = re.search(_NUMERO, celulas[1])
         if not mEtapa or not mCbo:
             continue
 
@@ -69,7 +72,7 @@ def lerVoluntariosMarkdown(textoMd: str) -> dict[str, Any]:
             "funcao": "arbitro" if secaoAtual == "arbitros" else "voluntario",
         }
         if secaoAtual == "arbitros" and len(celulas) >= 4:
-            mQa = re.search(r"(\d+)", celulas[3])
+            mQa = re.search(_NUMERO, celulas[3])
             if mQa:
                 registro["qaFecori"] = int(mQa.group(1))
 
