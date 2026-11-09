@@ -123,6 +123,14 @@ def gerarRelatorioIndividualMarkdown(
             linhas.append(
                 f"| {colStr} | {f.cbo} | {f.nome} | {f.clubeSigla} | {e1} | {e2} | {e3} | {e4} | {totStr} | {premStr} |"
             )
+        empatados = [f for f in fichas if f.empateNaoResolvido]
+        if empatados:
+            cbos = ", ".join(str(f.cbo) for f in empatados)
+            linhas.extend([
+                "",
+                f"> **Empate não resolvido (Art. 34, § 2º):** CBO {cbos} seguem empatados após o último percurso e os percursos anteriores; "
+                "o critério de maior idade não é aplicado automaticamente e deve ser decidido pelo apurador.",
+            ])
         linhas.append("")
 
     return "\n".join(linhas) + "\n"
