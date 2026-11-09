@@ -135,7 +135,10 @@ class TestExtracaoPowerShell(unittest.TestCase):
         self.assertNotIn("pwned", " ".join(argumentos))
         self.assertIn("pwned", ambiente["CCO_MDB_CAMINHO"])
         self.assertIn("$env:CCO_MDB_CAMINHO", argumentos[-1])
-        self.assertTrue(os.path.isabs(argumentos[0]))
+        # Caminho do Windows PowerShell em disco, nunca o nome solto resolvido pelo PATH.
+        self.assertTrue(argumentos[0].lower().endswith("powershell.exe"))
+        self.assertNotEqual(argumentos[0].lower(), "powershell.exe")
+        self.assertIn("System32", argumentos[0])
         self.assertFalse(falso.call_args.kwargs.get("shell", False))
 
     def test_script_nao_extrai_data_nem_ano_de_nascimento(self):

@@ -172,7 +172,10 @@ class TestPdfParcial(unittest.TestCase):
             textoPag = pag.get_text("text").replace("\xa0", " ")
             self.assertNotIn("descarte da pontuação mais baixa", textoPag.split("\n")[-3:])
 
-        ultimaPagTexto = doc[-1].get_text("text").replace("\xa0", " ").replace("\u2010", "-")
+        # No Linux a fonte alternativa devolve o marcador "\u2022" como "\u00b7" na extra\u00e7\u00e3o de texto.
+        ultimaPagTexto = (
+            doc[-1].get_text("text").replace("\xa0", " ").replace("\u2010", "-").replace("\u00b7", "\u2022")
+        )
         self.assertNotIn("DESCARTE:", ultimaPagTexto)
         self.assertIn("OBSERVAÇÕES:", ultimaPagTexto)
         self.assertIn(
