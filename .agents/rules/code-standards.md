@@ -22,8 +22,15 @@ trigger: always_on
 5. **Sanitização de Saídas:**
    - Nomes de atletas, clubes e categorias vindos de banco externo nunca entram em comandos de shell e são sanitizados antes de exportação para planilhas Excel/CSV (prevenindo injeção de fórmulas iniciadas por `=`, `+`, `-`, `@`).
 
+6. **Entradas Externas Validadas e Sem Interpolação:**
+   - JSON extraído e Markdown de entrada passam por `src/extracaoAccess/validarEntrada.py` (estrutura, dados pessoais proibidos, hash no manifesto) antes de chegar ao motor.
+   - Valor externo (caminho de arquivo, nome, texto do banco) nunca é interpolado em script, SQL ou comando; vai por parâmetro ou variável de ambiente ([ADR-004](../wiki/decisions/ADR-004-endurecimento-de-seguranca-e-cadeia-de-suprimentos.md)).
+7. **Análise Estática Obrigatória:**
+   - `mypy --strict` em `src/`, `ruff` (E, F, B, S, UP) e `bandit` passam sem achados (`pyproject.toml`). Exceção só com justificativa no próprio código (`# noqa` ou `# nosec` com o motivo na linha anterior).
+
 ## Testes Automatizados
 
 - Toda regra em `src/motorCalculo/` deve ter teste unitário correspondente em `tests/`, cobrindo casos normais e casos de borda (empates, número ímpar de etapas para voluntários, campeonato com 3 etapas ou menos sem descarte, atleta penalizado pelo Art. 23 sem direito a descarte, troca de categoria).
 - O CI e o script [`verificar-projeto.py`](../scripts/verificar-projeto.py) executam a suíte de testes automaticamente.
+- Todo achado de segurança corrigido ganha teste de regressão ([`revisao-seguranca.md`](../workflows/revisao-seguranca.md)); entradas de texto externas têm teste de propriedade (`hypothesis`).
 

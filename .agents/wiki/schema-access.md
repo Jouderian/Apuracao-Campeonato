@@ -25,7 +25,7 @@ python src/extracaoAccess/extrairHelga.py --mdb "Dados/2026/entradas/HelgaDat.md
 | `Club` | Clubes e federações vinculadas | `ID`, `Code`, `Name`, `Short_Name`, `Federation_FK` (`208` = FECORI; IDs `30` e `361` = Individual sem clube) | `Logo`, `Contact_FK`, `Homepage` |
 | `Federation` | Federações estaduais e CBO | `ID`, `Name`, `LongName` | `DB_updated` |
 | `Categories` | Categorias disputadas | `ID`, `Name`, `Age`, `Gender` (`DN1..3` e `HN1..3` são categorias acompanhadas) | `Order`, `Order2` |
-| `Person` | Cadastro de atletas | `ID`, `Code` (número CBO), `Firstname`, `Name`, `Gender`, `YearOfBirth`, ano de `Birthdate`, `Club_FK`, `Category_FK` | `Street1`, `Street2`, `Zip`, `Town`, `Phone1`, `Phone2`, `Fax`, `Email`, `Birthdate` completo |
+| `Person` | Cadastro de atletas | `ID`, `Code` (número CBO), `Firstname`, `Name`, `Gender`, `Club_FK`, `Category_FK` | `Street1`, `Street2`, `Zip`, `Town`, `Phone1`, `Phone2`, `Fax`, `Email`, `Birthdate` e `YearOfBirth` (nenhuma data ou ano de nascimento é extraído; ver [ADR-003](decisions/ADR-003-sem-ano-de-nascimento-e-desempate-por-idade.md)) |
 | `Course` | Inscrições, tempos e status por etapa | `Competition_PK`, `Runner_PK`, `Category_FK`, `Club_FK`, `Status_FK`, `ClassifyYN`, `CourseTime`, `CourseTime_ms` | `EmitBadge`, `Rented`, `RealBadgeNumber` |
 | `Status` | Dicionário de status de chegada | `code`, `status`, `status_short` | — |
 

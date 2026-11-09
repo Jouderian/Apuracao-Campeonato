@@ -9,6 +9,7 @@ Executado pelo CI (.github/workflows/ci.yml) e localmente antes de qualquer comm
 import json
 import os
 import re
+import subprocess
 import sys
 import unittest
 from urllib.parse import unquote
@@ -103,7 +104,7 @@ def checar_indice_specs(raiz):
         if status not in STATUS_SPEC:
             falha(spec_rel, 1, f'status da spec deve ser "ativa" ou "concluída", não {status!r}')
             continue
-        linha = next((l for l in linhas if f']({nome}/spec.md)' in l), None)
+        linha = next((item for item in linhas if f']({nome}/spec.md)' in item), None)
         if linha is None:
             falha(indice_rel, 0, f'spec "{nome}" fora do índice')
         elif f'| {status} |' not in linha:
@@ -168,6 +169,99 @@ def checar_origem_extraidos(raiz):
 
 
 # --------------------------------------------------------------------------
+# 4c. Estrutura dos extraídos e ausência de dados pessoais proibidos (ADR-003).
+# --------------------------------------------------------------------------
+def checar_extraidos_validos(raiz):
+    sys.path.insert(0, raiz)
+    from src.extracaoAccess.validarEntrada import EntradaInvalidaError, validarDadosHelga
+
+    pasta_dados = os.path.join(raiz, 'Dados')
+    for ano in sorted(os.listdir(pasta_dados)):
+        pasta = os.path.join(pasta_dados, ano, 'extraidos')
+        if not os.path.isdir(pasta):
+            continue
+        for nome in sorted(os.listdir(pasta)):
+            if not nome.endswith('.json'):
+                continue
+            rel = f'Dados/{ano}/extraidos/{nome}'
+            try:
+                validarDadosHelga(ler_json(os.path.join(pasta, nome)))
+            except (OSError, ValueError, EntradaInvalidaError) as erro:
+                falha(rel, 0, f'extraído recusado pela validação das entradas: {erro}')
+
+
+def ler_json(caminho):
+    with open(caminho, encoding='utf-8') as fh:
+        return json.load(fh)
+
+
+# --------------------------------------------------------------------------
+# 4d. Cadeia de suprimentos: Actions fixadas por SHA e dependências com hash (ADR-004).
+# --------------------------------------------------------------------------
+def checar_workflows_fixados(raiz):
+    pasta = os.path.join(raiz, '.github', 'workflows')
+    if not os.path.isdir(pasta):
+        return
+    for nome in sorted(os.listdir(pasta)):
+        if not nome.endswith(('.yml', '.yaml')):
+            continue
+        rel = f'.github/workflows/{nome}'
+        texto = ler(os.path.join(pasta, nome))
+        for m in re.finditer(r'(?m)^\s*-?\s*uses:\s*(\S+)', texto):
+            uso = m.group(1)
+            if uso.startswith('./'):
+                continue
+            if not re.search(r'@[0-9a-f]{40}$', uso):
+                falha(rel, linha_de(texto, m.start()), f'Action sem SHA de commit fixado: {uso}')
+        if not re.search(r'(?m)^permissions:', texto):
+            falha(rel, 0, 'workflow sem bloco "permissions:" de nível superior (permissão mínima)')
+
+
+def checar_dependencias_com_hash(raiz):
+    for nome in ('requirements.txt', 'requirements-dev.txt'):
+        caminho = os.path.join(raiz, nome)
+        if not os.path.isfile(caminho):
+            falha(nome, 0, 'arquivo de dependências ausente')
+            continue
+        texto = ler(caminho)
+        # Junta as continuações de linha ("\") e confere que cada pacote traz ao menos um --hash.
+        for bloco in texto.replace('\\\n', ' ').splitlines():
+            bloco = bloco.strip()
+            if not bloco or bloco.startswith(('#', '-')):
+                continue
+            if '--hash=sha256:' not in bloco:
+                falha(nome, 0, f'dependência sem hash SHA-256: {bloco.split()[0]}')
+
+
+# --------------------------------------------------------------------------
+# 4e. Análise estática: tipos (mypy), estilo e armadilhas (ruff) e segurança (bandit).
+# --------------------------------------------------------------------------
+FERRAMENTAS_ESTATICAS = (
+    ('mypy', [sys.executable, '-m', 'mypy']),
+    ('ruff', [sys.executable, '-m', 'ruff', 'check', '.']),
+    ('bandit', [sys.executable, '-m', 'bandit', '-q', '-c', 'pyproject.toml', '-r', 'src']),
+)
+
+
+def rodar_analise_estatica(raiz):
+    for nome, comando in FERRAMENTAS_ESTATICAS:
+        try:
+            # Comandos fixos acima (sys.executable -m <ferramenta>), sem shell e sem entrada externa.
+            res = subprocess.run(  # noqa: S603
+                comando, cwd=raiz, capture_output=True, text=True, encoding='utf-8', check=False,
+            )
+        except OSError as erro:
+            falha(nome, 0, f'não foi possível executar: {erro}')
+            continue
+        saida = (res.stdout + res.stderr).strip()
+        if 'No module named' in saida:
+            falha(nome, 0, 'ferramenta ausente: execute pip install -r requirements-dev.txt')
+        elif res.returncode != 0:
+            primeiras = '\n      '.join(saida.splitlines()[:15])
+            falha(nome, 0, f'análise estática falhou (código {res.returncode}):\n      {primeiras}')
+
+
+# --------------------------------------------------------------------------
 # 5. Execução da suíte de testes unitários em tests/.
 # --------------------------------------------------------------------------
 def rodar_testes(raiz):
@@ -196,6 +290,10 @@ def main():
     checar_indice_specs(RAIZ)
     checar_manifesto_sha256(RAIZ)
     checar_origem_extraidos(RAIZ)
+    checar_extraidos_validos(RAIZ)
+    checar_workflows_fixados(RAIZ)
+    checar_dependencias_com_hash(RAIZ)
+    rodar_analise_estatica(RAIZ)
     total_testes = rodar_testes(RAIZ)
 
     print(f'Arquivos Markdown verificados: {total_md} | Testes executados: {total_testes}')

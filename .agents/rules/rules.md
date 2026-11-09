@@ -44,6 +44,7 @@ trigger: always_on
 ## Privacidade (LGPD), Organização de Dados e Auditabilidade
 
 - **Proibido versionar banco bruto com dados pessoais:** arquivos `.mdb` e `.accdb` ficam no `.gitignore` para evitar exposição de CPF, RG, endereço, telefone, e-mail ou data de nascimento completa em repositório público.
+- **Dados pessoais mínimos:** os `.json` de `Dados/<ano>/extraidos/` não levam data nem ano de nascimento, documento, endereço ou contato; o campo `anoNascimento` é recusado pela validação das entradas ([ADR-003](../wiki/decisions/ADR-003-sem-ano-de-nascimento-e-desempate-por-idade.md)).
 - **Congelamento por SHA-256:** todo arquivo `.mdb`/`.accdb` oficial utilizado na apuração de uma etapa tem seu hash SHA-256 registrado em [`Dados/arquivosCongelados.sha256`](../../Dados/arquivosCongelados.sha256).
 - **Separação de pastas em `Dados/<ano>/`:**
   - `Dados/<ano>/entradas/`: contém exclusivamente o banco bruto `.mdb`/`.accdb` (local) e o arquivo Markdown de voluntários/convocados (`voluntariosCCO.md`), facilitando a auditoria humana.
