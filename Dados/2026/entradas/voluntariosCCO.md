@@ -2,8 +2,6 @@
 
 Relação oficial de atletas convocados formalmente por seus clubes para atuarem na equipe organizadora ou convocados pela FECORI para atuar como árbitro, nos termos do **Art. 33** do Regulamento das Competições Cearenses de Orientação de 2026.
 
-> **Observação:** A 4ª etapa ainda não enviou a listagem com os seus voluntários.
-
 ## Voluntários por Etapa
 
 | Etapa | CBO | Voluntário / Convocado |
@@ -21,6 +19,13 @@ Relação oficial de atletas convocados formalmente por seus clubes para atuarem
 | 2ª | 15659 | Rafaella Ellert Dal Castel Barros |
 | 2ª | 786 | Wladimir Sant'Anna |
 | 3ª | 17369 | Wesley Nunes da Silva |
+| 4ª | 18409 | Francisco Ferreira da Silva Neto |
+| 4ª | 786 | Wladimir Chagas de Sant'anna |
+| 4ª | 16627 | Joelson Matias da Silva |
+| 4ª | 15355 | Isabel Cristina Lima Freitas |
+| 4ª | 3951 | Antonio da Silva Moraes |
+| 4ª | 15659 | Rafaella Ellert Dal Castel Barros |
+| 4ª | 3966 | Marcelo Medeiros Delgado |
 
 ## Árbitros Convocados pela FECORI
 
