@@ -1,8 +1,8 @@
 # Classificação Individual — XX CCO (2026)
 
 Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Competições Cearenses de Orientação de 2026:
-- **Descarte obrigatório (Art. 34):** 1 etapa de menor pontuação marcada como `~~riscada~~` (campeonato com 4 etapas).
-- **Voluntários/Árbitros (Art. 33, § 1º):** identificados com `(VOL)` na etapa de atuação.
+- **Descarte obrigatório (Art. 34):** 1 etapa de menor pontuação descartada, indicada com valores tachados (ex.: `~~35,00 (3º)~~`) (campeonato com 4 etapas).
+- **Voluntários e Árbitros (Art. 33, § 1º):** atribuição de pontuação média na etapa de atuação, indicada com valores em itálico (ex.: `*20,00*`).
 - **Elegibilidade à premiação final (Art. 39, § 1º):** filiado à CBO e com participação em no mínimo metade das etapas realizadas (mínimo de 2 etapas).
 
 ## Categoria: D Adulto A
@@ -10,7 +10,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 | Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 22151 | Maria Fernanda Oliveira Martinez | COFORT | 1,00 (NC) | ~~0,00 (-)~~ | 37,00 (2º) | 40,00 (1º) | **78,00** | Sim |
-| **2º** | 10597 | Tayssa Maria Paiva de Sousa | COqueiro | 20,00 (VOL) | ~~0,00 (NP)~~ | 40,00 (1º) | 0,00 (NP) | **60,00** | Sim |
+| **2º** | 10597 | Tayssa Maria Paiva de Sousa | COqueiro | *20,00* | ~~0,00 (NP)~~ | 40,00 (1º) | 0,00 (NP) | **60,00** | Sim |
 
 ## Categoria: D Adulto B
 
@@ -22,10 +22,10 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 | 4º | 16835 | Izabel Cristina Barbosa de Lima | COFORT | ~~0,00 (-)~~ | 37,00 (2º) | 0,00 (-) | 35,00 (3º) | 72,00 | Sim |
 | 5º | 23018 | Bruna Stefanie Costa Lourenço | COqueiro | 33,00 (4º) | ~~0,00 (-)~~ | 37,00 (2º) | 0,00 (-) | 70,00 | Sim |
 | 6º | 12514 | Isis de Souza Nobre | AZIMUTE | ~~0,00 (-)~~ | 35,00 (3º) | 1,00 (NC) | 32,00 (5º) | 68,00 | Sim |
-| 7º | 15659 | Rafaella Ellert Dal Castel Barros | COFORT | ~~0,00 (-)~~ | 1,00 (VOL) | 1,00 (NC) | 0,00 (-) | 2,00 | Sim |
+| 7º | 15659 | Rafaella Ellert Dal Castel Barros | COFORT | ~~0,00 (-)~~ | *1,00* | 1,00 (NC) | 0,00 (-) | 2,00 | Sim |
 | 8º | 19764 | Brenda Tavares Moreira | COFORT | ~~0,00 (-)~~ | 0,00 (-) | 0,00 (-) | 1,00 (NC) | 1,00 | Não (1/4) |
 | 9º | 21983 | Claryce Oliveira Dos Santos | COFORT | 1,00 (NC) | ~~0,00 (-)~~ | 0,00 (-) | 0,00 (-) | 1,00 | Não (1/4) |
-| - | 15355 | Isabel Cristina Lima Freitas | COFORT | ~~0,00 (-)~~ | 0,00 (VOL) | 0,00 (-) | 0,00 (-) | 0,00 | Não (1/4) |
+| - | 15355 | Isabel Cristina Lima Freitas | COFORT | ~~0,00 (-)~~ | *0,00* | 0,00 (-) | 0,00 (-) | 0,00 | Não (1/4) |
 
 ## Categoria: D Adulto E
 
@@ -104,7 +104,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 16226 | Cristiane Helena Menezes da Silva | COqueiro | 40,00 (1º) | ~~37,00 (2º)~~ | 40,00 (1º) | 40,00 (1º) | **120,00** | Sim |
 | **2º** | 15183 | Ana Carolina de Paula Melo de Vasconcelos | COFORT | 37,00 (2º) | 35,00 (3º) | 37,00 (2º) | ~~0,00 (NP)~~ | **109,00** | Sim |
-| **3º** | 21869 | Ana Paula Pimentel Nogueira | COFORT | ~~35,00 (3º)~~ | 36,00 (VOL) | 35,00 (3º) | 37,00 (2º) | **108,00** | Sim |
+| **3º** | 21869 | Ana Paula Pimentel Nogueira | COFORT | ~~35,00 (3º)~~ | *36,00* | 35,00 (3º) | 37,00 (2º) | **108,00** | Sim |
 | 4º | 6825 | Maria Vilandeicy de Souza Nobre | AZIMUTE | ~~0,00 (-)~~ | 40,00 (1º) | 0,00 (-) | 0,00 (-) | 40,00 | Não (1/4) |
 | - | 20425 | Valecia Patrícia Rodrigues de Souza | COqueiro | ~~0,00 (NP)~~ | 0,00 (-) | 0,00 (-) | 0,00 (-) | 0,00 | Não (0/4) |
 
@@ -126,7 +126,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 | Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 22030 | Maria Dalva Siebra E Silva | COFORT | ~~40,00 (1º)~~ | 40,00 (1º) | 40,00 (1º) | 40,00 (1º) | **120,00** | Sim |
-| **2º** | 13820 | Tânia Maria Paiva de Sousa | COqueiro | 19,00 (VOL) | ~~0,00 (NP)~~ | 37,00 (2º) | 1,00 (NC) | **57,00** | Sim |
+| **2º** | 13820 | Tânia Maria Paiva de Sousa | COqueiro | *19,00* | ~~0,00 (NP)~~ | 37,00 (2º) | 1,00 (NC) | **57,00** | Sim |
 
 ## Categoria: D Vet N
 
@@ -205,7 +205,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 | **3º** | 24066 | Antonio David Tomás Da Silva | COCAP | 40,00 (1º) | 37,00 (2º) | 33,00 (4º) | ~~27,00 (10º)~~ | **110,00** | Sim |
 | 4º | 17106 | José Reinaldo Teixeira Neto | COFORT | 33,00 (4º) | ~~0,00 (NP)~~ | 32,00 (5º) | 37,00 (2º) | 102,00 | Sim |
 | 5º | 7214 | João Pedro Macedo Delgado | COFORT | 29,00 (8º) | 35,00 (3º) | 37,00 (2º) | ~~28,00 (9º)~~ | 101,00 | Sim |
-| 6º | 17369 | Wesley Nunes da Silva | COCAP | 32,00 (5º) | 32,00 (5º) | 32,00 (VOL) | ~~31,00 (6º)~~ | 96,00 | Sim |
+| 6º | 17369 | Wesley Nunes da Silva | COCAP | 32,00 (5º) | 32,00 (5º) | *32,00* | ~~31,00 (6º)~~ | 96,00 | Sim |
 | 7º | 19829 | Julio Demetrius Oliveira Martinez | COFORT | 30,00 (7º) | 30,00 (7º) | ~~29,00 (8º)~~ | 33,00 (4º) | 93,00 | Sim |
 | 8º | 12567 | Guilherme Gomes Noronha | TRILHA NORTE | ~~0,00 (-)~~ | 29,00 (8º) | 31,00 (6º) | 32,00 (5º) | 92,00 | Sim |
 | 9º | 9030 | Giovanni Martins Sales | COFORT | 31,00 (6º) | 31,00 (6º) | ~~30,00 (7º)~~ | 30,00 (7º) | 92,00 | Sim |
@@ -293,7 +293,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 | 7º | 9716 | Wagner Brasil Sobrinho | CORR | ~~30,00 (7º)~~ | 30,00 (7º) | 30,00 (7º) | 33,00 (4º) | 93,00 | Sim |
 | 8º | 22310 | Alexandre Damasceno Silva | CORR | 1,00 (NC) | 32,00 (5º) | 1,00 (NC) | ~~0,00 (-)~~ | 34,00 | Sim |
 | 9º | 11837 | João Marcelo Lobo Bandeira | COqueiro | ~~0,00 (-)~~ | 29,00 (8º) | 0,00 (-) | 0,00 (-) | 29,00 | Não (1/4) |
-| - | 16127 | Ronald Luis Rodrigues do Nascimento | CODL | ~~0,00 (-)~~ | 0,00 (-) | 0,00 (-) | 0,00 (VOL) | 0,00 | Não (1/4) |
+| - | 16127 | Ronald Luis Rodrigues do Nascimento | CODL | ~~0,00 (-)~~ | 0,00 (-) | 0,00 (-) | *0,00* | 0,00 | Não (1/4) |
 | - | 21535 | Francisco Mariano Nunes Sobrinho | COFORT | ~~0,00 (-)~~ | 0,00 (NP) | 0,00 (-) | 0,00 (-) | 0,00 | Não (0/4) |
 
 ## Categoria: H Sênior A
@@ -302,15 +302,15 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 16626 | Josieudes de Sousa Claudio | COFORT | 40,00 (1º) | 40,00 (1º) | ~~30,00 (7º)~~ | 37,00 (2º) | **117,00** | Sim |
 | **2º** | 16711 | Alisson Roberto de Aquino Rodrigues | COFORT | 37,00 (2º) | 35,00 (3º) | ~~27,00 (10º)~~ | 40,00 (1º) | **112,00** | Sim |
-| **3º** | 16544 | Clodoaldo Jansen Braga | COFORT | ~~33,00 (4º)~~ | 36,50 (VOL) | 40,00 (1º) | 33,00 (4º) | **109,50** | Sim |
-| 4º | 16627 | Joelson Matias da Silva | COFORT | 30,00 (7º) | 37,00 (VOL) | 37,00 (2º) | ~~0,00 (-)~~ | 104,00 | Sim |
+| **3º** | 16544 | Clodoaldo Jansen Braga | COFORT | ~~33,00 (4º)~~ | *36,50* | 40,00 (1º) | 33,00 (4º) | **109,50** | Sim |
+| 4º | 16627 | Joelson Matias da Silva | COFORT | 30,00 (7º) | *37,00* | 37,00 (2º) | ~~0,00 (-)~~ | 104,00 | Sim |
 | 5º | 11526 | Ricardo Diogo de Vasconcelos | COFORT | 35,00 (3º) | ~~33,00 (4º)~~ | 33,00 (4º) | 35,00 (3º) | 103,00 | Sim |
 | 6º | 4330 | Francisco Ary Pires de Souza Júnior | COFORT | ~~0,00 (NP)~~ | 32,00 (5º) | 35,00 (3º) | 32,00 (5º) | 99,00 | Sim |
 | 7º | 16253 | Jose Ady Marques Sales Filho | COqueiro | 28,00 (9º) | 37,00 (2º) | 32,00 (5º) | ~~0,00 (NP)~~ | 97,00 | Sim |
-| 8º | 4555 | José Reinaldo Teixeira Filho | COFORT | 32,00 (5º) | 31,50 (VOL) | ~~31,00 (6º)~~ | 31,00 (6º) | 94,50 | Sim |
-| 9º | 7203 | Josias dos Santos Cavalcanti | AZIMUTE | 28,50 (VOL) | ~~0,00 (NP)~~ | 28,00 (9º) | 29,00 (8º) | 85,50 | Sim |
+| 8º | 4555 | José Reinaldo Teixeira Filho | COFORT | 32,00 (5º) | *31,50* | ~~31,00 (6º)~~ | 31,00 (6º) | 94,50 | Sim |
+| 9º | 7203 | Josias dos Santos Cavalcanti | AZIMUTE | *28,50* | ~~0,00 (NP)~~ | 28,00 (9º) | 29,00 (8º) | 85,50 | Sim |
 | 10º | 4317 | Jayckson Saraiva de Amorim | CORR | 31,00 (6º) | ~~0,00 (NP)~~ | 29,00 (8º) | 0,00 (NP) | 60,00 | Sim |
-| 11º | 3607 | Paulo Antônio da Costa Mazulo Júnior | TRILHA NORTE | 29,00 (8º) | ~~0,00 (NP)~~ | 14,50 (VOL) | 0,00 (NP) | 43,50 | Sim |
+| 11º | 3607 | Paulo Antônio da Costa Mazulo Júnior | TRILHA NORTE | 29,00 (8º) | ~~0,00 (NP)~~ | *14,50* | 0,00 (NP) | 43,50 | Sim |
 | 12º | 11952 | Ricardo Luiz Queiroz Borges | COFORT | ~~0,00 (-)~~ | 0,00 (-) | 0,00 (-) | 30,00 (7º) | 30,00 | Não (1/4) |
 
 ## Categoria: H Sênior B
@@ -327,7 +327,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 | 8º | 22760 | José Jailton Ribeiro De Andrade Júnior | COqueiro | 31,00 (6º) | ~~0,00 (-)~~ | 33,00 (4º) | 0,00 (-) | 64,00 | Sim |
 | *(Art. 32)* | 21843 | Jota Junior de Lima | COFORT | ~~0,00 (-)~~ | 0,00 (-) | 0,00 (-) | 30,00 (7º) | 30,00 | Não (1/4) |
 | 9º | 21736 | Francisco de Assis Cavalcante Neto | COFORT | ~~0,00 (-)~~ | 0,00 (-) | 30,00 (7º) | 0,00 (-) | 30,00 | Não (1/4) |
-| 10º | 3951 | Antonio da Silva Moraes | COFORT | ~~0,00 (-)~~ | 1,00 (VOL) | 1,00 (NC) | 0,00 (-) | 2,00 | Sim |
+| 10º | 3951 | Antonio da Silva Moraes | COFORT | ~~0,00 (-)~~ | *1,00* | 1,00 (NC) | 0,00 (-) | 2,00 | Sim |
 
 ## Categoria: H Sênior N
 
@@ -344,8 +344,8 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 | **1º** | 15059 | Walber de Almeida Andrade | CAATINGA TREKKERS | 40,00 (1º) | 35,00 (3º) | 40,00 (1º) | ~~0,00 (NP)~~ | **115,00** | Sim |
 | **2º** | 16453 | Antonio Augusto Araujo do Nascimento | COqueiro | 33,00 (4º) | ~~30,00 (7º)~~ | 33,00 (4º) | 40,00 (1º) | **106,00** | Sim |
 | **3º** | 22525 | Francisco De Assis Oliveira Furtado | COqueiro | ~~30,00 (7º)~~ | 37,00 (2º) | 32,00 (5º) | 35,00 (3º) | **104,00** | Sim |
-| 4º | 4316 | Jorge Saraiva de Amorim | CORR | 33,00 (VOL) | ~~31,00 (6º)~~ | 35,00 (3º) | 31,00 (6º) | 99,00 | Sim |
-| 5º | 10641 | Antonio Marden Oliveira de Sousa | COqueiro | 32,00 (VOL) | 32,00 (VOL) | ~~0,00 (-)~~ | 32,00 (5º) | 96,00 | Sim |
+| 4º | 4316 | Jorge Saraiva de Amorim | CORR | *33,00* | ~~31,00 (6º)~~ | 35,00 (3º) | 31,00 (6º) | 99,00 | Sim |
+| 5º | 10641 | Antonio Marden Oliveira de Sousa | COqueiro | *32,00* | *32,00* | ~~0,00 (-)~~ | 32,00 (5º) | 96,00 | Sim |
 | 6º | 16776 | Carlos Carvalho Cunha | COFORT | 27,00 (10º) | ~~1,00 (NC)~~ | 31,00 (6º) | 37,00 (2º) | 95,00 | Sim |
 | 7º | 3966 | Marcelo Medeiros Delgado | COFORT | 32,00 (5º) | 32,00 (5º) | 30,00 (7º) | ~~0,00 (NP)~~ | 94,00 | Sim |
 | 8º | 3980 | Alexandre Pinto Vasconcelos | COFORT | 31,00 (6º) | 28,00 (9º) | ~~0,00 (NP)~~ | 33,00 (4º) | 92,00 | Sim |
@@ -382,7 +382,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 | Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
-| **1º** | 786 | Wladimir Chagas de Sant'anna | COFORT | 40,00 (1º) | 40,00 (VOL) | 40,00 (1º) | ~~0,00 (-)~~ | **120,00** | Sim |
+| **1º** | 786 | Wladimir Chagas de Sant'anna | COFORT | 40,00 (1º) | *40,00* | 40,00 (1º) | ~~0,00 (-)~~ | **120,00** | Sim |
 | **2º** | 3483 | Francisco Sávio de Oliveira Barros | CORR | 37,00 (2º) | ~~0,00 (NP)~~ | 37,00 (2º) | 0,00 (NP) | **74,00** | Sim |
 
 ## Categoria: H65B

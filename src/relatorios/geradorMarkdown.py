@@ -21,7 +21,7 @@ def formatarCelulaEtapa(des: DesempenhoEtapaCalculado) -> str:
     if not des.inscrito and not des.atuouComoVoluntario:
         base = "0,00 (-)"
     elif des.atuouComoVoluntario:
-        base = f"{formatarMoedaPontos(des.pontosFinais)} (VOL)"
+        base = f"*{formatarMoedaPontos(des.pontosFinais)}*"
     elif des.colocacao is not None:
         base = f"{formatarMoedaPontos(des.pontosFinais)} ({des.colocacao}º)"
     else:
@@ -94,8 +94,8 @@ def gerarRelatorioIndividualMarkdown(
         f"# Classificação Individual — {edicao} ({ano})",
         "",
         "Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Competições Cearenses de Orientação de 2026:",
-        "- **Descarte obrigatório (Art. 34):** 1 etapa de menor pontuação marcada como `~~riscada~~` (campeonato com 4 etapas).",
-        "- **Voluntários/Árbitros (Art. 33, § 1º):** identificados com `(VOL)` na etapa de atuação.",
+        "- **Descarte obrigatório (Art. 34):** 1 etapa de menor pontuação descartada, indicada com valores tachados (ex.: `~~35,00 (3º)~~`) (campeonato com 4 etapas).",
+        "- **Voluntários e Árbitros (Art. 33, § 1º):** atribuição de pontuação média na etapa de atuação, indicada com valores em itálico (ex.: `*20,00*`).",
         "- **Elegibilidade à premiação final (Art. 39, § 1º):** filiado à CBO e com participação em no mínimo metade das etapas realizadas (mínimo de 2 etapas).",
         "",
     ]

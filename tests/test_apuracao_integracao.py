@@ -12,6 +12,7 @@ from src.relatorios.geradorExcelPdf import (
     gerarPdfResultadoParcialAtletas,
     gerarPlanilhaExcelApuracao,
 )
+from src.relatorios.geradorMarkdown import gerarRelatorioIndividualMarkdown
 
 CATEGORIA = "H Adulto A"
 
@@ -117,6 +118,16 @@ class TestApuracaoCompleta(unittest.TestCase):
         self.assertTrue(fichaSamilla.elegivelPremiacao)
         self.assertFalse(fichaSamilla.competiuEmMultiplasCategorias)
         self.assertEqual(fichaSamilla.pontuacaoTotal, Decimal("68.00"))   # 35 (3ª na 2ª et.) + 33 (4ª na 3ª et.)
+
+    def test_relatorio_individual_markdown_italico_voluntario_e_legenda_unificada(self):
+        md = gerarRelatorioIndividualMarkdown(2026, "XX CCO", self.resultado)
+        # Caio (CBO 3) teve média de voluntário de 36,00 na 2ª etapa: deve estar em itálico e sem '(VOL)'
+        self.assertIn("*36,00*", md)
+        self.assertNotIn("(VOL)", md)
+        # Informações unificadas no cabeçalho inicial e sem seção de legenda ao final
+        self.assertNotIn("## Legenda", md)
+        self.assertIn("valores tachados", md)
+        self.assertIn("valores em itálico", md)
 
 
 
