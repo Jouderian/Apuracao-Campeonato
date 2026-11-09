@@ -585,6 +585,36 @@ def _montarTextoObservacao(
         ]
 
     itensBullet: list[list[tuple[str, str]]] = [trechosVol]
+    houveVolOuArb = any(
+        des.atuouComoVoluntario
+        for cat in resultadoApuracao.get("fichasPorCategoria", {}).values()
+        for f in cat
+        for des in f.etapas.values()
+    )
+    if houveVolOuArb:
+        itensBullet.append([
+            (
+                "Os valores referentes às médias dos ",
+                "r",
+            ),
+            (
+                "voluntários",
+                "i",
+            ),
+            (
+                " e ",
+                "r",
+            ),
+            (
+                "árbitros",
+                "i",
+            ),
+            (
+                ", conforme estabelecido no Art. 33 do Regulamento, encontram-se destacados em amarelo.",
+                "r",
+            ),
+        ])
+
     houveDescarte = any(
         f.etapaDescartada is not None
         for cat in resultadoApuracao.get("fichasPorCategoria", {}).values()

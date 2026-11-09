@@ -200,6 +200,11 @@ class TestPdfParcial(unittest.TestCase):
             ultimaPagTexto.replace("\n", " "),
         )
         self.assertIn(
+            "• Os valores referentes às médias dos voluntários e árbitros, conforme "
+            "estabelecido no Art. 33 do Regulamento, encontram-se destacados em amarelo.",
+            ultimaPagTexto.replace("\n", " "),
+        )
+        self.assertIn(
             "• Caso identifique alguma inconformidade, envie um eMail para",
             ultimaPagTexto.replace("\n", " "),
         )
