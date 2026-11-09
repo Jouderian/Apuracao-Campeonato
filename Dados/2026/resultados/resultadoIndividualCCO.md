@@ -293,8 +293,8 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 | 7º | 9716 | Wagner Brasil Sobrinho | CORR | ~~30,00 (7º)~~ | 30,00 (7º) | 30,00 (7º) | 33,00 (4º) | 93,00 | Sim |
 | 8º | 22310 | Alexandre Damasceno Silva | CORR | 1,00 (NC) | 32,00 (5º) | 1,00 (NC) | ~~0,00 (-)~~ | 34,00 | Sim |
 | 9º | 11837 | João Marcelo Lobo Bandeira | COqueiro | ~~0,00 (-)~~ | 29,00 (8º) | 0,00 (-) | 0,00 (-) | 29,00 | Não (1/4) |
-| - | 21535 | Francisco Mariano Nunes Sobrinho | COFORT | ~~0,00 (-)~~ | 0,00 (NP) | 0,00 (-) | 0,00 (-) | 0,00 | Não (0/4) |
 | - | 16127 | Ronald Luis Rodrigues do Nascimento | CODL | ~~0,00 (-)~~ | 0,00 (-) | 0,00 (-) | 0,00 (VOL) | 0,00 | Não (1/4) |
+| - | 21535 | Francisco Mariano Nunes Sobrinho | COFORT | ~~0,00 (-)~~ | 0,00 (NP) | 0,00 (-) | 0,00 (-) | 0,00 | Não (0/4) |
 
 ## Categoria: H Sênior A
 
