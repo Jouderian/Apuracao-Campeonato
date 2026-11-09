@@ -6,6 +6,15 @@ description: Ciclo recorrente de revisão de segurança — medir, corrigir, tra
 
 Decisão e motivos em [ADR-004](../wiki/decisions/ADR-004-endurecimento-de-seguranca-e-cadeia-de-suprimentos.md). Faça a revisão ao fechar cada etapa do campeonato e ao menos uma vez por mês.
 
+## Automação semanal
+
+Toda segunda-feira, às 06:23 (Brasília), o GitHub executa sozinho o [CI](../../.github/workflows/ci.yml) (`pip-audit`, `mypy`, `ruff`, `bandit`, validação dos extraídos e testes) e o [CodeQL](../../.github/workflows/codeql.yml). Se algum falhar, o GitHub avisa por e-mail. Esse é o passo 1 do ciclo abaixo; os passos 2 a 6 continuam manuais.
+
+Cuidados:
+- O GitHub **desativa** execuções agendadas de repositório público sem nenhuma atividade por 60 dias; um commit ou o botão *Enable workflow* em Actions reativa.
+- Para rodar na hora: Actions → *Verificação e Testes* → *Run workflow*.
+- Um agente em nuvem que também leia alertas e *pull requests* só pode ser criado depois que o GitHub for conectado à conta Claude (https://claude.ai/connect-github).
+
 ## 1. Medir
 
 ```powershell
