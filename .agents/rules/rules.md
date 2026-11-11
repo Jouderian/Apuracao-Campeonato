@@ -43,13 +43,19 @@ trigger: always_on
 
 ## Privacidade (LGPD), Organização de Dados e Auditabilidade
 
-- **Proibido versionar banco bruto com dados pessoais:** arquivos `.mdb` e `.accdb` ficam no `.gitignore` para evitar exposição de CPF, RG, endereço, telefone, e-mail ou data de nascimento completa em repositório público.
+- **Proibido versionar banco bruto com dados pessoais:** arquivos `.mdb` e `.accdb` (e a planilha `exportadoSiteHelga.xlsx`, que recebe o mesmo tratamento) ficam no `.gitignore` para evitar exposição de CPF, RG, endereço, telefone, e-mail ou data de nascimento completa em repositório público.
 - **Dados pessoais mínimos:** os `.json` de `Dados/<ano>/extraidos/` não levam data nem ano de nascimento, documento, endereço ou contato; o campo `anoNascimento` é recusado pela validação das entradas ([ADR-003](../wiki/decisions/ADR-003-sem-ano-de-nascimento-e-desempate-por-idade.md)).
-- **Congelamento por SHA-256:** todo arquivo `.mdb`/`.accdb` oficial utilizado na apuração de uma etapa tem seu hash SHA-256 registrado em [`Dados/arquivosCongelados.sha256`](../../Dados/arquivosCongelados.sha256).
+- **Congelamento por SHA-256:** todo arquivo `.mdb`/`.accdb` oficial utilizado na apuração de uma etapa, e a planilha `exportadoSiteHelga.xlsx` quando usada, tem seu hash SHA-256 registrado em [`Dados/arquivosCongelados.sha256`](../../Dados/arquivosCongelados.sha256). Arquivo congelado não pode mudar: hash diferente do registrado recusa a extração.
 - **Separação de pastas em `Dados/<ano>/`:**
-  - `Dados/<ano>/entradas/`: contém exclusivamente o banco bruto `.mdb`/`.accdb` (local) e o arquivo Markdown de voluntários/convocados (`voluntariosCCO.md`), facilitando a auditoria humana.
+  - `Dados/<ano>/entradas/`: contém exclusivamente o banco bruto `.mdb`/`.accdb` (local), a planilha de resultados exportada do site do Helga (`exportadoSiteHelga.xlsx`, local; usada só quando o banco de uma etapa se perdeu ou veio sem resultados, conforme [ADR-006](../wiki/decisions/ADR-006-planilha-do-site-helga-como-fonte-complementar.md)) e o arquivo Markdown de voluntários/convocados (`voluntariosCCO.md`), facilitando a auditoria humana.
   - `Dados/<ano>/extraidos/`: armazena os arquivos `.json` higienizados extraídos do banco Access.
   - `Dados/<ano>/resultados/`: armazena os relatórios finais calculados (`.md`, `.pdf`, `.xlsx`).
+
+## Resultados Oficiais Publicados
+
+- **O publicado prevalece:** o resultado de uma edição já publicado oficialmente pela FECORI vale mesmo que contenha erro de cálculo; o repositório o reproduz e não o recalcula ([ADR-007](../wiki/decisions/ADR-007-resultado-oficial-publicado-prevalece.md)).
+- **Divergências registradas, nunca embutidas:** cada ponto em que o publicado difere do que o regulamento e os dados produziriam fica na seção `Ajustes do Resultado Oficial Publicado` do `voluntariosCCO.md`, uma linha por atleta e etapa, com o valor publicado e o motivo. O motor recusa ajuste que não encontra o atleta, e o relatório sinaliza as células ajustadas.
+- **O agente não corrige resultado publicado:** ao achar divergência, lista-a ao usuário; só registra o ajuste com autorização expressa.
 
 ## Controle de Pendências
 

@@ -196,6 +196,26 @@ def ler_json(caminho):
 
 
 # --------------------------------------------------------------------------
+# 4c-bis. Regulamento do ano: todo ano com dados extraídos precisa ter regras registradas (ADR-005).
+# --------------------------------------------------------------------------
+def checar_regras_por_ano(raiz):
+    sys.path.insert(0, raiz)
+    from src.motorCalculo.regulamentos import RegulamentoNaoMapeadoError, obterRegras
+
+    pasta_dados = os.path.join(raiz, 'Dados')
+    for ano in sorted(os.listdir(pasta_dados)):
+        pasta = os.path.join(pasta_dados, ano, 'extraidos')
+        if not ano.isdigit() or not os.path.isdir(pasta):
+            continue
+        if not any(n.endswith('.json') for n in os.listdir(pasta)):
+            continue
+        try:
+            obterRegras(int(ano))
+        except RegulamentoNaoMapeadoError as erro:
+            falha(f'Dados/{ano}/extraidos', 0, f'ano sem regras do regulamento registradas: {erro}')
+
+
+# --------------------------------------------------------------------------
 # 4d. Cadeia de suprimentos: Actions fixadas por SHA e dependências com hash (ADR-004).
 # --------------------------------------------------------------------------
 def checar_workflows_fixados(raiz):
@@ -291,6 +311,7 @@ def main():
     checar_manifesto_sha256(RAIZ)
     checar_origem_extraidos(RAIZ)
     checar_extraidos_validos(RAIZ)
+    checar_regras_por_ano(RAIZ)
     checar_workflows_fixados(RAIZ)
     checar_dependencias_com_hash(RAIZ)
     rodar_analise_estatica(RAIZ)
