@@ -5,4 +5,4 @@ openpyxl>=3.1
 pillow>=10.0
 # PyMuPDF 2.x passou a exigir onnxruntime, numpy, networkx e outras ~10 dependências que o projeto
 # não usa (só gera PDF com a API básica); a série 1.x mantém a cadeia de suprimentos enxuta.
-pymupdf>=1.24.3,<2
+pymupdf>=2.1,<3
