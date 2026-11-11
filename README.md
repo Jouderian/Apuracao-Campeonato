@@ -4,6 +4,8 @@ Sistema para cálculo, auditoria e publicação dos resultados individuais e por
 
 As regras esportivas aplicadas por este motor seguem os regulamentos oficiais mantidos no repositório [Regulamentos-de-Orientacao](https://github.com/Jouderian/Regulamentos-de-Orientacao).
 
+**Cada edição é apurada pelo regulamento do seu próprio ano** (`Documentos/<ano>/` do repositório de regulamentos): o 2025 não tem descarte e desempata de outra forma que o 2026, por exemplo. As regras de cada ano ficam em [`src/motorCalculo/regulamentos.py`](src/motorCalculo/regulamentos.py) (hoje 2025 e 2026), e um ano sem regras registradas não é apurado. Para apurar: `python src/apurarCampeonato.py --ano <ano> --competicao CCO` (o `--ano` é obrigatório). Detalhes em [`apurar-etapa.md`](.agents/workflows/apurar-etapa.md) e na [ADR-005](.agents/wiki/decisions/ADR-005-regulamento-por-ano-na-apuracao.md).
+
 ## Estrutura do Repositório
 
 | Caminho | Finalidade |
