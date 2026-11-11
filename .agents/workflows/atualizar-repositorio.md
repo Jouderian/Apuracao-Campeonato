@@ -40,3 +40,19 @@ git commit -m "<mensagem aprovada>"
 git push -u origin <branch>
 ```
 
+## 5. Depois do Merge: Apagar o Branch
+
+Com o PR mesclado, apague o branch local e o remoto e atualize a `main`. Essa limpeza vale por regra ([`rules.md`](../rules/rules.md)) e não precisa de nova autorização:
+
+```powershell
+gh pr view <N> --json state          # deve ser MERGED
+git switch main
+git pull --ff-only
+git diff main <branch>               # vazio: o conteúdo já está na main
+git branch -D <branch>               # -D porque o merge por rebase muda os hashes
+git push origin --delete <branch>
+git fetch --prune origin
+```
+
+Nunca apague branches de terceiros (Dependabot) nem branches com PR aberto.
+
