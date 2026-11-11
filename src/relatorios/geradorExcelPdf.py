@@ -16,7 +16,7 @@ from src.motorCalculo.pontuacao import (
     DesempenhoEtapaCalculado,
     ehCategoriaSemPontuacao,
 )
-from src.relatorios.geradorMarkdown import formatarMoedaPontos, numerosEtapasRealizadas
+from src.relatorios.geradorMarkdown import numerosEtapasRealizadas
 
 
 def sanitizarCelulaExcel(texto: str) -> str:
@@ -866,119 +866,4 @@ def gerarPdfResultadoParcialAtletas(
     for caminho in caminhosSaidaPdf:
         os.makedirs(os.path.dirname(os.path.abspath(caminho)), exist_ok=True)
         doc.save(caminho)
-    doc.close()
-
-
-def gerarPdfResultadoClubes(
-    ano: int,
-    edicaoRomanos: str,
-    resultadoApuracao: dict[str, Any],
-    caminhoSaidaPdf: str,
-    nomeArquivoPlanilha: str,
-    caminhoLogo: str | None = None,
-) -> None:
-    """Gera o PDF oficial de Resultado de Clubes no layout paisagem da FECORI com a logo da edição."""
-    import pymupdf as fitz
-
-    doc = fitz.open()
-    largura, altura = 841.92, 595.32
-    page = doc.new_page(width=largura, height=altura)
-    fontes = _obterMapaFontesPdf()
-    fRegular = fontes["regular"]
-    fBold = fontes["bold"]
-
-    corCabecalho = (0.267, 0.447, 0.769)   # Azul FECORI (#4472C4)
-    corZebra = (0.851, 0.882, 0.949)       # Azul claro (#D9E1F2)
-    corBranco = (1.0, 1.0, 1.0)
-    corPreto = (0.08, 0.08, 0.08)
-    corBorda = (0.65, 0.72, 0.85)
-
-    logoBytes = carregarBytesLogoSemFundo(caminhoLogo)
-    if logoBytes:
-        page.insert_image(fitz.Rect(42, 20, 122, 104), stream=logoBytes, keep_proportion=True)
-
-    _inserirTextoAlinhado(
-        page, 130, largura - 130, 56, f"Resultado de Clubes do {edicaoRomanos}", fBold, 20.0, "center", corPreto
-    )
-    _inserirTextoAlinhado(
-        page, 130, largura - 130, 82, "Campeonato Cearense de Orientação", fBold, 20.0, "center", corPreto
-    )
-    _inserirTextoAlinhado(
-        page, largura - 200, largura - 45, 72, "FECORI", fBold, 24.0, "right", (0.15, 0.15, 0.15)
-    )
-
-    margemX = 45.0
-    topoTabela = 112.0
-    alturaCab = 34.0
-    clubes = [c for c in resultadoApuracao["classificacaoClubes"] if c["totalPontos"] > 0]
-    alturaLinha = min(38.0, float(int((altura - topoTabela - alturaCab - 55) / max(len(clubes), 1))))
-
-    numeros = numerosEtapasRealizadas(resultadoApuracao)
-    # As colunas de etapa dividem igualmente a faixa de 320 pt (com 4 etapas, 80 pt cada).
-    larguraEtapa = 320.0 / max(len(numeros), 1)
-    colX = [
-        margemX,
-        margemX + 60,
-        margemX + 235,
-        margemX + 290,
-        *[margemX + 355 + i * larguraEtapa for i in range(len(numeros) + 1)],
-        largura - margemX,
-    ]
-    titulosCol = [
-        ("Class.", "center"),
-        ("Clube", "left"),
-        ("Fed.", "center"),
-        ("Atletas", "center"),
-        *[(f"{n}ª Etapa", "right") for n in numeros],
-        ("Total Pontos", "right"),
-    ]
-
-    rectCab = fitz.Rect(margemX, topoTabela, largura - margemX, topoTabela + alturaCab)
-    page.draw_rect(rectCab, color=corCabecalho, fill=corCabecalho)
-    yBaseCab = topoTabela + 21.5
-    for i, (titulo, alinhamento) in enumerate(titulosCol):
-        _inserirTextoAlinhado(page, colX[i] + 6, colX[i + 1] - 6, yBaseCab, titulo, fBold, 12.0, alinhamento, corBranco)
-
-    yAtual = topoTabela + alturaCab
-    for idx, c in enumerate(clubes, start=1):
-        rectLinha = fitz.Rect(margemX, yAtual, largura - margemX, yAtual + alturaLinha)
-        corFundo = corZebra if idx % 2 == 1 else corBranco
-        page.draw_rect(rectLinha, color=corBorda, fill=corFundo, width=0.5)
-
-        estLinha = fBold if idx <= 3 else fRegular
-        celulas = [
-            (f"{idx}º", "center"),
-            (c["sigla"], "left"),
-            (c.get("federacaoSigla") or "-", "center"),
-            (str(c["qtdAtletas"]), "center"),
-            *[
-                (formatarMoedaPontos(c["pontosPorEtapa"].get(et, Decimal("0.00"))), "right")
-                for et in numeros
-            ],
-            (formatarMoedaPontos(c["totalPontos"]), "right"),
-        ]
-        yBaseLinha = yAtual + (alturaLinha * 0.64)
-        for i, (valor, alinhamento) in enumerate(celulas):
-            _inserirTextoAlinhado(
-                page, colX[i] + 6, colX[i + 1] - 6, yBaseLinha, valor, estLinha, 12.5, alinhamento, corPreto
-            )
-
-        yAtual += alturaLinha
-
-    carimbo = datetime.now().strftime("%d/%m/%Y - %H:%M")
-    _inserirTextoAlinhado(page, margemX, 300.0, altura - 18.0, carimbo, fRegular, 9.5, "left", corPreto)
-    _inserirTextoAlinhado(
-        page,
-        largura - 380.0,
-        largura - margemX,
-        altura - 18.0,
-        f"{nomeArquivoPlanilha} - resultadoClubes",
-        fRegular,
-        9.5,
-        "right",
-        corPreto,
-    )
-
-    os.makedirs(os.path.dirname(os.path.abspath(caminhoSaidaPdf)), exist_ok=True)
-    doc.save(caminhoSaidaPdf)
     doc.close()

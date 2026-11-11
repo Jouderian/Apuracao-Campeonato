@@ -9,7 +9,11 @@ warn_unreachable = true
 
 # PyMuPDF não publica anotações para estas chamadas; o restante do módulo continua em modo estrito.
 [[tool.mypy.overrides]]
-module = ["src.relatorios.geradorExcelPdf", "src.relatorios.geradorPdfIndividualFinal"]
+module = [
+    "src.relatorios.geradorExcelPdf",
+    "src.relatorios.geradorPdfIndividualFinal",
+    "src.relatorios.geradorPdfClubesFinal",
+]
 disallow_untyped_calls = false
 
 [tool.ruff]

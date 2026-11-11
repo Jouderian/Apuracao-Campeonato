@@ -17,6 +17,9 @@ DivisorMediaVoluntario = Literal["inscritas", "todasAsOutras"]
 # Soma de clubes: os 3 melhores de cada categoria em cada etapa (texto do Art. 35 de 2026) ou os 3 melhores totais
 # finais da categoria (método do resultado publicado de 2025, ADR-007).
 SomaClubes = Literal["etapa", "totalDoCampeonato"]
+# Coluna "Atletas" do resultado de clubes: atletas distintos que participaram, ou as linhas (atleta e categoria)
+# que o clube tem no resultado individual (método do resultado publicado de 2025, ADR-007).
+ContagemAtletasClube = Literal["atletasDistintos", "linhasDoResultado"]
 
 TABELA_PONTOS_26_PRIMEIROS: tuple[int, ...] = (
     40, 37, 35, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24,
@@ -70,6 +73,9 @@ class RegrasRegulamento:
     arredondaMediaVoluntario: bool
     desempateIndividual: CriterioDesempateIndividual
     clubeSomaTop3Por: SomaClubes
+    clubeContaAtletasPor: ContagemAtletasClube
+    # Federação a que o clube precisa ser filiado para entrar no resultado de clubes; `None` = basta a filiação à CBO.
+    federacaoExigidaDoClube: str | None
 
     @property
     def temDescarte(self) -> bool:
@@ -115,6 +121,9 @@ REGRAS_CCO_2025 = RegrasRegulamento(
     desempateIndividual="primeirosLugares",
     # O Art. 37 fala em "por etapa", mas o resultado publicado (que vale, ADR-007) soma os 3 melhores totais finais.
     clubeSomaTop3Por="totalDoCampeonato",
+    clubeContaAtletasPor="linhasDoResultado",
+    # Art. 40: o clube não filiado (à FECORI, Art. 2º) não é classificado; o publicado deixou o CODAC (FOMS) de fora.
+    federacaoExigidaDoClube="FECORI",
 )
 
 REGRAS_CCO_2026 = RegrasRegulamento(
@@ -147,6 +156,8 @@ REGRAS_CCO_2026 = RegrasRegulamento(
     arredondaMediaVoluntario=True,
     desempateIndividual="ultimoPercurso",
     clubeSomaTop3Por="etapa",
+    clubeContaAtletasPor="atletasDistintos",
+    federacaoExigidaDoClube=None,   # Art. 35: clubes não filiados à CBO não participam
 )
 
 REGRAS_POR_EDICAO: dict[tuple[int, str], RegrasRegulamento] = {

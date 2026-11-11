@@ -140,10 +140,12 @@ def gerarRelatorioIndividualMarkdown(
     ]
     nAjustes = len(resultadoApuracao.get("ajustesOficiais", []))
     nPosicoes = len(resultadoApuracao.get("posicoesOficiais", []))
-    if nAjustes or nPosicoes:
+    nOmissoes = len(resultadoApuracao.get("omissoesOficiais", []))
+    if nAjustes or nPosicoes or nOmissoes:
         linhas.append(
             f"- **Resultado oficial publicado (ADR-007):** o publicado pela FECORI prevalece sobre o recálculo; "
-            f"{nAjustes} notas (marcadas com †) e {nPosicoes} posições foram mantidas como publicadas."
+            f"{nAjustes} notas (marcadas com †), {nPosicoes} posições e {nOmissoes} atletas fora da lista foram "
+            "mantidos como publicados."
         )
     linhas.append("")
 

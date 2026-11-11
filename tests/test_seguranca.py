@@ -205,7 +205,7 @@ class TestFuzz(unittest.TestCase):
     @given(st.text(alphabet=st.characters(blacklist_categories=("Cs",)), max_size=400))
     def test_leitor_de_voluntarios_aceita_qualquer_texto_sem_falhar(self, texto):
         resultado = lerVoluntariosMarkdown(texto)
-        self.assertEqual(set(resultado), {"voluntarios", "arbitros", "penalidadesArt23", "unificacoesCbo", "ajustesOficiais", "posicoesOficiais"})
+        self.assertEqual(set(resultado), {"voluntarios", "arbitros", "penalidadesArt23", "unificacoesCbo", "ajustesOficiais", "posicoesOficiais", "omissoesOficiais"})
 
     @settings(max_examples=100, deadline=None)
     @given(st.text(alphabet="0123456789", min_size=1, max_size=5000))

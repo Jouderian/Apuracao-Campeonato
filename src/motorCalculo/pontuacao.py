@@ -521,6 +521,12 @@ def apurarCampeonatoCCO(
         posicoesOficiais[chavePos] = int(a["posicao"])
     posicoesAplicadas: set[tuple[int, str]] = set()
 
+    # Atletas que o resultado oficial publicado não lista (ADR-007): (CBO oficial, categoria).
+    omissoesOficiais: set[tuple[int, str]] = {
+        (mapaUnificacaoCbo.get(int(o["cbo"]), int(o["cbo"])), str(o["categoria"]).strip())
+        for o in dadosVoluntarios.get("omissoesOficiais", [])
+    }
+
     perfis = dadosHelga["perfisAtletas"]
     registrosOriginais = dadosHelga["registrosEtapas"]
 
@@ -754,6 +760,22 @@ def apurarCampeonatoCCO(
         )
         fichasPorAtletaCat.append(ficha)
 
+    omitidas: set[tuple[int, str]] = set()
+    mantidas: list[ClassificacaoAtletaCategoria] = []
+    for f in fichasPorAtletaCat:
+        if (f.cbo, f.categoria) in omissoesOficiais:
+            if f.pontuacaoTotal != 0:
+                raise ValueError(f"omissão oficial de atleta com pontos: CBO {f.cbo}, {f.categoria}")
+            omitidas.add((f.cbo, f.categoria))
+        else:
+            mantidas.append(f)
+    if omissoesOficiais - omitidas:
+        raise ValueError(
+            "omissões oficiais sem ficha correspondente (CBO, categoria): "
+            + "; ".join(f"CBO {c}, {k}" for c, k in sorted(omissoesOficiais - omitidas, key=str))
+        )
+    fichasPorAtletaCat = mantidas
+
     semFicha = sorted(set(ajustesOficiais) - ajustesAplicados)
     if semFicha:
         raise ValueError(
@@ -830,6 +852,8 @@ def apurarCampeonatoCCO(
     resultadoClubes: dict[int, dict[str, Any]] = {}
     for clubeId, cInfo in clubesInfo.items():
         if not cInfo.get("filiadoCBO", False):
+            continue
+        if regras.federacaoExigidaDoClube and cInfo.get("federacaoSigla") != regras.federacaoExigidaDoClube:
             continue
         resultadoClubes[clubeId] = {
             "clubeId": clubeId,
@@ -913,7 +937,13 @@ def apurarCampeonatoCCO(
         c["totalPontos"] = arredondarPontuacao(
             totalBruto if totalBruto is not None else sum(c["pontosPorEtapa"].values(), Decimal('0.00'))
         )
-        c["qtdAtletas"] = len(c["atletasFiliadosParticipantes"])
+        if regras.clubeContaAtletasPor == "linhasDoResultado":
+            c["qtdAtletas"] = sum(
+                1 for f in fichasPorAtletaCat
+                if f.clubeId == c["clubeId"] and not ehCategoriaSemPontuacao(f.categoria)
+            )
+        else:
+            c["qtdAtletas"] = len(c["atletasFiliadosParticipantes"])
 
     # Art. 35, Parágrafo Único: desempate por mais 1ºs lugares, depois 2ºs, sucessivamente
     listaClubesOrdenada.sort(
@@ -943,6 +973,9 @@ def apurarCampeonatoCCO(
         "ajustesOficiais": [
             {"etapa": e, "cbo": c, "categoria": k, "pontos": str(p)} for (e, c, k), p in sorted(ajustesOficiais.items())
         ],
+        "omissoesOficiais": sorted(
+            ({"categoria": k, "cbo": c} for c, k in omissoesOficiais), key=lambda o: (o["categoria"], o["cbo"])
+        ),
         "posicoesOficiais": [
             {"categoria": k, "cbo": c, "posicao": p} for (c, k), p in sorted(posicoesOficiais.items(), key=str)
         ],
