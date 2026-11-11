@@ -19,6 +19,7 @@ def lerVoluntariosMarkdown(textoMd: str) -> dict[str, Any]:
     unificacoesCbo: list[dict[str, Any]] = []
     ajustesOficiais: list[dict[str, Any]] = []
     posicoesOficiais: list[dict[str, Any]] = []
+    omissoesOficiais: list[dict[str, Any]] = []
     secaoAtual = "voluntarios"
 
     for linha in textoMd.splitlines():
@@ -31,6 +32,8 @@ def lerVoluntariosMarkdown(textoMd: str) -> dict[str, Any]:
                 secaoAtual = "arbitros"
             elif "unificação" in titulo or "unificacao" in titulo:
                 secaoAtual = "unificacoes"
+            elif "fora do resultado" in titulo:
+                secaoAtual = "omissoes"
             elif "ajuste" in titulo:
                 secaoAtual = "ajustes"
             elif "posições" in titulo or "posicoes" in titulo:
@@ -49,6 +52,18 @@ def lerVoluntariosMarkdown(textoMd: str) -> dict[str, Any]:
             continue
         primeiraColuna = celulas[0].lower()
         if primeiraColuna in ("etapa", "percurso") or primeiraColuna.startswith("cbo"):
+            continue
+
+        if secaoAtual == "omissoes":
+            # | Categoria | CBO | Motivo |
+            mCboOm = re.search(_NUMERO, celulas[1])
+            if not mCboOm:
+                continue
+            omissoesOficiais.append({
+                "categoria": celulas[0],
+                "cbo": int(mCboOm.group(1)),
+                "motivo": celulas[2],
+            })
             continue
 
         if secaoAtual == "posicoes":
@@ -126,5 +141,6 @@ def lerVoluntariosMarkdown(textoMd: str) -> dict[str, Any]:
         "unificacoesCbo": unificacoesCbo,
         "ajustesOficiais": ajustesOficiais,
         "posicoesOficiais": posicoesOficiais,
+        "omissoesOficiais": omissoesOficiais,
     }
 

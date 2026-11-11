@@ -48,7 +48,7 @@ def montarDadosSinteticos() -> tuple[dict, dict]:
         "sha256Fonte": "0" * 64,
         "etapas": [{"numeroEtapa": n, "descricao": f"{n}ª etapa"} for n in (1, 2, 3, 4)],
         "clubes": [{
-            "clubeId": 1, "sigla": "AAA", "nome": "Clube A", "filiadoCBO": True, "federacaoSigla": "FED",
+            "clubeId": 1, "sigla": "AAA", "nome": "Clube A", "filiadoCBO": True, "federacaoSigla": "FECORI",
         }],
         "perfisAtletas": {},
         "registrosEtapas": registros,

@@ -329,8 +329,9 @@ def gerarPdfResultadoIndividualFinal(
     resultadoApuracao: dict[str, Any],
     caminhoSaidaPdf: str,
     caminhoLogo: str | None = None,
+    caminhoLogoFecori: str | None = None,
 ) -> None:
-    """Gera o PDF do Resultado Individual final (layout da FECORI); a logo da edição entra se existir."""
+    """Gera o PDF do Resultado Individual final (layout da FECORI); as logos entram se os arquivos existirem."""
     import pymupdf as fitz
 
     fichasPorCategoria: dict[str, list[ClassificacaoAtletaCategoria]] = resultadoApuracao["fichasPorCategoria"]
@@ -376,7 +377,10 @@ def gerarPdfResultadoIndividualFinal(
             _texto(page, 100.0, 740.0, 61.0, "Resultado Individual do", negrito, 25.0, "center", PRETO)
             _texto(page, 100.0, 740.0, 93.0, f"{edicaoRomanos} Campeonato Cearense de Orientação", negrito, 25.0,
                    "center", PRETO)
-            _texto(page, 700.0, 826.0, 76.0, "FECORI", negrito, 21.0, "right", (0.15, 0.15, 0.15))
+            if caminhoLogoFecori and os.path.isfile(caminhoLogoFecori):
+                page.insert_image(fitz.Rect(700.0, 53.0, 826.0, 81.2), filename=caminhoLogoFecori, keep_proportion=True)
+            else:
+                _texto(page, 700.0, 826.0, 76.0, "FECORI", negrito, 21.0, "right", (0.15, 0.15, 0.15))
         if linhasPagina or not paginaSoQuadros or numeroPagina != len(paginas):
             _desenharCabecalho(page, Y_CAB_PRIMEIRA if numeroPagina == 1 else Y_CAB_DEMAIS, colunas, negrito, regular)
         y = topoLinhas[numeroPagina - 1]

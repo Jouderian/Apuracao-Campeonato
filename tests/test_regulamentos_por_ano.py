@@ -43,7 +43,7 @@ def _dados(etapas: tuple[int, ...], registros: list[dict], voluntarios: list[dic
         "sha256Fonte": "0" * 64,
         "etapas": [{"numeroEtapa": n, "descricao": f"{n}ª etapa", "data": "2025-01-01", "local": "L",
                     "clubeOrganizadorSigla": "AAA"} for n in etapas],
-        "clubes": [{"clubeId": 1, "sigla": "AAA", "nome": "Clube A", "filiadoCBO": True, "federacaoSigla": "FED"}],
+        "clubes": [{"clubeId": 1, "sigla": "AAA", "nome": "Clube A", "filiadoCBO": True, "federacaoSigla": "FECORI"}],
         "perfisAtletas": {},
         "registrosEtapas": registros,
     }

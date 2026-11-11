@@ -14,10 +14,10 @@ from src.extracaoAccess.mesclarComplemento import carregarDadosDoAno
 from src.motorCalculo.pontuacao import apurarCampeonatoCCO, diagnosticarEtapas
 from src.motorCalculo.regulamentos import RegulamentoNaoMapeadoError, obterRegras
 from src.relatorios.geradorExcelPdf import (
-    gerarPdfResultadoClubes,
     gerarPdfResultadoParcialAtletas,
     gerarPlanilhaExcelApuracao,
 )
+from src.relatorios.geradorPdfClubesFinal import gerarPdfResultadoClubes, localizarBrasoes
 from src.relatorios.geradorPdfIndividualFinal import gerarPdfResultadoIndividualFinal
 from src.relatorios.geradorMarkdown import (
     gerarRelatorioClubesMarkdown,
@@ -50,6 +50,12 @@ def localizarLogoEdicao(ano: int, competicao: str) -> str | None:
         if os.path.isfile(c):
             return c
     return None
+
+
+def localizarLogoFecori() -> str | None:
+    """Localiza a logo da FECORI em Dados/ (usada nos PDFs finais)."""
+    caminho = os.path.join(RAIZ, "Dados", "logoFECORI.png")
+    return caminho if os.path.isfile(caminho) else None
 
 
 ANO_EDICAO_ZERO = 2006   # 2026 = XX edição (ano - 2006)
@@ -137,6 +143,7 @@ def main() -> int:
     os.makedirs(pastaResultados, exist_ok=True)
 
     caminhoLogo = localizarLogoEdicao(args.ano, args.competicao)
+    caminhoLogoFecori = localizarLogoFecori()
 
     arqClubesMd = os.path.join(pastaResultados, f'resultadoClubes{args.competicao}.md')
     arqIndivMd = os.path.join(pastaResultados, f'resultadoIndividual{args.competicao}.md')
@@ -169,6 +176,7 @@ def main() -> int:
             resultado,
             arqIndivPdf,
             caminhoLogo=caminhoLogo,
+            caminhoLogoFecori=caminhoLogoFecori,
         )
         gerarPdfResultadoClubes(
             args.ano,
@@ -177,6 +185,10 @@ def main() -> int:
             arqClubesPdf,
             nomePlanilha,
             caminhoLogo=caminhoLogo,
+            caminhoLogoFecori=caminhoLogoFecori,
+            brasoes=localizarBrasoes(
+                [c["sigla"] for c in resultado["classificacaoClubes"]], os.path.join(RAIZ, "Dados", "brasoes")
+            ),
         )
 
     empatados = sorted(

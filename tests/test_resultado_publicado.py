@@ -117,6 +117,72 @@ class TestClubes2025(unittest.TestCase):
         self.assertEqual(clube["totalPontos"], sum(exatos[:3], Decimal("0")).quantize(Decimal("0.01")))
 
 
+def _naoLargou(etapa: int, cbo: int, nome: str) -> dict:
+    reg = _registro(etapa, cbo, nome, 0)
+    reg.update({"statusCodigo": 3, "statusSigla": "NP", "tempo": None, "tempoSegundos": None})
+    return reg
+
+
+class TestRegrasDeClubes2025(unittest.TestCase):
+    def test_clube_de_outra_federacao_nao_e_classificado_em_2025_mas_e_em_2026(self):
+        reg = _registro(1, 8, "Ze", 1100)
+        reg.update({"clubeId": 2, "clubeSigla": "BBB", "clubeNome": "Clube B"})
+        dadosHelga, dadosVol = _dados((1,), [_registro(1, 1, "Ana", 1000), reg])
+        dadosHelga["clubes"].append(
+            {"clubeId": 2, "sigla": "BBB", "nome": "Clube B", "filiadoCBO": True, "federacaoSigla": "FOMS"})
+        siglas2025 = [c["sigla"] for c in apurarCampeonatoCCO(dadosHelga, dadosVol, REGRAS_CCO_2025)["classificacaoClubes"]]
+        siglas2026 = [c["sigla"] for c in apurarCampeonatoCCO(dadosHelga, dadosVol, REGRAS_CCO_2026)["classificacaoClubes"]]
+        self.assertEqual(siglas2025, ["AAA"])
+        self.assertEqual(sorted(siglas2026), ["AAA", "BBB"])
+
+    def test_coluna_atletas_conta_linhas_do_resultado_em_2025_e_atletas_distintos_em_2026(self):
+        outraCategoria = _registro(2, 5, "Eva", 1000)
+        outraCategoria["categoria"] = "H Adulto B"
+        registros = [_registro(1, 1, "Ana", 1000), _registro(1, 5, "Eva", 1100), outraCategoria]
+        dados = _dados((1, 2), registros)
+        qtd2025 = apurarCampeonatoCCO(*dados, REGRAS_CCO_2025)["classificacaoClubes"][0]["qtdAtletas"]
+        qtd2026 = apurarCampeonatoCCO(*dados, REGRAS_CCO_2026)["classificacaoClubes"][0]["qtdAtletas"]
+        self.assertEqual(qtd2025, 3)   # Ana + Eva em duas categorias
+        self.assertEqual(qtd2026, 2)   # Ana e Eva
+
+
+class TestOmissoesDoPublicado(unittest.TestCase):
+    def _dados(self):
+        return _dados((1,), [_registro(1, 1, "Ana", 1000), _naoLargou(1, 4, "Dani")])
+
+    def test_atleta_omitido_sai_do_resultado_e_da_contagem_de_clubes(self):
+        dadosHelga, dadosVol = self._dados()
+        com = apurarCampeonatoCCO(dadosHelga, dadosVol, REGRAS_CCO_2025)
+        self.assertIn(4, _fichas(com))
+        self.assertEqual(com["classificacaoClubes"][0]["qtdAtletas"], 2)
+        dadosVol["omissoesOficiais"] = [{"categoria": CATEGORIA, "cbo": 4, "motivo": "fora da lista publicada"}]
+        sem = apurarCampeonatoCCO(dadosHelga, dadosVol, REGRAS_CCO_2025)
+        self.assertNotIn(4, _fichas(sem))
+        self.assertEqual(sem["classificacaoClubes"][0]["qtdAtletas"], 1)
+        self.assertEqual(sem["omissoesOficiais"], [{"categoria": CATEGORIA, "cbo": 4}])
+        self.assertIn("1 atletas fora da lista", gerarRelatorioIndividualMarkdown(2025, "XIX CCO", sem))
+
+    def test_omissoes_invalidas_recusam_a_apuracao(self):
+        casos = {
+            "atleta com pontos": {"categoria": CATEGORIA, "cbo": 1},
+            "sem ficha correspondente": {"categoria": CATEGORIA, "cbo": 99},
+        }
+        for nome, omissao in casos.items():
+            dadosHelga, dadosVol = self._dados()
+            dadosVol["omissoesOficiais"] = [omissao]
+            with self.subTest(nome), self.assertRaises(ValueError):
+                apurarCampeonatoCCO(dadosHelga, dadosVol, REGRAS_CCO_2025)
+
+    def test_leitura_da_secao_de_atletas_fora_do_resultado(self):
+        md = (
+            "## Atletas Fora do Resultado Oficial Publicado\n\n"
+            "| Categoria | CBO | Motivo |\n| :--- | :---: | :--- |\n"
+            "| H Vet A | 10641 | Voluntário sem inscrição nas etapas apuradas |\n"
+        )
+        self.assertEqual(lerVoluntariosMarkdown(md)["omissoesOficiais"], [
+            {"categoria": "H Vet A", "cbo": 10641, "motivo": "Voluntário sem inscrição nas etapas apuradas"}])
+
+
 class TestLeituraDasSecoes(unittest.TestCase):
     def test_leitura_das_secoes_de_ajustes_e_posicoes(self):
         md = (
