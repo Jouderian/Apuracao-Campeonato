@@ -6,14 +6,13 @@ Apuração calculada conforme o **Art. 37** do Regulamento do XIX Campeonato Cea
 
 | Class. | Clube | Federação | Atletas | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total Pontos |
 | :---: | :--- | :---: | :---: | ---: | ---: | ---: | ---: | ---: |
-| **1º** | **COFORT** (Clube de Orientação Fortaleza) | FECORI | 86 | 1.653,00 | 1.726,00 | 1.756,00 | 1.718,33 | **6.853,33** |
-| **2º** | **COqueiro** (Clube de Orientação Coqueiro) | FECORI | 62 | 1.361,33 | 1.250,00 | 1.290,00 | 987,00 | **4.888,33** |
-| **3º** | **TRILHA NORTE** (Trilha Norte CO) | FECORI | 16 | 284,33 | 290,00 | 375,00 | 255,00 | **1.204,33** |
-| 4º | COCAP (Clube de Orientação Caçadores de Prisma) | FECORI | 33 | 223,00 | 330,00 | 391,00 | 220,67 | 1.164,67 |
-| 5º | CORR (Clube de Orientação Rumba na Rota) | FECORI | 14 | 286,00 | 234,00 | 292,00 | 213,33 | 1.025,33 |
-| 6º | AZIMUTE (Clube Azimute de Orientação e Aventura) | FECORI | 6 | 117,00 | 65,00 | 135,00 | 12,00 | 329,00 |
+| **1º** | **COFORT** (Clube de Orientação Fortaleza) | FECORI | 88 | 1.653,00 | 1.726,00 | 1.756,00 | 1.718,33 | **6.853,33** |
+| **2º** | **COqueiro** (Clube de Orientação Coqueiro) | FECORI | 63 | 1.361,33 | 1.250,00 | 1.290,00 | 987,00 | **4.888,33** |
+| **3º** | **TRILHA NORTE** (Trilha Norte CO) | FECORI | 14 | 284,33 | 290,00 | 375,00 | 255,00 | **1.204,33** |
+| 4º | COCAP (Clube de Orientação Caçadores de Prisma) | FECORI | 37 | 223,00 | 330,00 | 391,00 | 220,67 | 1.164,67 |
+| 5º | CORR (Clube de Orientação Rumba na Rota) | FECORI | 15 | 286,00 | 234,00 | 292,00 | 213,33 | 1.025,33 |
+| 6º | AZIMUTE (Clube Azimute de Orientação e Aventura) | FECORI | 7 | 117,00 | 65,00 | 135,00 | 12,00 | 329,00 |
 | 7º | CODL (Clube de Orientação Desporto e Lazer) | FECORI | 4 | 37,00 | 76,67 | 139,00 | 0,00 | 252,67 |
-| 8º | CODAC (Centro de Orientação e Desportos de Aventura de Campo Grande) | FOMS | 2 | 0,00 | 0,00 | 0,00 | 75,00 | 75,00 |
 
 ## Resumo das Etapas Apuradas
 

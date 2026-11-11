@@ -104,3 +104,19 @@ Posição na categoria que o resultado publicado deu aos atletas empatados (o pu
 | H Master B | 22050 | 12 | Empate resolvido no publicado |
 | H Sênior B | 16241 | 13 | Posição diferente da calculada no publicado |
 | H Sênior B | 8439 | 14 | Posição diferente da calculada no publicado |
+
+## Atletas Fora do Resultado Oficial Publicado
+
+O resultado publicado de 2025 não lista estes atletas, todos sem pontos: o banco da 2ª etapa se perdeu e o publicado só conhecia as inscrições das etapas 1, 3 e 4. Eles constam da lista de partida da 2ª etapa (não largaram) ou são voluntários sem inscrição nas etapas apuradas (ADR-007).
+
+| Categoria | CBO | Motivo |
+| :--- | :---: | :--- |
+| D Adulto B | 15355 | Voluntária da 2ª etapa, sem inscrição nas etapas apuradas pelo publicado |
+| D Adulto N | 116957 | Só consta da lista de partida da 2ª etapa (não largou) |
+| D Master N | 22968 | Só consta da lista de partida da 2ª etapa (não largou) |
+| D Sênior B | 8446 | Só consta da lista de partida da 2ª etapa (não largou) |
+| H Adulto A | 16719 | Voluntário da 2ª etapa, sem inscrição nas etapas apuradas pelo publicado |
+| H Master B | 22601 | Só consta da lista de partida da 2ª etapa (não largou) |
+| H Sênior N | 21907 | Voluntário da 4ª etapa, sem inscrição nas etapas apuradas pelo publicado |
+| H Vet A | 10641 | Voluntário das etapas 1 e 4, sem inscrição nas etapas apuradas pelo publicado |
+
