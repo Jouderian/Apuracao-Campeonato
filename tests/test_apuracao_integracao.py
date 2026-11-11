@@ -7,6 +7,7 @@ import unittest
 
 from src.apurarCampeonato import converterParaRomano, obterEdicaoRomana
 from src.motorCalculo.pontuacao import STATUS_OK, apurarCampeonatoCCO
+from src.motorCalculo.regulamentos import REGRAS_CCO_2026
 from src.relatorios import geradorExcelPdf
 from src.relatorios.geradorExcelPdf import (
     gerarPdfResultadoParcialAtletas,
@@ -62,7 +63,7 @@ def montarDadosSinteticos() -> tuple[dict, dict]:
 class TestApuracaoCompleta(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.resultado = apurarCampeonatoCCO(*montarDadosSinteticos())
+        cls.resultado = apurarCampeonatoCCO(*montarDadosSinteticos(), REGRAS_CCO_2026)
         cls.fichas = {f.cbo: f for f in cls.resultado["fichasPorCategoria"][CATEGORIA]}
 
     def test_classificacao_na_categoria(self):
@@ -108,7 +109,7 @@ class TestApuracaoCompleta(unittest.TestCase):
         }
         dadosVoluntarios["unificacoesCbo"] = [{"cboProvisorio": 990004, "cboOficial": 24219, "nome": "Samilla"}]
 
-        res = apurarCampeonatoCCO(dadosHelga, dadosVoluntarios)
+        res = apurarCampeonatoCCO(dadosHelga, dadosVoluntarios, REGRAS_CCO_2026)
         fichas = {f.cbo: f for f in res["fichasPorCategoria"][CATEGORIA]}
         self.assertNotIn(990004, fichas)
         self.assertIn(24219, fichas)
@@ -134,7 +135,7 @@ class TestApuracaoCompleta(unittest.TestCase):
 class TestPdfParcial(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.resultado = apurarCampeonatoCCO(*montarDadosSinteticos())
+        cls.resultado = apurarCampeonatoCCO(*montarDadosSinteticos(), REGRAS_CCO_2026)
         cls.pasta = tempfile.TemporaryDirectory()
         cls.addClassCleanup(cls.pasta.cleanup)
 

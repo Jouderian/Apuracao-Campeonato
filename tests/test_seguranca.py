@@ -42,6 +42,7 @@ from src.extracaoAccess.validarEntrada import (
     validarDadosHelga,
 )
 from src.motorCalculo.pontuacao import apurarCampeonatoCCO
+from src.motorCalculo.regulamentos import REGRAS_CCO_2026
 from src.relatorios.geradorExcelPdf import sanitizarCelulaExcel
 from src.relatorios.geradorMarkdown import gerarRelatorioIndividualMarkdown
 from tests.test_apuracao_integracao import CATEGORIA, _registro, montarDadosSinteticos
@@ -171,7 +172,7 @@ class TestEmpateNaoResolvido(unittest.TestCase):
         return dadosHelga, dadosVoluntarios
 
     def test_empate_em_todos_os_criterios_e_sinalizado_sem_usar_idade(self):
-        resultado = apurarCampeonatoCCO(*self._dadosComEmpate())
+        resultado = apurarCampeonatoCCO(*self._dadosComEmpate(), REGRAS_CCO_2026)
         fichas = {f.cbo: f for f in resultado["fichasPorCategoria"][CATEGORIA]}
         self.assertTrue(fichas[4].empateNaoResolvido and fichas[5].empateNaoResolvido)
         self.assertFalse(fichas[1].empateNaoResolvido)
@@ -181,7 +182,7 @@ class TestEmpateNaoResolvido(unittest.TestCase):
         self.assertIn("CBO 4, 5", markdown)
 
     def test_sem_empate_nada_e_sinalizado(self):
-        resultado = apurarCampeonatoCCO(*montarDadosSinteticos())
+        resultado = apurarCampeonatoCCO(*montarDadosSinteticos(), REGRAS_CCO_2026)
         self.assertFalse(any(f.empateNaoResolvido for f in resultado["fichasPorCategoria"][CATEGORIA]))
         self.assertNotIn("Empate não resolvido", gerarRelatorioIndividualMarkdown(2026, "XX CCO", resultado))
 
@@ -204,7 +205,7 @@ class TestFuzz(unittest.TestCase):
     @given(st.text(alphabet=st.characters(blacklist_categories=("Cs",)), max_size=400))
     def test_leitor_de_voluntarios_aceita_qualquer_texto_sem_falhar(self, texto):
         resultado = lerVoluntariosMarkdown(texto)
-        self.assertEqual(set(resultado), {"voluntarios", "arbitros", "penalidadesArt23", "unificacoesCbo"})
+        self.assertEqual(set(resultado), {"voluntarios", "arbitros", "penalidadesArt23", "unificacoesCbo", "ajustesOficiais", "posicoesOficiais"})
 
     @settings(max_examples=100, deadline=None)
     @given(st.text(alphabet="0123456789", min_size=1, max_size=5000))
