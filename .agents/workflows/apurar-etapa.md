@@ -22,7 +22,7 @@ Este repositório complementa o [Regulamentos-de-Orientacao](https://github.com/
 ## 1. Preparar Entradas e Logo da Edição
 
 1. Salve o arquivo `.mdb` ou `.accdb` atualizado localmente em `Dados/<ano>/entradas/` (ex.: `Dados/2026/entradas/HelgaDat.mdb`). Na pasta `entradas/` ficam apenas o arquivo `.mdb` (ignorado pelo Git por LGPD) e o arquivo Markdown de voluntários (`voluntariosCCO.md`).
-2. Certifique-se de que a logo oficial da edição esteja em `Dados/<ano>/logoCCO.jpeg` (copiada do repositório `Regulamentos-de-Orientacao/Documentos/<ano>/logoCCO.jpeg`).
+2. Certifique-se de que a logo oficial da edição esteja em `Dados/<ano>/logoCCO.jpeg` (copiada do repositório `Regulamentos-de-Orientacao/Documentos/<ano>/logoCCO.jpeg`). Os PDFs finais também usam `Dados/logoFECORI.png` e os brasões em `Dados/brasoes/<sigla>.png`; clube sem arquivo de brasão sai sem imagem.
 
 ## 2. Registrar ou Atualizar Voluntários e Árbitros em Markdown
 

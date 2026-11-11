@@ -49,6 +49,7 @@ trigger: always_on
 - **Separação de pastas em `Dados/<ano>/`:**
   - `Dados/<ano>/entradas/`: contém exclusivamente o banco bruto `.mdb`/`.accdb` (local), a planilha de resultados exportada do site do Helga (`exportadoSiteHelga.xlsx`, local; usada só quando o banco de uma etapa se perdeu ou veio sem resultados, conforme [ADR-006](../wiki/decisions/ADR-006-planilha-do-site-helga-como-fonte-complementar.md)) e o arquivo Markdown de voluntários/convocados (`voluntariosCCO.md`), facilitando a auditoria humana.
   - `Dados/<ano>/extraidos/`: armazena os arquivos `.json` higienizados extraídos do banco Access.
+  - `Dados/logoFECORI.png` e `Dados/brasoes/<sigla>.png`: logos usadas nos PDFs finais (a da FECORI e o brasão de cada clube, com o nome da sigla em camelCase, ex.: `trilhaNorte.png`), extraídas do resultado de clubes oficial de 2025. A logo da edição fica em `Dados/<ano>/logoCCO.*`.
   - `Dados/<ano>/resultados/`: armazena os relatórios finais calculados (`.md`, `.pdf`, `.xlsx`).
 
 ## Resultados Oficiais Publicados
