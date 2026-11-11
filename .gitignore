@@ -14,6 +14,9 @@ htmlcov/
 *.ldb
 *.laccdb
 
+# Planilha exportada do site de resultados do Helga (fonte local, congelada por SHA-256)
+Dados/*/entradas/exportadoSiteHelga.xlsx
+
 # Resultado parcial (não oficial): PDF regenerável a cada apuração, não é versionado
 Dados/*/resultados/resultadoParcial*.pdf
 
