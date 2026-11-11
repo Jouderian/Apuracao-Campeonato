@@ -1,5 +1,5 @@
 ---
-description: Decisão de que o resultado oficial já publicado prevalece sobre o recálculo, com as divergências registradas como ajustes auditáveis e a regra de soma de clubes de 2025 igual à do publicado.
+description: Decisão de que o resultado oficial já publicado prevalece sobre o recálculo, com as divergências registradas como ajustes auditáveis e as regras de clubes de 2025 (soma, federação e contagem de atletas) iguais às do publicado.
 ---
 
 # ADR 007: O resultado oficial publicado prevalece
@@ -18,6 +18,9 @@ description: Decisão de que o resultado oficial já publicado prevalece sobre o
 3. Cada erro pontual é um **ajuste** na seção `Ajustes do Resultado Oficial Publicado` do `voluntariosCCO.md`: etapa, CBO, categoria, pontos publicados e motivo. O motor aplica o ajuste depois de calcular a nota da etapa (inclusive a média de voluntário) e antes do total, do descarte e da classificação. Ajuste sem ficha correspondente recusa a apuração.
 4. O relatório sinaliza as células ajustadas, para que ninguém confunda o publicado com o calculado.
 5. O agente nunca corrige resultado publicado por conta própria.
+6. A seção `Posições do Resultado Oficial Publicado` fixa a posição de quem o publicado desempatou por critério que o repositório não aplica (idade, ADR-003), e a seção `Atletas Fora do Resultado Oficial Publicado` omite as linhas que o publicado não tinha (atletas sem pontos que só constam da lista de partida da 2ª etapa, cujo banco se perdeu, ou voluntários sem inscrição). O motor recusa omissão de atleta com pontos ou sem ficha.
+7. Também em 2025, o resultado de clubes só classifica clubes filiados à FECORI (`federacaoExigidaDoClube`; o CODAC, da FOMS, fica de fora, Art. 40) e a coluna "Atletas" conta as linhas do clube no resultado individual (`clubeContaAtletasPor`). Em 2026 vale a filiação à CBO e a contagem de atletas distintos.
+8. Os PDFs finais (individual e de clubes) seguem o layout publicado pela FECORI, com a logo da edição, a logo da FECORI (`Dados/logoFECORI.png`) e os brasões dos clubes (`Dados/brasoes/<sigla>.png`), extraídos do resultado de clubes oficial de 2025.
 
 ## Consequências
 - **Positivas:** o resultado reproduzido coincide com o publicado, e cada divergência fica visível, justificada e reversível.
