@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 """Ponto de entrada (CLI) para execução da apuração do campeonato."""
 import argparse
-import json
 import os
 import sys
 
@@ -11,13 +10,15 @@ if RAIZ not in sys.path:
     sys.path.insert(0, RAIZ)
 
 from src.extracaoAccess.leitorVoluntarios import lerVoluntariosMarkdown
-from src.extracaoAccess.validarEntrada import conferirHashNoManifesto, validarDadosHelga
-from src.motorCalculo.pontuacao import apurarCampeonatoCCO
+from src.extracaoAccess.mesclarComplemento import carregarDadosDoAno
+from src.motorCalculo.pontuacao import apurarCampeonatoCCO, diagnosticarEtapas
+from src.motorCalculo.regulamentos import RegulamentoNaoMapeadoError, obterRegras
 from src.relatorios.geradorExcelPdf import (
     gerarPdfResultadoClubes,
     gerarPdfResultadoParcialAtletas,
     gerarPlanilhaExcelApuracao,
 )
+from src.relatorios.geradorPdfIndividualFinal import gerarPdfResultadoIndividualFinal
 from src.relatorios.geradorMarkdown import (
     gerarRelatorioClubesMarkdown,
     gerarRelatorioIndividualMarkdown,
@@ -78,7 +79,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(
         description="Calcula o resultado individual e por clubes do Campeonato Cearense de Orientação (CCO/CCOS)."
     )
-    parser.add_argument('--ano', type=int, default=2026, help="Ano da edição do campeonato (ex.: 2026)")
+    parser.add_argument(
+        '--ano',
+        type=int,
+        required=True,
+        help="Ano da edição do campeonato (ex.: 2026); define o regulamento aplicado, sem valor padrão",
+    )
     parser.add_argument(
         '--competicao',
         choices=['CCO', 'CCOS'],
@@ -92,6 +98,13 @@ def main() -> int:
     )
     args = parser.parse_args()
 
+    # A apuração segue o regulamento do próprio ano; ano sem regras registradas é recusado (ADR-005).
+    try:
+        regras = obterRegras(args.ano, args.competicao)
+    except RegulamentoNaoMapeadoError as erro:
+        print(f"Regulamento não mapeado: {erro}", file=sys.stderr)
+        return 1
+
     pastaAno = os.path.join(RAIZ, 'Dados', str(args.ano))
     arqEtapas = os.path.join(pastaAno, 'extraidos', f'etapasHelga{args.ano}.json')
     arqVoluntariosMd = os.path.join(pastaAno, 'entradas', f'voluntarios{args.competicao}.md')
@@ -101,10 +114,8 @@ def main() -> int:
         return 1
 
     try:
-        with open(arqEtapas, encoding='utf-8') as fh:
-            dadosHelga = json.load(fh)
-        validarDadosHelga(dadosHelga)
-        conferirHashNoManifesto(dadosHelga, args.ano, os.path.join(RAIZ, 'Dados'))
+        # JSON do banco + complementos (ex.: planilha do site do Helga), cada um validado e com hash conferido
+        dadosHelga, arquivosUsados = carregarDadosDoAno(args.ano, os.path.join(RAIZ, 'Dados'))
     except (ValueError, OSError) as erro:
         print(f"Entrada recusada ({arqEtapas}): {erro}", file=sys.stderr)
         return 1
@@ -115,7 +126,10 @@ def main() -> int:
     else:
         dadosVoluntarios = {"voluntarios": [], "penalidadesArt23": []}
 
-    resultado = apurarCampeonatoCCO(dadosHelga, dadosVoluntarios)
+    for aviso in diagnosticarEtapas(dadosHelga):
+        print(f"ATENÇÃO: {aviso}.", file=sys.stderr)
+
+    resultado = apurarCampeonatoCCO(dadosHelga, dadosVoluntarios, regras)
 
     edicaoRomanos = obterEdicaoRomana(args.ano)
     edicao = f"{edicaoRomanos} {args.competicao}"
@@ -149,11 +163,11 @@ def main() -> int:
         caminhoLogo=None,
     )
     if args.oficial:
-        gerarPdfResultadoParcialAtletas(
+        gerarPdfResultadoIndividualFinal(
             args.ano,
             edicaoRomanos,
             resultado,
-            [arqIndivPdf],
+            arqIndivPdf,
             caminhoLogo=caminhoLogo,
         )
         gerarPdfResultadoClubes(
@@ -170,11 +184,18 @@ def main() -> int:
     )
     if empatados:
         print(
-            "ATENÇÃO: empate não resolvido (Art. 34, § 2º; critério de idade não aplicado, ADR-003) em: "
+            f"ATENÇÃO: empate não resolvido ({regras.artigos.desempateIndividual}; critério de idade não aplicado, ADR-003) em: "
             + ", ".join(f"{cat} CBO {cbo}" for cat, cbo in empatados),
             file=sys.stderr,
         )
     print(f"Apuração do {edicao} ({args.ano}) concluída:")
+    print(f"  - Regulamento:      {regras.nomeRegulamento} ({regras.arquivoFonte})")
+    print(f"  - Dados extraídos:  {', '.join(arquivosUsados)}")
+    print(
+        "  - Etapas apuradas:  "
+        + ", ".join(f"{e['numeroEtapa']}ª" for e in resultado["etapas"])
+        + (" (com descarte)" if resultado["descarteAplicado"] else " (sem descarte)")
+    )
     print(f"  - Voluntários lidos ({len(dadosVoluntarios['voluntarios'])}): {os.path.relpath(arqVoluntariosMd, RAIZ)}")
     if caminhoLogo:
         print(f"  - Logo da edição:   {os.path.relpath(caminhoLogo, RAIZ)}")
