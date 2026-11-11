@@ -6,4 +6,6 @@ Cada subpasta `<ano>/` é dividida em três áreas para não misturar fontes hum
 - `extraidos/`: armazena os arquivos `.json` higienizados extraídos automaticamente do banco Access (`etapasHelga<ano>.json`, mais `etapasHelgaWeb<ano>.json` quando há planilha do site).
 - `resultados/`: armazena os relatórios finais de classificação individual e por clubes gerados pelo motor de cálculo.
 
+Na raiz de `Dados/` ficam também `logoFECORI.png` e a pasta `brasoes/` (um arquivo por clube, nomeado pela sigla em camelCase), usados nos PDFs finais.
+
 Os hashes SHA-256 dos bancos `.mdb`/`.accdb` originais ficam registrados em [`arquivosCongelados.sha256`](arquivosCongelados.sha256).

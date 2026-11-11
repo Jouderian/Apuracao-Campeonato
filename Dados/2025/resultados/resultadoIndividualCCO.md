@@ -4,7 +4,7 @@ Apuração calculada conforme o Regulamento do XIX Campeonato Cearense de Orient
 - **Sem descarte (Art. 38):** o regulamento de 2025 classifica pelo somatório dos pontos de todas as etapas.
 - **Voluntários e Árbitros (Art. 36, § 1º):** atribuição de pontuação média na etapa de atuação, indicada com valores em itálico (ex.: `*20,00*`).
 - **Elegibilidade à premiação final (Art. 42, § 1º):** filiado à CBO e com participação em no mínimo metade das etapas realizadas (mínimo de 2 etapas).
-- **Resultado oficial publicado (ADR-007):** o publicado pela FECORI prevalece sobre o recálculo; 10 notas (marcadas com †) e 25 posições foram mantidas como publicadas.
+- **Resultado oficial publicado (ADR-007):** o publicado pela FECORI prevalece sobre o recálculo; 10 notas (marcadas com †), 25 posições e 8 atletas fora da lista foram mantidos como publicados.
 
 ## Categoria: D Adulto A
 
@@ -26,7 +26,6 @@ Apuração calculada conforme o Regulamento do XIX Campeonato Cearense de Orient
 | 6º | 15659 | Rafaella Ellert Dal Castel Barros | COFORT | 0,00 (-) | *10,33* | 31,00 (6º) | 0,00 (-) | 41,33 | Sim |
 | 7º | 19764 | Brenda Tavares Moreira | COFORT | 0,00 (-) | 0,00 (-) | 32,00 (5º) | 0,00 (-) | 32,00 | Não (1/4) |
 | 8º | 21983 | Claryce Oliveira Dos Santos | COFORT | 0,00 (-) | 0,00 (-) | 1,00 (NC) | 0,00 (-) | 1,00 | Não (1/4) |
-| - | 15355 | Isabel Cristina Lima Freitas | COFORT | 0,00 (-) | *0,00* | 0,00 (-) | 0,00 (-) | 0,00 | Não (1/4) |
 
 ## Categoria: D Adulto E
 
@@ -47,7 +46,6 @@ Apuração calculada conforme o Regulamento do XIX Campeonato Cearense de Orient
 | *(Art. 35)* | 910002 | Rossana Maria Castro De Andrade | INDIV | 0,00 (-) | 33,00 (4º) | 0,00 (-) | 0,00 (-) | 33,00 | Não (1/4) |
 | 6º | 22848 | Lisia Mary Santana Barbosa | COFORT | 1,00 (NC) | 0,00 (NP) | 0,00 (-) | 0,00 (-) | 1,00 | Não (1/4) |
 | - | 20661 | Maria Vanessa dos Santos Costa | COqueiro | 0,00 (NP) | 0,00 (-) | 0,00 (-) | 0,00 (-) | 0,00 | Não (0/4) |
-| - | 116957 | Ana Melissa Morais Ribeiro | COFORT | 0,00 (-) | 0,00 (NP) | 0,00 (-) | 0,00 (-) | 0,00 | Não (0/4) |
 
 ## Categoria: D Infant B
 
@@ -118,7 +116,6 @@ Apuração calculada conforme o Regulamento do XIX Campeonato Cearense de Orient
 | Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 42, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 7039 | Rosineide de Sales Coragem | COqueiro | 0,00 (-) | 40,00 (1º) | 40,00 (1º) | 40,00 (1º) | **120,00** | Sim |
-| - | 22968 | Liesia Monteiro Silveira | COFORT | 0,00 (-) | 0,00 (NP) | 0,00 (-) | 0,00 (-) | 0,00 | Não (0/4) |
 
 ## Categoria: D Sênior A
 
@@ -138,7 +135,6 @@ Apuração calculada conforme o Regulamento do XIX Campeonato Cearense de Orient
 | 4º | 20425 | Valecia Patrícia Rodrigues de Souza | COqueiro | 37,00 (2º) | 0,00 (NP) | 1,00 (NC) | 0,00 (-) | 38,00 | Sim |
 | 5º | 22418 | Andrelia Maciel Melo | COqueiro | 0,00 (-) | 0,00 (NP) | 1,00 (NC) | 0,00 (-) | 1,00 | Não (1/4) |
 | - | 14762 | Karen Cavalcante Colares | COqueiro | 0,00 (NP) | 0,00 (NP) | 0,00 (-) | 0,00 (-) | 0,00 | Não (0/4) |
-| - | 8446 | Cinthya Barros dos Anjos | COFORT | 0,00 (-) | 0,00 (NP) | 0,00 (-) | 0,00 (-) | 0,00 | Não (0/4) |
 
 ## Categoria: D Sênior N
 
@@ -186,7 +182,6 @@ Apuração calculada conforme o Regulamento do XIX Campeonato Cearense de Orient
 | 7º | 23180 | Luiz Fernando Guimarães Fernandes | COCAP | 0,00 (-) | 0,00 (-) | 1,00 (NC) | 0,00 (-) | 1,00 | Não (1/4) |
 | *(Art. 35)* | 23189 | Matheus Edgar Pereira Do Nascimento | COCAP | 1,00 (NC) | 0,00 (-) | 0,00 (-) | 0,00 (-) | 1,00 | Não (1/4) |
 | - | 3488 | Anthonyo Tarciso Aragão Correia Lima | CORR | 0,00 (NP) | 0,00 (-) | 0,00 (-) | 0,00 (-) | 0,00 | Não (0/4) |
-| - | 16719 | Felipe Derick de Sousa Lima | COFORT | 0,00 (-) | *0,00* | 0,00 (-) | 0,00 (-) | 0,00 | Não (1/4) |
 
 ## Categoria: H Adulto B
 
@@ -351,7 +346,6 @@ Apuração calculada conforme o Regulamento do XIX Campeonato Cearense de Orient
 | 12º | 22050 | Francisco Gláucio Gomes Peixoto | COFORT | 28,00 (9º) | 1,00 (NC) | 0,00 (-) | 0,00 (-) | 29,00 | Sim |
 | 13º | 22146 | Bruno Rogério Simões Dos Santos | COFORT | 27,00 (10º) | 0,00 (-) | 0,00 (-) | 0,00 (-) | 27,00 | Não (1/4) |
 | 14º | 21980 | Alisson Alencar David | COCAP | 0,00 (NP) | 0,00 (-) | 1,00 (NC) | 0,00 (-) | 1,00 | Não (1/4) |
-| - | 22601 | Daniel Santiago Da Silva Cazé | COFORT | 0,00 (-) | 0,00 (NP) | 0,00 (-) | 0,00 (-) | 0,00 | Não (0/4) |
 
 ## Categoria: H Master N
 
@@ -359,7 +353,7 @@ Apuração calculada conforme o Regulamento do XIX Campeonato Cearense de Orient
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 910001 | Thales Magalhães De Carvalho Saldanha | INDIV | 0,00 (-) | 0,00 (-) | 40,00 (1º) | 0,00 (-) | **40,00** | Não (1/4) |
 | *(Art. 35)* | 22592 | Pedro Ivo Da Silva Mendes | COCAP | 0,00 (-) | 0,00 (-) | 1,00 (NC) | 0,00 (-) | 1,00 | Não (1/4) |
-| *(Art. 35)* | 22601 | Daniel Santiago Da Silva Cazé | COFORT | 0,00 (NP) | 0,00 (-) | 0,00 (-) | 0,00 (-) | 0,00 | Não (0/4) |
+| - | 22601 | Daniel Santiago Da Silva Cazé | COFORT | 0,00 (NP) | 0,00 (-) | 0,00 (-) | 0,00 (-) | 0,00 | Não (0/4) |
 | - | 22722 | Fabio Viana De Brito | COFORT | 0,00 (NP) | 0,00 (-) | 0,00 (-) | 0,00 (-) | 0,00 | Não (0/4) |
 
 ## Categoria: H Sênior A
@@ -405,7 +399,6 @@ Apuração calculada conforme o Regulamento do XIX Campeonato Cearense de Orient
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 22964 | Leonardo Cesar Silva Rodrigues | COFORT | 40,00 (1º) | 40,00 (1º) | 40,00 (1º) | 40,00 (1º) | **160,00** | Sim |
 | **2º** | 22449 | Leonardo Abreu Fonseca | COFORT | 0,00 (-) | 37,00 (2º) | 0,00 (-) | 37,00 (2º) | **74,00** | Sim |
-| - | 21907 | Silvio Murillo Baltazar Moreira | CORR | 0,00 (-) | 0,00 (-) | 0,00 (-) | *0,00* | 0,00 | Não (1/4) |
 
 ## Categoria: H VIP A
 
@@ -441,7 +434,6 @@ Apuração calculada conforme o Regulamento do XIX Campeonato Cearense de Orient
 | 11º | 3604 | Erbério Alves de Lima | TRILHA NORTE | 0,00 (-) | 32,00 (5º) | 28,00 (9º) | 1,00 (NC) | 61,00 | Sim |
 | 12º | 11686 | Jefferson Luis da Rosa Gonçalves | COFORT | 32,00 (5º) | 27,00 (10º) | 0,00 (-) | 0,00 (-) | 59,00 | Sim |
 | 13º | 3952 | Paulo Marcelo Oliveira | COFORT | 17,50 (-)† | 35,00 (3º) | 0,00 (NP) | 0,00 (-) | 52,50 | Não (1/4) |
-| - | 10641 | Antonio Marden Oliveira de Sousa | COqueiro | *0,00* | 0,00 (NP) | 0,00 (-) | *0,00* | 0,00 | Sim |
 
 ## Categoria: H Vet B
 
