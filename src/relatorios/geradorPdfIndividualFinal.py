@@ -63,6 +63,8 @@ AMARELO: Cor = (1.0, 1.0, 0.0)
 LARANJA_CLARO: Cor = (1.0, 0.949, 0.8)
 LARANJA: Cor = (1.0, 0.753, 0.0)
 BRONZE: Cor = (0.929, 0.49, 0.192)
+PRATA: Cor = (0.78, 0.78, 0.8)
+AZUL_FITA: Cor = (0.12, 0.2, 0.4)
 OURO: Cor = (1.0, 0.851, 0.4)
 VERMELHO: Cor = (1.0, 0.0, 0.0)
 PRETO: Cor = (0.0, 0.0, 0.0)
@@ -164,6 +166,21 @@ def _desenharMedalha(page: Any, cx: float, cy: float, cor: Cor, digito: str, fon
         )
     page.draw_circle(p(cx, cy + 1.7), 3.7, color=cor, width=0.9)
     _inserirTextoAlinhado(page, cx - 4.0, cx + 4.0, cy + 3.7, digito, fonte, 5.8, "center", cor)
+
+
+def _desenharMedalhaColorida(page: Any, cx: float, cy: float, fundo: Cor, digito: str, fonte: Fonte) -> None:
+    """Medalha do quadro de premiação: fitas escuras, disco colorido (ouro, prata ou bronze) e o dígito."""
+    import pymupdf as fitz
+
+    p = fitz.Point
+    for lado in (-1, 1):   # fitas
+        page.draw_polyline(
+            [p(cx + lado * 3.9, cy - 6.4), p(cx + lado * 1.3, cy - 6.4), p(cx - lado * 0.8, cy - 1.4),
+             p(cx + lado * 1.8, cy - 1.4), p(cx + lado * 3.9, cy - 6.4)],
+            color=AZUL_FITA, fill=AZUL_FITA, width=0.3, closePath=True,
+        )
+    page.draw_circle(p(cx, cy + 1.9), 4.3, color=PRETO, fill=fundo, width=0.9)
+    _inserirTextoAlinhado(page, cx - 4.0, cx + 4.0, cy + 4.0, digito, fonte, 6.4, "center", PRETO)
 
 
 def _desenharPremio(page: Any, premio: str | None, topo: float, fontes: Fonte, fonteNegrito: Fonte,
@@ -275,14 +292,19 @@ def _desenharQuadros(page: Any, topo: float, contagem: dict[str, int], regras: A
     page.draw_rect(fitz.Rect(xe, topo, xd, topo + 21.0), color=None, fill=AZUL)
     _texto(page, xe, xd, topo + 14.5, "Premiação", negrito, 12.0, "center", BRANCO)
     alturaTabela = 21.0 + 3 * ALT_LINHA
+    regular = fontes["regular"]
     for i, premio in enumerate((PREMIO_OURO, PREMIO_PRATA, PREMIO_BRONZE)):
         y0 = topo + 21.0 + i * ALT_LINHA
-        page.draw_rect(fitz.Rect(xe, y0, xd, y0 + ALT_LINHA), color=None, fill=AZUL_CLARO)
+        if i % 2 == 1:   # linhas alternadas: branca e azul clara
+            page.draw_rect(fitz.Rect(xe, y0, xd, y0 + ALT_LINHA), color=None, fill=AZUL_CLARO)
+        if i > 0:   # separador pontilhado entre as linhas
+            page.draw_line(fitz.Point(xe, y0), fitz.Point(xd, y0), color=CINZA_TRACO, width=0.5, dashes="[1.5 1.5] 0")
         numero = {PREMIO_OURO: "1", PREMIO_PRATA: "2", PREMIO_BRONZE: "3"}[premio]
-        _texto(page, xe + 12, xe + 44, y0 + 12.9, f"{numero}°", negrito, 11.0, "left", PRETO)
-        _desenharMedalha(page, xe + 54.0, y0 + 8.4, PRETO, numero, negrito)
-        _texto(page, xe + 90, xd - 8, y0 + 12.9, str(contagem.get(premio, 0)), negrito, 11.0, "right", PRETO)
-    page.draw_rect(fitz.Rect(xe, topo, xd, topo + alturaTabela), color=PRETO, width=1.4)
+        corDisco = {PREMIO_OURO: OURO, PREMIO_PRATA: PRATA, PREMIO_BRONZE: BRONZE}[premio]
+        _texto(page, xe + 12, xe + 44, y0 + 12.9, f"{numero}°", regular, 12.0, "left", PRETO)
+        _desenharMedalhaColorida(page, xe + 62.0, y0 + 8.4, corDisco, numero, negrito)
+        _texto(page, xe + 90, xd - 8, y0 + 12.9, str(contagem.get(premio, 0)), regular, 12.0, "right", PRETO)
+    page.draw_rect(fitz.Rect(xe, topo, xd, topo + alturaTabela), color=PRETO, width=1.0)
 
     # Legenda
     xl0, xl1 = 170.0, 410.0
