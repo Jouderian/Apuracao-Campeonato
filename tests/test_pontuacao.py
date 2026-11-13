@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""Testes unitários do motor de cálculo de pontuação (Regulamento 2026, Arts. 23, 31 a 35 e 39)."""
+"""Testes unitários do motor de cálculo de pontuação (regulamentos 2026: Arts. 23, 31 a 35 e 39; 2025: Arts. 34 a 42)."""
 from decimal import Decimal
 import unittest
 
@@ -15,51 +15,54 @@ from src.motorCalculo.pontuacao import (
     calcularPontosStatusHelga,
     calcularPontuacaoClubeNaEtapa,
     ehCategoriaSemPontuacao,
-    exigirMinimoEtapasVoluntarioCCO,
     normalizarCategoriaPadraoCBO,
     selecionarIndiceDescarte,
     temDireitoDescarteCCO,
 )
+from src.motorCalculo.regulamentos import REGRAS_CCO_2026, calcularMinimoMetadeEtapas
 from src.relatorios.geradorExcelPdf import (
     formatarPontoTabelaParcial,
     sanitizarCelulaExcel,
 )
 
 
+REGRAS = REGRAS_CCO_2026
+
+
 class TestPontuacaoEtapa(unittest.TestCase):
     def test_primeiros_26_colocados(self):
-        self.assertEqual(calcularPontosEtapa('H21E', True, 1), 40)
-        self.assertEqual(calcularPontosEtapa('H21E', True, 2), 37)
-        self.assertEqual(calcularPontosEtapa('H21E', True, 3), 35)
-        self.assertEqual(calcularPontosEtapa('H21E', True, 4), 33)
-        self.assertEqual(calcularPontosEtapa('H21E', True, 26), 11)
+        self.assertEqual(calcularPontosEtapa('H21E', True, 1, regras=REGRAS), 40)
+        self.assertEqual(calcularPontosEtapa('H21E', True, 2, regras=REGRAS), 37)
+        self.assertEqual(calcularPontosEtapa('H21E', True, 3, regras=REGRAS), 35)
+        self.assertEqual(calcularPontosEtapa('H21E', True, 4, regras=REGRAS), 33)
+        self.assertEqual(calcularPontosEtapa('H21E', True, 26, regras=REGRAS), 11)
 
     def test_a_partir_do_27_colocado_recebe_10_pontos(self):
-        self.assertEqual(calcularPontosEtapa('H21A', True, 27), 10)
-        self.assertEqual(calcularPontosEtapa('H21A', True, 50), 10)
+        self.assertEqual(calcularPontosEtapa('H21A', True, 27, regras=REGRAS), 10)
+        self.assertEqual(calcularPontosEtapa('H21A', True, 50, regras=REGRAS), 10)
 
     def test_nao_classificado_ou_percurso_anulado_recebe_1_ponto(self):
-        self.assertEqual(calcularPontosEtapa('D21E', False, None), 1)
-        self.assertEqual(calcularPontosEtapa('D21E', True, 1, percursoAnulado=True), 1)
+        self.assertEqual(calcularPontosEtapa('D21E', False, None, regras=REGRAS), 1)
+        self.assertEqual(calcularPontosEtapa('D21E', True, 1, percursoAnulado=True, regras=REGRAS), 1)
 
     def test_status_helga_ok_nc_ot_np_cc(self):
-        self.assertEqual(calcularPontosStatusHelga('H Adulto E', STATUS_OK, 1), 40)
-        self.assertEqual(calcularPontosStatusHelga('H Adulto E', STATUS_NC, None), 1)
-        self.assertEqual(calcularPontosStatusHelga('D Master B', STATUS_OT, None), 1)
-        self.assertEqual(calcularPontosStatusHelga('H Vet A', STATUS_NP, None), 0)
-        self.assertEqual(calcularPontosStatusHelga('H Vet B', STATUS_CC, None), 0)
+        self.assertEqual(calcularPontosStatusHelga('H Adulto E', STATUS_OK, 1, regras=REGRAS), 40)
+        self.assertEqual(calcularPontosStatusHelga('H Adulto E', STATUS_NC, None, regras=REGRAS), 1)
+        self.assertEqual(calcularPontosStatusHelga('D Master B', STATUS_OT, None, regras=REGRAS), 1)
+        self.assertEqual(calcularPontosStatusHelga('H Vet A', STATUS_NP, None, regras=REGRAS), 0)
+        self.assertEqual(calcularPontosStatusHelga('H Vet B', STATUS_CC, None, regras=REGRAS), 0)
 
     def test_categorias_acompanhadas_e_abertas_nao_pontuam(self):
         for cat in ('HN1', 'DN2', 'Acompanhado Adulto', 'Aberto Curto'):
             self.assertTrue(ehCategoriaSemPontuacao(cat))
-            self.assertEqual(calcularPontosEtapa(cat, True, 1), 0)
+            self.assertEqual(calcularPontosEtapa(cat, True, 1, regras=REGRAS), 0)
 
 
 class TestDescarteEVoluntarios(unittest.TestCase):
     def test_direito_descarte_cco_apenas_mais_de_3_etapas(self):
-        self.assertFalse(temDireitoDescarteCCO(2))
-        self.assertFalse(temDireitoDescarteCCO(3))
-        self.assertTrue(temDireitoDescarteCCO(4))
+        self.assertFalse(temDireitoDescarteCCO(2, REGRAS))
+        self.assertFalse(temDireitoDescarteCCO(3, REGRAS))
+        self.assertTrue(temDireitoDescarteCCO(4, REGRAS))
 
     def test_penalidade_art23_impede_descarte_daquela_etapa(self):
         notas = [
@@ -71,15 +74,16 @@ class TestDescarteEVoluntarios(unittest.TestCase):
         self.assertEqual(selecionarIndiceDescarte(notas), 1)
 
     def test_minimo_etapas_voluntario_arredonda_para_baixo(self):
-        self.assertEqual(exigirMinimoEtapasVoluntarioCCO(4), 2)
-        self.assertEqual(exigirMinimoEtapasVoluntarioCCO(5), 2)
-        self.assertEqual(exigirMinimoEtapasVoluntarioCCO(3), 1)
+        self.assertEqual(calcularMinimoMetadeEtapas(4, REGRAS), 2)
+        self.assertEqual(calcularMinimoMetadeEtapas(5, REGRAS), 2)
+        self.assertEqual(calcularMinimoMetadeEtapas(3, REGRAS), 1)
 
     def test_media_voluntario_cco_aplica_descarte_antes_da_media(self):
         media = calcularMediaVoluntarioCCO(
             etapasRealizadasNoCampeonato=4,
             resultadosInscritosExcetoVoluntario=[(40, True), (35, True), (10, True)],
             participouEtapasTotais=3,
+            regras=REGRAS,
         )
         self.assertEqual(media, Decimal('37.50'))
 

@@ -4,7 +4,7 @@ description: Índice da base de conhecimento do projeto — decisões arquitetur
 
 # Base de Conhecimento
 
-Última atualização: 2026-11-09
+Última atualização: 2026-11-11
 
 Índice das páginas da wiki. As decisões formais ficam em `decisions/` como ADRs; specs, planos e workflows continuam sendo a fonte de verdade de cada iniciativa.
 
@@ -16,6 +16,9 @@ description: Índice da base de conhecimento do projeto — decisões arquitetur
 | [ADR-002](decisions/ADR-002-licenciamento-polyform-noncommercial-e-relacao-com-o-regulamento.md) | Licenciamento PolyForm Noncommercial | Código sob PolyForm Noncommercial 1.0.0; regras esportivas permanecem das entidades e da CC BY 4.0 do repositório de regulamentos; licenças independentes |
 | [ADR-003](decisions/ADR-003-sem-ano-de-nascimento-e-desempate-por-idade.md) | Sem ano de nascimento e desempate por idade | O ano de nascimento deixa de ser extraído e versionado (LGPD); o empate que dependeria da idade é sinalizado como não resolvido até o regulamento propor outro critério |
 | [ADR-004](decisions/ADR-004-endurecimento-de-seguranca-e-cadeia-de-suprimentos.md) | Endurecimento de segurança e cadeia de suprimentos | Extração sem injeção no PowerShell, validação das entradas, `mypy`/`ruff`/`bandit` no CI, dependências com hash, Actions fixadas por SHA e revisão recorrente |
+| [ADR-005](decisions/ADR-005-regulamento-por-ano-na-apuracao.md) | Regulamento por ano na apuração | Cada edição é apurada pelo regulamento do seu ano, com regras registradas por ano e competição; ano sem regras é recusado; interpretações adotadas onde o regulamento de 2025 é omisso |
+| [ADR-006](decisions/ADR-006-planilha-do-site-helga-como-fonte-complementar.md) | Planilha do site do Helga como fonte complementar | Etapas com banco perdido ou sem resultados usam a planilha exportada do site (lista de partida e resultado), congelada por SHA-256 e conferida automaticamente |
+| [ADR-007](decisions/ADR-007-resultado-oficial-publicado-prevalece.md) | O resultado oficial publicado prevalece | O publicado vale mesmo com erro; a soma de clubes de 2025 segue o publicado e cada divergência pontual vira ajuste auditável no `voluntariosCCO.md` |
 
 ## Páginas Técnicas
 

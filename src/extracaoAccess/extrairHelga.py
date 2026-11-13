@@ -41,8 +41,8 @@ def extrairDadosViaPowerShellOdbc(caminhoMdb: str) -> dict[str, Any]:
     psScript = """
 $ErrorActionPreference = 'Stop'
 [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
-# O caminho chega por variável de ambiente e é entre chaves (escape ODBC), nunca interpolado no script.
-$dbq = '{' + $env:CCO_MDB_CAMINHO.Replace('}', '}}') + '}'
+# O caminho chega por variável de ambiente, nunca interpolado no script (ADR-004).
+$dbq = $env:CCO_MDB_CAMINHO
 $conn = New-Object System.Data.Odbc.OdbcConnection("Driver={Microsoft Access Driver (*.mdb, *.accdb)};Dbq=$dbq;ReadOnly=1;")
 $conn.Open()
 
@@ -59,8 +59,12 @@ $etapasRows = Get-Rows "SELECT c.ID, c.Site, c.OrganisingClub_FK, cl.Short_Name 
 $etapas = @()
 $idx = 1
 foreach ($r in $etapasRows) {
+    $numEtapa = $idx
+    if ("$($r.Description)" -match '(\\d+)\\s*([ªaáºo]|\\.?[ªaáºo])\\s*(?:etapa)?') {
+        $numEtapa = [int]$Matches[1]
+    }
     $etapas += [ordered]@{
-        numeroEtapa = $idx
+        numeroEtapa = $numEtapa
         competitionId = [int]$r.ID
         eventId = [int]$r.Event_FK
         descricao = "$($r.Description)".Trim()
@@ -195,32 +199,43 @@ def main() -> int:
         description="Extrai dados higienizados do HelgaDat.mdb para JSON."
     )
     parser.add_argument(
+        "--ano",
+        type=int,
+        default=None,
+        help="Ano da edição do campeonato (preenche caminhos padrão de mdb, saida e voluntarios)",
+    )
+    parser.add_argument(
         "--mdb",
-        default="Dados/2026/entradas/HelgaDat.mdb",
+        default=None,
         help="Caminho do arquivo .mdb do Helga",
     )
     parser.add_argument(
         "--saida",
-        default="Dados/2026/extraidos/etapasHelga2026.json",
+        default=None,
         help="Caminho do arquivo JSON higienizado de saída",
     )
     parser.add_argument(
         "--voluntarios",
-        default="Dados/2026/entradas/voluntariosCCO.md",
+        default=None,
         help="Arquivo Markdown de voluntários para garantir inclusão do perfil base se necessário",
     )
     args = parser.parse_args()
 
-    if not os.path.isfile(args.mdb):
-        print(f"Arquivo não encontrado: {args.mdb}", file=sys.stderr)
+    ano = args.ano or 2026
+    caminhoMdb = args.mdb or f"Dados/{ano}/entradas/HelgaDat.mdb"
+    caminhoSaida = args.saida or f"Dados/{ano}/extraidos/etapasHelga{ano}.json"
+    caminhoVoluntarios = args.voluntarios or f"Dados/{ano}/entradas/voluntariosCCO.md"
+
+    if not os.path.isfile(caminhoMdb):
+        print(f"Arquivo não encontrado: {caminhoMdb}", file=sys.stderr)
         return 1
 
-    sha256 = calcularSha256(args.mdb)
-    dadosBrutos = extrairDadosViaPowerShellOdbc(args.mdb)
+    sha256 = calcularSha256(caminhoMdb)
+    dadosBrutos = extrairDadosViaPowerShellOdbc(caminhoMdb)
 
     cbosNasEtapas = {str(r["cbo"]) for r in dadosBrutos["registros"]}
-    if os.path.isfile(args.voluntarios):
-        with open(args.voluntarios, encoding="utf-8") as fh:
+    if os.path.isfile(caminhoVoluntarios):
+        with open(caminhoVoluntarios, encoding="utf-8") as fh:
             volData = lerVoluntariosMarkdown(fh.read())
         for v in volData.get("voluntarios", []):
             cbosNasEtapas.add(str(v["cbo"]))
@@ -247,7 +262,7 @@ def main() -> int:
         r["etapa"] = compIdParaEtapa[r["competitionId"]]
 
     payloadFinal = {
-        "fonte": os.path.basename(args.mdb),
+        "fonte": os.path.basename(caminhoMdb),
         "sha256Fonte": sha256,
         "etapas": dadosBrutos["etapas"],
         "clubes": clubesFiltrados,
@@ -255,15 +270,15 @@ def main() -> int:
         "registrosEtapas": dadosBrutos["registros"],
     }
 
-    os.makedirs(os.path.dirname(os.path.abspath(args.saida)), exist_ok=True)
-    with open(args.saida, "w", encoding="utf-8", newline="\n") as fh:
+    os.makedirs(os.path.dirname(os.path.abspath(caminhoSaida)), exist_ok=True)
+    with open(caminhoSaida, "w", encoding="utf-8", newline="\n") as fh:
         json.dump(payloadFinal, fh, ensure_ascii=False, indent=2)
         fh.write("\n")
 
     print(
         f"Extração concluída: {len(dadosBrutos['etapas'])} etapas, "
         f"{len(dadosBrutos['registros'])} inscrições, "
-        f"{len(perfisFiltrados)} atletas únicos -> {args.saida}"
+        f"{len(perfisFiltrados)} atletas únicos -> {caminhoSaida}"
     )
     return 0
 

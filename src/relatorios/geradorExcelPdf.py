@@ -16,9 +16,7 @@ from src.motorCalculo.pontuacao import (
     DesempenhoEtapaCalculado,
     ehCategoriaSemPontuacao,
 )
-from src.relatorios.geradorMarkdown import formatarMoedaPontos
-
-ETAPAS_CAMPEONATO: tuple[int, ...] = (1, 2, 3, 4)
+from src.relatorios.geradorMarkdown import numerosEtapasRealizadas
 
 
 def sanitizarCelulaExcel(texto: str) -> str:
@@ -117,7 +115,7 @@ def _inserirTextoAlinhado(
 
 
 def _descreverEtapaPlanilha(des: DesempenhoEtapaCalculado) -> str:
-    if not des.inscrito and not des.atuouComoVoluntario:
+    if not des.inscrito and not des.atuouComoVoluntario and not des.ajustadoOficial:
         return "-"
     if des.atuouComoVoluntario:
         return "VOL"
@@ -148,6 +146,10 @@ def gerarPlanilhaExcelApuracao(
 ) -> None:
     """Gera o arquivo Excel (.xlsx) com abas resultadoParcial, resultadoClubes, resultadoIndividual e memoriaClubesTop3."""
     wb = Workbook()
+    regras = resultadoApuracao["regras"]
+    numeros = numerosEtapasRealizadas(resultadoApuracao)
+    nEt = len(numeros)
+    colTotalParcial = 5 + nEt + 1
 
     fonteTitulo = Font(name="Calibri", size=14, bold=True, color="000000")
     fonteCabecalho = Font(name="Calibri", size=11, bold=True, color="FFFFFF")
@@ -178,7 +180,7 @@ def gerarPlanilhaExcelApuracao(
     wsParcial["A1"].font = fonteTitulo
     wsParcial.append([])
 
-    cabecalhosParcial = ["Categoria", "Class", "CBO", "Atleta", "Clube", "1", "2", "3", "4", "Total"]
+    cabecalhosParcial = ["Categoria", "Class", "CBO", "Atleta", "Clube", *[str(n) for n in numeros], "Total"]
     wsParcial.append(cabecalhosParcial)
     for colIdx in range(1, len(cabecalhosParcial) + 1):
         cel = wsParcial.cell(row=3, column=colIdx)
@@ -190,16 +192,17 @@ def gerarPlanilhaExcelApuracao(
         )
 
     linhasParcial = _coletarLinhasTabelaParcial(resultadoApuracao)
-    contagemEtapas = {et: 0 for et in ETAPAS_CAMPEONATO}
+    contagemEtapas = {et: 0 for et in numeros}
     for idx, f in enumerate(linhasParcial, start=1):
         rowNum = 3 + idx
         notasCols: list[float | int | str] = []
-        for et in ETAPAS_CAMPEONATO:
+        for et in numeros:
             des = f.etapas[et]
-            if not des.inscrito and not des.atuouComoVoluntario:
+            if not des.inscrito and not des.atuouComoVoluntario and not des.ajustadoOficial:
                 notasCols.append("")
             else:
-                contagemEtapas[et] += 1
+                if des.inscrito or des.atuouComoVoluntario:
+                    contagemEtapas[et] += 1
                 q = des.pontosFinais.quantize(Decimal("0.01"))
                 notasCols.append(int(q) if q == q.to_integral_value() else float(q))
 
@@ -211,31 +214,27 @@ def gerarPlanilhaExcelApuracao(
             int(f.cbo),
             sanitizarCelulaExcel(f.nome),
             sanitizarCelulaExcel(f.clubeSigla),
-            notasCols[0],
-            notasCols[1],
-            notasCols[2],
-            notasCols[3],
+            *notasCols,
             totVal,
         ])
-        for colIdx in range(1, 11):
+        for colIdx in range(1, colTotalParcial + 1):
             cel = wsParcial.cell(row=rowNum, column=colIdx)
             cel.font = fonteNormal
-            if colIdx < 10 and idx % 2 == 1:
+            if colIdx < colTotalParcial and idx % 2 == 1:
                 cel.fill = preenchimentoCinzaParcial
             if colIdx == 4 and f.competiuEmMultiplasCategorias:
                 cel.fill = preenchimentoRosaDuplicado
                 cel.font = fonteRosa
-            if 6 <= colIdx <= 9:
-                et = colIdx - 5
-                des = f.etapas[et]
+            if 6 <= colIdx < colTotalParcial:
+                des = f.etapas[numeros[colIdx - 6]]
                 if des.atuouComoVoluntario:
                     cel.fill = preenchimentoAmareloVoluntario
                 if des.descartada:
                     cel.font = fonteDescarte
-            if colIdx == 10:
+            if colIdx == colTotalParcial:
                 cel.fill = preenchimentoCabecalho
                 cel.font = fonteTotalBranca
-            if colIdx in (2, 6, 7, 8, 9, 10):
+            if colIdx == 2 or colIdx >= 6:
                 cel.alignment = Alignment(horizontal="center")
             elif colIdx == 3:
                 cel.alignment = Alignment(horizontal="right")
@@ -243,12 +242,12 @@ def gerarPlanilhaExcelApuracao(
     linhaTotParcial = 4 + len(linhasParcial)
     wsParcial.append([
         "Total", "", "", len(linhasParcial), "",
-        contagemEtapas[1], contagemEtapas[2], contagemEtapas[3], contagemEtapas[4], "",
+        *[contagemEtapas[et] for et in numeros], "",
     ])
-    for colIdx in range(1, 11):
+    for colIdx in range(1, colTotalParcial + 1):
         cel = wsParcial.cell(row=linhaTotParcial, column=colIdx)
         cel.font = fonteNegrito
-        if colIdx in (4, 6, 7, 8, 9):
+        if colIdx == 4 or 6 <= colIdx < colTotalParcial:
             cel.alignment = Alignment(horizontal="center")
 
     # 2. Aba: resultadoClubes
@@ -258,7 +257,7 @@ def gerarPlanilhaExcelApuracao(
 
     cabecalhosClubes = [
         "Class.", "Clube", "Nome Completo", "Federação", "Atletas",
-        "1ª Etapa", "2ª Etapa", "3ª Etapa", "4ª Etapa", "Total Pontos",
+        *[f"{n}ª Etapa" for n in numeros], "Total Pontos",
     ]
     wsClubes.append([])
     wsClubes.append(cabecalhosClubes)
@@ -276,10 +275,7 @@ def gerarPlanilhaExcelApuracao(
             sanitizarCelulaExcel(c["nome"]),
             sanitizarCelulaExcel(c.get("federacaoSigla") or "-"),
             int(c["qtdAtletas"]),
-            float(c["pontosPorEtapa"].get(1, Decimal("0.00"))),
-            float(c["pontosPorEtapa"].get(2, Decimal("0.00"))),
-            float(c["pontosPorEtapa"].get(3, Decimal("0.00"))),
-            float(c["pontosPorEtapa"].get(4, Decimal("0.00"))),
+            *[float(c["pontosPorEtapa"].get(et, Decimal("0.00"))) for et in numeros],
             float(c["totalPontos"]),
         ]
         wsClubes.append(valores)
@@ -301,10 +297,18 @@ def gerarPlanilhaExcelApuracao(
     wsIndiv["A1"].font = fonteTitulo
     wsIndiv.append([])
 
+    # Colunas: 5 de identificação, 2 por etapa (pontos e situação), [descartada], total e elegibilidade.
+    colsPontosEtapa = [6 + 2 * i for i in range(nEt)]
+    colsSituacaoEtapa = [7 + 2 * i for i in range(nEt)]
+    colProximaIndiv = 6 + 2 * nEt
+    colDescartada = colProximaIndiv if regras.temDescarte else None
+    colTotalIndiv = colProximaIndiv + (1 if regras.temDescarte else 0)
+    colElegivel = colTotalIndiv + 1
     cabecalhosIndiv = [
         "Categoria", "Col.", "CBO", "Atleta", "Clube",
-        "E1 Pts", "E1 Sit.", "E2 Pts", "E2 Sit.", "E3 Pts", "E3 Sit.", "E4 Pts", "E4 Sit.",
-        "Etapa Descartada", "Total Pontos", "Elegível Premiação (Art. 39)",
+        *[rotulo for n in numeros for rotulo in (f"E{n} Pts", f"E{n} Sit.")],
+        *(["Etapa Descartada"] if regras.temDescarte else []),
+        "Total Pontos", f"Elegível Premiação ({regras.artigos.premiacao})",
     ]
     wsIndiv.append(cabecalhosIndiv)
     for colIdx in range(1, len(cabecalhosIndiv) + 1):
@@ -315,24 +319,28 @@ def gerarPlanilhaExcelApuracao(
 
     linhaAtual = 4
     for f in linhasParcial:
-        colStr = f"{f.colocacaoFinal}º" if f.colocacaoFinal > 0 else ("Art. 32" if not f.categoriaValidaFinal else "-")
-        e1, e2, e3, e4 = f.etapas[1], f.etapas[2], f.etapas[3], f.etapas[4]
+        colStr = (
+            f"{f.colocacaoFinal}º" if f.colocacaoFinal > 0
+            else (regras.artigos.trocaCategoria if not f.categoriaValidaFinal else "-")
+        )
+        desempenhos = [f.etapas[et] for et in numeros]
         valores = [
             sanitizarCelulaExcel(f.categoria),
             colStr,
             int(f.cbo),
             sanitizarCelulaExcel(f.nome),
             sanitizarCelulaExcel(f.clubeSigla),
-            float(e1.pontosFinais), _descreverEtapaPlanilha(e1),
-            float(e2.pontosFinais), _descreverEtapaPlanilha(e2),
-            float(e3.pontosFinais), _descreverEtapaPlanilha(e3),
-            float(e4.pontosFinais), _descreverEtapaPlanilha(e4),
-            f"{f.etapaDescartada}ª" if f.etapaDescartada else "-",
+            *[v for des in desempenhos for v in (float(des.pontosFinais), _descreverEtapaPlanilha(des))],
+            *([f"{f.etapaDescartada}ª" if f.etapaDescartada else "-"] if regras.temDescarte else []),
             float(f.pontuacaoTotal),
-            "Sim" if f.elegivelPremiacao else f"Não ({f.etapasParticipadas}/4)",
+            "Sim" if f.elegivelPremiacao else f"Não ({f.etapasParticipadas}/{nEt})",
         ]
         wsIndiv.append(valores)
         ehPodio = 1 <= f.colocacaoFinal <= 3
+        colsCentro = {1, 2, 3, 5, colElegivel, *colsSituacaoEtapa}
+        if colDescartada is not None:
+            colsCentro.add(colDescartada)
+        colsPontos = {*colsPontosEtapa, colTotalIndiv}
         for colIdx in range(1, len(valores) + 1):
             cel = wsIndiv.cell(row=linhaAtual, column=colIdx)
             cel.font = fonteNegrito if ehPodio else fonteNormal
@@ -340,14 +348,14 @@ def gerarPlanilhaExcelApuracao(
             if colIdx == 4 and f.competiuEmMultiplasCategorias:
                 cel.fill = preenchimentoRosaDuplicado
                 cel.font = fonteRosa
-            if colIdx in (6, 8, 10, 12, 15):
+            if colIdx in colsPontos:
                 cel.number_format = "#,##0.00"
                 cel.alignment = Alignment(horizontal="right")
-            elif colIdx in (1, 2, 3, 5, 7, 9, 11, 13, 14, 16):
+            elif colIdx in colsCentro:
                 cel.alignment = Alignment(horizontal="center")
 
-        if f.etapaDescartada in ETAPAS_CAMPEONATO:
-            colPtsDesc = 6 + (f.etapaDescartada - 1) * 2
+        if f.etapaDescartada is not None and f.etapaDescartada in numeros:
+            colPtsDesc = 6 + numeros.index(f.etapaDescartada) * 2
             wsIndiv.cell(row=linhaAtual, column=colPtsDesc).font = fonteDescarte
             wsIndiv.cell(row=linhaAtual, column=colPtsDesc + 1).font = fonteDescarte
 
@@ -413,12 +421,16 @@ COL_CBO = (106.0, 141.3)
 COL_ATLETA = (145.0, 360.0)
 COL_ATLETA_FUNDO = (143.16, 362.16)
 COL_CLUBE = (363.8, 434.0)
-COLS_ETAPAS: dict[int, tuple[float, float]] = {
-    1: (434.0, 461.4),
-    2: (461.4, 488.8),
-    3: (488.8, 516.2),
-    4: (516.2, 543.72),
-}
+X_ETAPAS_INICIO = 434.0   # as colunas de etapa dividem igualmente o espaço entre o clube e o total
+
+
+def _colunasEtapas(numeros: list[int]) -> dict[int, tuple[float, float]]:
+    """Divide a faixa das etapas em uma coluna por etapa realizada (com 4 etapas, 27,4 pt cada)."""
+    largura = (X_TOTAL_ESQ - X_ETAPAS_INICIO) / max(len(numeros), 1)
+    return {
+        et: (X_ETAPAS_INICIO + i * largura, X_ETAPAS_INICIO + (i + 1) * largura)
+        for i, et in enumerate(numeros)
+    }
 
 COR_AZUL = (0.267, 0.447, 0.769)        # #4472C4
 COR_CINZA = (0.851, 0.851, 0.851)       # #D9D9D9
@@ -432,10 +444,12 @@ COR_DESCARTE_TEXTO = (0.45, 0.45, 0.45) # #737373 cinza atenuado
 COR_DESCARTE_LINHA = (0.45, 0.45, 0.45) # #737373 traço tachado (strikethrough)
 
 
-def _contarInscricoesPorEtapa(linhas: list[ClassificacaoAtletaCategoria]) -> dict[int, int]:
-    contagem = {et: 0 for et in ETAPAS_CAMPEONATO}
+def _contarInscricoesPorEtapa(
+    linhas: list[ClassificacaoAtletaCategoria], numeros: list[int]
+) -> dict[int, int]:
+    contagem = {et: 0 for et in numeros}
     for f in linhas:
-        for et in ETAPAS_CAMPEONATO:
+        for et in numeros:
             des = f.etapas[et]
             if des.inscrito or des.atuouComoVoluntario:
                 contagem[et] += 1
@@ -533,10 +547,12 @@ def _montarTextoObservacao(
 
     Estilos: 'r' regular, 'b' negrito, 'i' itálico, 'm' mono.
     """
+    regras = resultadoApuracao["regras"]
     etapasComVol = set(resultadoApuracao.get("etapasComVoluntarios", []))
     etapasComArb = set(resultadoApuracao.get("etapasComArbitros", []))
-    pendentesVol = [et for et in ETAPAS_CAMPEONATO if et not in etapasComVol]
-    pendentesArb = [et for et in ETAPAS_CAMPEONATO if et not in etapasComArb]
+    numeros = numerosEtapasRealizadas(resultadoApuracao)
+    pendentesVol = [et for et in numeros if et not in etapasComVol]
+    pendentesArb = [et for et in numeros if et not in etapasComArb]
 
     trechosVol: list[tuple[str, str]]
     if not etapasComVol and not etapasComArb:
@@ -585,6 +601,37 @@ def _montarTextoObservacao(
         ]
 
     itensBullet: list[list[tuple[str, str]]] = [trechosVol]
+    houveVolOuArb = any(
+        des.atuouComoVoluntario
+        for cat in resultadoApuracao.get("fichasPorCategoria", {}).values()
+        for f in cat
+        for des in f.etapas.values()
+    )
+    if houveVolOuArb:
+        itensBullet.append([
+            (
+                "Os valores referentes às médias dos ",
+                "r",
+            ),
+            (
+                "voluntários",
+                "i",
+            ),
+            (
+                " e ",
+                "r",
+            ),
+            (
+                "árbitros",
+                "i",
+            ),
+            (
+                f", conforme estabelecido no {regras.artigos.voluntarios} do Regulamento, "
+                "encontram-se destacados em amarelo.",
+                "r",
+            ),
+        ])
+
     houveDescarte = any(
         f.etapaDescartada is not None
         for cat in resultadoApuracao.get("fichasPorCategoria", {}).values()
@@ -593,8 +640,19 @@ def _montarTextoObservacao(
     if houveDescarte:
         itensBullet.append([
             (
-                "O valor total já considera o descarte da pontuação mais baixa, conforme estabelecido no Art. 34 "
-                "do Regulamento. A etapa descartada encontra-se destacada em cinza e com o texto riscado.",
+                "O valor total já considera o descarte da pontuação mais baixa, conforme estabelecido no "
+                f"{regras.artigos.descarte} do Regulamento. A etapa descartada encontra-se em cinza e com o texto riscado.",
+                "r",
+            ),
+        ])
+
+    nAjustes = len(resultadoApuracao.get("ajustesOficiais", []))
+    nPosicoes = len(resultadoApuracao.get("posicoesOficiais", []))
+    if nAjustes or nPosicoes:
+        itensBullet.append([
+            (
+                f"Este resultado segue o resultado oficial publicado pela FECORI, que prevalece sobre o recálculo: "
+                f"{nAjustes} notas e {nPosicoes} posições foram mantidas como publicadas.",
                 "r",
             ),
         ])
@@ -627,7 +685,11 @@ def _desenharTituloParcial(
     _inserirTextoAlinhado(page, xTitulo, X_DIR, Y_BASELINE_TITULO, "NÃO OFICIAL", fBold, tamFonte, "right", COR_VERMELHO)
 
 
-def _desenharCabecalhoTabelaParcial(page: Any, fBold: tuple[str, str | None, Any]) -> None:
+def _desenharCabecalhoTabelaParcial(
+    page: Any,
+    fBold: tuple[str, str | None, Any],
+    colunasEtapas: dict[int, tuple[float, float]],
+) -> None:
     import pymupdf as fitz
 
     page.draw_rect(
@@ -642,7 +704,7 @@ def _desenharCabecalhoTabelaParcial(page: Any, fBold: tuple[str, str | None, Any
     _inserirTextoAlinhado(page, *COL_CBO, y, "CBO", fBold, 11.2, "right", COR_BRANCO)
     _inserirTextoAlinhado(page, *COL_ATLETA, y, "Atleta", fBold, 11.2, "left", COR_BRANCO)
     _inserirTextoAlinhado(page, *COL_CLUBE, y, "Clube", fBold, 11.2, "left", COR_BRANCO)
-    for et, (x0, x1) in COLS_ETAPAS.items():
+    for et, (x0, x1) in colunasEtapas.items():
         _inserirTextoAlinhado(page, x0, x1, y, str(et), fBold, 9.4, "center", COR_BRANCO)
     _inserirTextoAlinhado(page, X_TOTAL_ESQ, X_DIR, y, "Total", fBold, 11.2, "center", COR_BRANCO)
 
@@ -653,6 +715,7 @@ def _desenharLinhaAtletaParcial(
     yLinha: float,
     ehLinhaCinza: bool,
     fontes: dict[str, tuple[str, str | None, Any]],
+    colunasEtapas: dict[int, tuple[float, float]],
 ) -> None:
     import pymupdf as fitz
 
@@ -668,7 +731,7 @@ def _desenharLinhaAtletaParcial(
             color=None,
             fill=COR_ROSA_FUNDO,
         )
-    for et, (x0, x1) in COLS_ETAPAS.items():
+    for et, (x0, x1) in colunasEtapas.items():
         if f.etapas[et].atuouComoVoluntario:
             page.draw_rect(
                 fitz.Rect(x0, yLinha, x1, yLinha + ALTURA_LINHA),
@@ -685,9 +748,9 @@ def _desenharLinhaAtletaParcial(
     _inserirTextoAlinhado(page, COL_ATLETA[0], 361.0, y, f.nome[:42], fRegular, 10.2, "left", corNome)
     _inserirTextoAlinhado(page, *COL_CLUBE, y, f.clubeSigla[:15], fRegular, 10.2, "left", COR_PRETO)
 
-    for et, (x0, x1) in COLS_ETAPAS.items():
+    for et, (x0, x1) in colunasEtapas.items():
         des = f.etapas[et]
-        if des.inscrito or des.atuouComoVoluntario:
+        if des.inscrito or des.atuouComoVoluntario or des.ajustadoOficial:
             texto = formatarPontoTabelaParcial(des.pontosFinais)
             if des.descartada:
                 _inserirTextoAlinhado(page, x0, x1, y, texto, fRegular, 10.0, "center", COR_DESCARTE_TEXTO)
@@ -713,6 +776,7 @@ def _desenharTotaisEObservacao(
     contagemEtapas: dict[int, int],
     resultadoApuracao: dict[str, Any],
     fontes: dict[str, tuple[str, str | None, Any]],
+    colunasEtapas: dict[int, tuple[float, float]],
 ) -> None:
     """Linha de totais de inscrições por etapa e bloco OBSERVAÇÃO em vermelho (última página)."""
     import pymupdf as fitz
@@ -724,7 +788,7 @@ def _desenharTotaisEObservacao(
     yBaseTot = yLinha + 11.8
     _inserirTextoAlinhado(page, *COL_CATEGORIA, yBaseTot, "Total", fBold, 11.2, "left", COR_PRETO)
     _inserirTextoAlinhado(page, *COL_ATLETA_FUNDO, yBaseTot, str(totalAtletas), fBold, 11.2, "center", COR_PRETO)
-    for et, (x0, x1) in COLS_ETAPAS.items():
+    for et, (x0, x1) in colunasEtapas.items():
         _inserirTextoAlinhado(page, x0, x1, yBaseTot, str(contagemEtapas[et]), fBold, 11.2, "center", COR_PRETO)
     yFimTot = yLinha + ALTURA_LINHA
     page.draw_line(fitz.Point(X_ESQ, yFimTot), fitz.Point(X_DIR, yFimTot), color=COR_PRETO, width=0.8)
@@ -774,21 +838,25 @@ def gerarPdfResultadoParcialAtletas(
 
     paginasLinhas = _paginarLinhasParcial(linhas)
     totalPaginas = len(paginasLinhas)
-    contagemEtapas = _contarInscricoesPorEtapa(linhas)
+    numeros = numerosEtapasRealizadas(resultadoApuracao)
+    colunasEtapas = _colunasEtapas(numeros)
+    contagemEtapas = _contarInscricoesPorEtapa(linhas, numeros)
     doc = fitz.open()
 
     for idxPag, fatia in enumerate(paginasLinhas, start=1):
         page = doc.new_page(width=LARGURA_PAGINA, height=ALTURA_PAGINA)
         _desenharTituloParcial(page, edicaoRomanos, logoBytes, fBold)
-        _desenharCabecalhoTabelaParcial(page, fBold)
+        _desenharCabecalhoTabelaParcial(page, fBold, colunasEtapas)
 
         yLinha = TOPO_CABECALHO + ALTURA_CABECALHO
         for idxLinhaPag, f in enumerate(fatia, start=1):
-            _desenharLinhaAtletaParcial(page, f, yLinha, idxLinhaPag % 2 == 1, fontes)
+            _desenharLinhaAtletaParcial(page, f, yLinha, idxLinhaPag % 2 == 1, fontes, colunasEtapas)
             yLinha += ALTURA_LINHA
 
         if idxPag == totalPaginas:
-            _desenharTotaisEObservacao(page, yLinha, len(linhas), contagemEtapas, resultadoApuracao, fontes)
+            _desenharTotaisEObservacao(
+                page, yLinha, len(linhas), contagemEtapas, resultadoApuracao, fontes, colunasEtapas
+            )
 
         _inserirTextoAlinhado(page, 15.24, 200.0, Y_RODAPE, carimbo, fRegular, 10.2, "left", COR_PRETO)
         _inserirTextoAlinhado(
@@ -798,123 +866,4 @@ def gerarPdfResultadoParcialAtletas(
     for caminho in caminhosSaidaPdf:
         os.makedirs(os.path.dirname(os.path.abspath(caminho)), exist_ok=True)
         doc.save(caminho)
-    doc.close()
-
-
-def gerarPdfResultadoClubes(
-    ano: int,
-    edicaoRomanos: str,
-    resultadoApuracao: dict[str, Any],
-    caminhoSaidaPdf: str,
-    nomeArquivoPlanilha: str,
-    caminhoLogo: str | None = None,
-) -> None:
-    """Gera o PDF oficial de Resultado de Clubes no layout paisagem da FECORI com a logo da edição."""
-    import pymupdf as fitz
-
-    doc = fitz.open()
-    largura, altura = 841.92, 595.32
-    page = doc.new_page(width=largura, height=altura)
-    fontes = _obterMapaFontesPdf()
-    fRegular = fontes["regular"]
-    fBold = fontes["bold"]
-
-    corCabecalho = (0.267, 0.447, 0.769)   # Azul FECORI (#4472C4)
-    corZebra = (0.851, 0.882, 0.949)       # Azul claro (#D9E1F2)
-    corBranco = (1.0, 1.0, 1.0)
-    corPreto = (0.08, 0.08, 0.08)
-    corBorda = (0.65, 0.72, 0.85)
-
-    logoBytes = carregarBytesLogoSemFundo(caminhoLogo)
-    if logoBytes:
-        page.insert_image(fitz.Rect(42, 20, 122, 104), stream=logoBytes, keep_proportion=True)
-
-    _inserirTextoAlinhado(
-        page, 130, largura - 130, 56, f"Resultado de Clubes do {edicaoRomanos}", fBold, 20.0, "center", corPreto
-    )
-    _inserirTextoAlinhado(
-        page, 130, largura - 130, 82, "Campeonato Cearense de Orientação", fBold, 20.0, "center", corPreto
-    )
-    _inserirTextoAlinhado(
-        page, largura - 200, largura - 45, 72, "FECORI", fBold, 24.0, "right", (0.15, 0.15, 0.15)
-    )
-
-    margemX = 45.0
-    topoTabela = 112.0
-    alturaCab = 34.0
-    clubes = [c for c in resultadoApuracao["classificacaoClubes"] if c["totalPontos"] > 0]
-    alturaLinha = min(38.0, float(int((altura - topoTabela - alturaCab - 55) / max(len(clubes), 1))))
-
-    colX = [
-        margemX,
-        margemX + 60,
-        margemX + 235,
-        margemX + 290,
-        margemX + 355,
-        margemX + 435,
-        margemX + 515,
-        margemX + 595,
-        margemX + 675,
-        largura - margemX,
-    ]
-    titulosCol = [
-        ("Class.", "center"),
-        ("Clube", "left"),
-        ("Fed.", "center"),
-        ("Atletas", "center"),
-        ("1ª Etapa", "right"),
-        ("2ª Etapa", "right"),
-        ("3ª Etapa", "right"),
-        ("4ª Etapa", "right"),
-        ("Total Pontos", "right"),
-    ]
-
-    rectCab = fitz.Rect(margemX, topoTabela, largura - margemX, topoTabela + alturaCab)
-    page.draw_rect(rectCab, color=corCabecalho, fill=corCabecalho)
-    yBaseCab = topoTabela + 21.5
-    for i, (titulo, alinhamento) in enumerate(titulosCol):
-        _inserirTextoAlinhado(page, colX[i] + 6, colX[i + 1] - 6, yBaseCab, titulo, fBold, 12.0, alinhamento, corBranco)
-
-    yAtual = topoTabela + alturaCab
-    for idx, c in enumerate(clubes, start=1):
-        rectLinha = fitz.Rect(margemX, yAtual, largura - margemX, yAtual + alturaLinha)
-        corFundo = corZebra if idx % 2 == 1 else corBranco
-        page.draw_rect(rectLinha, color=corBorda, fill=corFundo, width=0.5)
-
-        estLinha = fBold if idx <= 3 else fRegular
-        celulas = [
-            (f"{idx}º", "center"),
-            (c["sigla"], "left"),
-            (c.get("federacaoSigla") or "-", "center"),
-            (str(c["qtdAtletas"]), "center"),
-            (formatarMoedaPontos(c["pontosPorEtapa"].get(1, Decimal("0.00"))), "right"),
-            (formatarMoedaPontos(c["pontosPorEtapa"].get(2, Decimal("0.00"))), "right"),
-            (formatarMoedaPontos(c["pontosPorEtapa"].get(3, Decimal("0.00"))), "right"),
-            (formatarMoedaPontos(c["pontosPorEtapa"].get(4, Decimal("0.00"))), "right"),
-            (formatarMoedaPontos(c["totalPontos"]), "right"),
-        ]
-        yBaseLinha = yAtual + (alturaLinha * 0.64)
-        for i, (valor, alinhamento) in enumerate(celulas):
-            _inserirTextoAlinhado(
-                page, colX[i] + 6, colX[i + 1] - 6, yBaseLinha, valor, estLinha, 12.5, alinhamento, corPreto
-            )
-
-        yAtual += alturaLinha
-
-    carimbo = datetime.now().strftime("%d/%m/%Y - %H:%M")
-    _inserirTextoAlinhado(page, margemX, 300.0, altura - 18.0, carimbo, fRegular, 9.5, "left", corPreto)
-    _inserirTextoAlinhado(
-        page,
-        largura - 380.0,
-        largura - margemX,
-        altura - 18.0,
-        f"{nomeArquivoPlanilha} - resultadoClubes",
-        fRegular,
-        9.5,
-        "right",
-        corPreto,
-    )
-
-    os.makedirs(os.path.dirname(os.path.abspath(caminhoSaidaPdf)), exist_ok=True)
-    doc.save(caminhoSaidaPdf)
     doc.close()

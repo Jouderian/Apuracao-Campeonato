@@ -1,3 +1,5 @@
 # Manifesto de integridade SHA-256 dos bancos de dados brutos (.mdb / .accdb) de cada etapa.
 # Formato: <sha256_em_minusculas>  <ano>/<nome_do_arquivo>
+d8bc71a89a9995e4c57d29d3291190cd904e7902a7c884aaf95c2c40d89a1e9c  2025/HelgaDat.mdb
 4873b2743c869bf61a247d4e018ad229aa1c616c1e74cae9466defcf88d3fdec  2026/HelgaDat.mdb
+a7b2db05f73841f3bfccb6a4d550930a23f11952c31ccd9b31351b8931ec5258  2025/exportadoSiteHelga.xlsx

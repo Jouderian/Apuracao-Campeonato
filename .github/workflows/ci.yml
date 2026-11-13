@@ -4,6 +4,10 @@ on:
   push:
     branches: [main]
   pull_request:
+  # Revisão de segurança semanal (segundas, 06:23 em Brasília): novas vulnerabilidades em
+  # dependências aparecem mesmo sem commit. Falha do job notifica quem mantém o repositório.
+  schedule:
+    - cron: '23 9 * * 1'
   workflow_dispatch:
 
 # Permissão mínima: o CI só lê o repositório.

@@ -7,11 +7,13 @@ import unittest
 
 from src.apurarCampeonato import converterParaRomano, obterEdicaoRomana
 from src.motorCalculo.pontuacao import STATUS_OK, apurarCampeonatoCCO
+from src.motorCalculo.regulamentos import REGRAS_CCO_2026
 from src.relatorios import geradorExcelPdf
 from src.relatorios.geradorExcelPdf import (
     gerarPdfResultadoParcialAtletas,
     gerarPlanilhaExcelApuracao,
 )
+from src.relatorios.geradorMarkdown import gerarRelatorioIndividualMarkdown
 
 CATEGORIA = "H Adulto A"
 
@@ -46,7 +48,7 @@ def montarDadosSinteticos() -> tuple[dict, dict]:
         "sha256Fonte": "0" * 64,
         "etapas": [{"numeroEtapa": n, "descricao": f"{n}ª etapa"} for n in (1, 2, 3, 4)],
         "clubes": [{
-            "clubeId": 1, "sigla": "AAA", "nome": "Clube A", "filiadoCBO": True, "federacaoSigla": "FED",
+            "clubeId": 1, "sigla": "AAA", "nome": "Clube A", "filiadoCBO": True, "federacaoSigla": "FECORI",
         }],
         "perfisAtletas": {},
         "registrosEtapas": registros,
@@ -61,7 +63,7 @@ def montarDadosSinteticos() -> tuple[dict, dict]:
 class TestApuracaoCompleta(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.resultado = apurarCampeonatoCCO(*montarDadosSinteticos())
+        cls.resultado = apurarCampeonatoCCO(*montarDadosSinteticos(), REGRAS_CCO_2026)
         cls.fichas = {f.cbo: f for f in cls.resultado["fichasPorCategoria"][CATEGORIA]}
 
     def test_classificacao_na_categoria(self):
@@ -107,7 +109,7 @@ class TestApuracaoCompleta(unittest.TestCase):
         }
         dadosVoluntarios["unificacoesCbo"] = [{"cboProvisorio": 990004, "cboOficial": 24219, "nome": "Samilla"}]
 
-        res = apurarCampeonatoCCO(dadosHelga, dadosVoluntarios)
+        res = apurarCampeonatoCCO(dadosHelga, dadosVoluntarios, REGRAS_CCO_2026)
         fichas = {f.cbo: f for f in res["fichasPorCategoria"][CATEGORIA]}
         self.assertNotIn(990004, fichas)
         self.assertIn(24219, fichas)
@@ -118,12 +120,22 @@ class TestApuracaoCompleta(unittest.TestCase):
         self.assertFalse(fichaSamilla.competiuEmMultiplasCategorias)
         self.assertEqual(fichaSamilla.pontuacaoTotal, Decimal("68.00"))   # 35 (3ª na 2ª et.) + 33 (4ª na 3ª et.)
 
+    def test_relatorio_individual_markdown_italico_voluntario_e_legenda_unificada(self):
+        md = gerarRelatorioIndividualMarkdown(2026, "XX CCO", self.resultado)
+        # Caio (CBO 3) teve média de voluntário de 36,00 na 2ª etapa: deve estar em itálico e sem '(VOL)'
+        self.assertIn("*36,00*", md)
+        self.assertNotIn("(VOL)", md)
+        # Informações unificadas no cabeçalho inicial e sem seção de legenda ao final
+        self.assertNotIn("## Legenda", md)
+        self.assertIn("valores tachados", md)
+        self.assertIn("valores em itálico", md)
+
 
 
 class TestPdfParcial(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.resultado = apurarCampeonatoCCO(*montarDadosSinteticos())
+        cls.resultado = apurarCampeonatoCCO(*montarDadosSinteticos(), REGRAS_CCO_2026)
         cls.pasta = tempfile.TemporaryDirectory()
         cls.addClassCleanup(cls.pasta.cleanup)
 
@@ -172,17 +184,25 @@ class TestPdfParcial(unittest.TestCase):
             textoPag = pag.get_text("text").replace("\xa0", " ")
             self.assertNotIn("descarte da pontuação mais baixa", textoPag.split("\n")[-3:])
 
-        ultimaPagTexto = doc[-1].get_text("text").replace("\xa0", " ").replace("\u2010", "-")
+        # No Linux a fonte alternativa devolve o marcador "\u2022" como "\u00b7" na extra\u00e7\u00e3o de texto.
+        ultimaPagTexto = (
+            doc[-1].get_text("text").replace("\xa0", " ").replace("\u2010", "-").replace("\u00b7", "\u2022")
+        )
         self.assertNotIn("DESCARTE:", ultimaPagTexto)
         self.assertIn("OBSERVAÇÕES:", ultimaPagTexto)
         self.assertIn(
             "• O valor total já considera o descarte da pontuação mais baixa, conforme "
             "estabelecido no Art. 34 do Regulamento. A etapa descartada encontra-se "
-            "destacada em cinza e com o texto riscado.",
+            "em cinza e com o texto riscado.",
             ultimaPagTexto.replace("\n", " "),
         )
         self.assertIn(
             "• Este resultado não é oficial e ainda não inclui os voluntários",
+            ultimaPagTexto.replace("\n", " "),
+        )
+        self.assertIn(
+            "• Os valores referentes às médias dos voluntários e árbitros, conforme "
+            "estabelecido no Art. 33 do Regulamento, encontram-se destacados em amarelo.",
             ultimaPagTexto.replace("\n", " "),
         )
         self.assertIn(

@@ -45,16 +45,29 @@ trigger: always_on
 
 - **Proibido versionar banco bruto com dados pessoais:** arquivos `.mdb` e `.accdb` ficam no `.gitignore` para evitar exposição de CPF, RG, endereço, telefone, e-mail ou data de nascimento completa em repositório público.
 - **Dados pessoais mínimos:** os `.json` de `Dados/<ano>/extraidos/` não levam data nem ano de nascimento, documento, endereço ou contato; o campo `anoNascimento` é recusado pela validação das entradas ([ADR-003](../wiki/decisions/ADR-003-sem-ano-de-nascimento-e-desempate-por-idade.md)).
-- **Congelamento por SHA-256:** todo arquivo `.mdb`/`.accdb` oficial utilizado na apuração de uma etapa tem seu hash SHA-256 registrado em [`Dados/arquivosCongelados.sha256`](../../Dados/arquivosCongelados.sha256).
+- **Congelamento por SHA-256:** todo arquivo `.mdb`/`.accdb` oficial utilizado na apuração de uma etapa, e a planilha `exportadoSiteHelga.xlsx` quando usada, tem seu hash SHA-256 registrado em [`Dados/arquivosCongelados.sha256`](../../Dados/arquivosCongelados.sha256). Arquivo congelado não pode mudar: hash diferente do registrado recusa a extração.
 - **Separação de pastas em `Dados/<ano>/`:**
-  - `Dados/<ano>/entradas/`: contém exclusivamente o banco bruto `.mdb`/`.accdb` (local) e o arquivo Markdown de voluntários/convocados (`voluntariosCCO.md`), facilitando a auditoria humana.
+  - `Dados/<ano>/entradas/`: contém exclusivamente o banco bruto `.mdb`/`.accdb` (local, ignorado pelo Git), a planilha de resultados exportada do site do Helga (`exportadoSiteHelga.xlsx`, versionada; usada só quando o banco de uma etapa se perdeu ou veio sem resultados, conforme [ADR-006](../wiki/decisions/ADR-006-planilha-do-site-helga-como-fonte-complementar.md)) e o arquivo Markdown de voluntários/convocados (`voluntariosCCO.md`), facilitando a auditoria humana.
   - `Dados/<ano>/extraidos/`: armazena os arquivos `.json` higienizados extraídos do banco Access.
+  - `Dados/logoFECORI.png` e `Dados/brasoes/<sigla>.png`: logos usadas nos PDFs finais (a da FECORI e o brasão de cada clube, com o nome da sigla em camelCase, ex.: `trilhaNorte.png`), extraídas do resultado de clubes oficial de 2025. A logo da edição fica em `Dados/<ano>/logoCCO.*`.
   - `Dados/<ano>/resultados/`: armazena os relatórios finais calculados (`.md`, `.pdf`, `.xlsx`).
+
+## Resultados Oficiais Publicados
+
+- **O publicado prevalece:** o resultado de uma edição já publicado oficialmente pela FECORI vale mesmo que contenha erro de cálculo; o repositório o reproduz e não o recalcula ([ADR-007](../wiki/decisions/ADR-007-resultado-oficial-publicado-prevalece.md)).
+- **Divergências registradas, nunca embutidas:** cada ponto em que o publicado difere do que o regulamento e os dados produziriam fica na seção `Ajustes do Resultado Oficial Publicado` do `voluntariosCCO.md`, uma linha por atleta e etapa, com o valor publicado e o motivo. O motor recusa ajuste que não encontra o atleta, e o relatório sinaliza as células ajustadas.
+- **O agente não corrige resultado publicado:** ao achar divergência, lista-a ao usuário; só registra o ajuste com autorização expressa.
 
 ## Controle de Pendências
 
 - O que está pendente vive exclusivamente como *issue* do GitHub ([`gestao-issues.md`](../workflows/gestao-issues.md)).
 - O agente só abre, altera rótulo ou fecha *issue* com autorização expressa do usuário, apresentando o texto antes.
+
+## Trabalho Simultâneo de Agentes
+
+- **Um agente por diretório de trabalho:** dois agentes (ou um agente e o usuário) nunca operam ao mesmo tempo no mesmo diretório. Para trabalho paralelo, cada um usa seu próprio *worktree* (`git worktree add ..\Apuracao-<assunto> -b <branch> main`), com o `.mdb` e o `.xlsx` ignorados pelo Git copiados para ele ([`atualizar-repositorio.md`](../workflows/atualizar-repositorio.md)).
+- **Comandos que descartam trabalho:** `git clean`, `git restore .`, `git checkout -- .`, `git reset --hard` e `git stash drop` só atuam sobre arquivos da própria tarefa, e nunca sobre saídas geradas por outro agente. Antes de trocar de branch, o `git status` deve estar limpo ou o que sobra deve ir para um stash nomeado.
+- **Commit logo após gerar e conferir:** resultado gerado e verificado vai para commit local no branch de trabalho antes de qualquer outra tarefa, porque o que não está em commit se perde num descarte. O `push` continua dependendo de autorização.
 
 ## Convenções de Git
 
@@ -77,3 +90,4 @@ trigger: always_on
 - **Autoria humana exclusiva:** nenhum rodapé de coautoria ou geração por IA (`Co-Authored-By:`, `Generated with` ou equivalente).
 - **Antes do commit:** `python .agents/scripts/verificar-projeto.py` deve passar sem erros.
 - **Antes de pedir autorização:** apresente a lista exata de arquivos e a mensagem exata do commit. `git push`, abertura e mesclagem de PR só ocorrem com autorização expressa do usuário ([`atualizar-repositorio.md`](../workflows/atualizar-repositorio.md)).
+- **Depois do merge, apague o branch:** com o PR mesclado (confira `gh pr view <N> --json state`), o agente apaga o branch local e o remoto do PR e atualiza a `main` local, sem precisar de nova autorização. Antes de apagar, confirme que o conteúdo já está na `main` (`git diff main <branch>` vazio); como o merge por *rebase* muda os hashes, o `git branch -d` recusa o branch e se usa `-D` depois dessa conferência. Branches de terceiros (como os do Dependabot) e branches com PR aberto nunca são apagados ([`atualizar-repositorio.md`](../workflows/atualizar-repositorio.md)).
