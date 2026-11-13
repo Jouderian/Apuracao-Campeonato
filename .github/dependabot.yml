@@ -8,6 +8,10 @@ updates:
     open-pull-requests-limit: 5
     commit-message:
       prefix: "chore(root)"
+    # PyMuPDF 2.x puxa numpy, onnxruntime e networkx sem uso no projeto (ver requirements.in).
+    ignore:
+      - dependency-name: "pymupdf"
+        update-types: ["version-update:semver-major"]
     groups:
       dependencias-python:
         patterns: ["*"]
