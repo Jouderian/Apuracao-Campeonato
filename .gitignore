@@ -17,8 +17,9 @@ htmlcov/
 # Resultado parcial (não oficial): PDF regenerável a cada apuração, não é versionado
 Dados/*/resultados/resultadoParcial*.pdf
 
-# Resultado de clubes do ano corrente (aguarda autorização formal da FECORI antes de divulgar)
+# Resultado de clubes e apuração do ano corrente (aguarda autorização formal da FECORI antes de divulgar)
 Dados/2026/resultados/resultadoClubesCCO.*
+Dados/2026/resultados/apuracaoCampeonato2026.xlsx
 
 # Arquivos temporários de Office e sistema
 ~$*.doc
