@@ -61,8 +61,8 @@ class TestRegrasDoLayout(unittest.TestCase):
 
 
 class TestPremiacao(unittest.TestCase):
-    def test_trofeu_para_campeao_ouro_para_novato_prata_e_bronze(self):
-        self.assertEqual(classificarPremio(_ficha(final=1, naCategoria=1)), "trofeu")
+    def test_ouro_para_todo_campeao_inclusive_novato_prata_e_bronze(self):
+        self.assertEqual(classificarPremio(_ficha(final=1, naCategoria=1)), "ouro")
         self.assertEqual(classificarPremio(_ficha("D Vet N", final=1, naCategoria=1)), "ouro")
         self.assertEqual(classificarPremio(_ficha(final=2, naCategoria=2)), "prata")
         self.assertEqual(classificarPremio(_ficha(final=3, naCategoria=3)), "bronze")
