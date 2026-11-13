@@ -63,6 +63,12 @@ trigger: always_on
 - O que está pendente vive exclusivamente como *issue* do GitHub ([`gestao-issues.md`](../workflows/gestao-issues.md)).
 - O agente só abre, altera rótulo ou fecha *issue* com autorização expressa do usuário, apresentando o texto antes.
 
+## Trabalho Simultâneo de Agentes
+
+- **Um agente por diretório de trabalho:** dois agentes (ou um agente e o usuário) nunca operam ao mesmo tempo no mesmo diretório. Para trabalho paralelo, cada um usa seu próprio *worktree* (`git worktree add ..\Apuracao-<assunto> -b <branch> main`), com o `.mdb` e o `.xlsx` ignorados pelo Git copiados para ele ([`atualizar-repositorio.md`](../workflows/atualizar-repositorio.md)).
+- **Comandos que descartam trabalho:** `git clean`, `git restore .`, `git checkout -- .`, `git reset --hard` e `git stash drop` só atuam sobre arquivos da própria tarefa, e nunca sobre saídas geradas por outro agente. Antes de trocar de branch, o `git status` deve estar limpo ou o que sobra deve ir para um stash nomeado.
+- **Commit logo após gerar e conferir:** resultado gerado e verificado vai para commit local no branch de trabalho antes de qualquer outra tarefa, porque o que não está em commit se perde num descarte. O `push` continua dependendo de autorização.
+
 ## Convenções de Git
 
 - [Conventional Commits](https://www.conventionalcommits.org/): `tipo(escopo): descrição`, **escopo obrigatório**. Tipos: `feat`, `fix`, `docs`, `refactor`, `test`, `chore`, `spec`.

@@ -16,6 +16,17 @@ git pull
 git switch -c calculo/1-motor-pontuacao-etapa
 ```
 
+### Trabalho em paralelo: um *worktree* por agente
+
+Se outro agente já atua neste diretório, não troque o branch dele: crie um *worktree* próprio ([`rules.md`](../rules/rules.md)) e copie os arquivos ignorados pelo Git de que a tarefa precisa:
+
+```powershell
+git worktree add ..\Apuracao-2025 -b dados/2025-ajuste main
+Copy-Item Dados\2025\entradas\* ..\Apuracao-2025\Dados\2025\entradas\ -Recurse -Force   # .mdb e .xlsx ignorados
+# ao terminar, com o PR mesclado:
+git worktree remove ..\Apuracao-2025
+```
+
 ## 2. Verificar o Projeto e Executar Testes
 
 Antes de propor o commit, execute o verificador do projeto (que valida links, frontmatter, índice de specs e roda a suíte de testes):
