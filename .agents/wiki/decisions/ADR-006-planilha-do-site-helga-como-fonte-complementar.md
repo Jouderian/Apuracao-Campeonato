@@ -13,7 +13,7 @@ description: Decisão de aceitar a planilha exportada do site de resultados do H
 
 ## Decisão
 1. A planilha `Dados/<ano>/entradas/exportadoSiteHelga.xlsx` é fonte oficial **complementar**: gera `etapasHelgaWeb<ano>.json`, e as etapas dele substituem as de mesmo número do banco ([spec](../../specs/web-results-ingestion/spec.md)).
-2. A planilha é **congelada** por SHA-256 no `arquivosCongelados.sha256` e **não é versionada**, como o `.mdb`; o JSON complementar é versionado e traz o hash.
+2. A planilha é **congelada** por SHA-256 no `arquivosCongelados.sha256` e **é versionada** no Git (pois não contém dados sensíveis e serve como memória de cálculo); o JSON complementar também é versionado e traz o hash.
 3. A extração recusa qualquer inconsistência (lista de problemas) em vez de corrigir por estimativa.
 4. Categorias com prefixo `Militar` não valem para o CCO e ficam fora.
 

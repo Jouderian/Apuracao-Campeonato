@@ -24,7 +24,7 @@ Uma aba `listaPartidaEtapa<N>` e uma `resultadoEtapa<N>` por etapa.
 4. **Avisa** (não recusa) quando dois classificados da mesma categoria têm o mesmo tempo: a ordem segue a colocação do site.
 5. **Etapas com o banco disponível** (como a 3ª de 2025) mantêm no complemento o número, a data, o local e o `competitionId` do banco; etapas sem banco recebem os metadados informados no comando (`--etapa-nova`).
 6. **Atletas novos** (CBO fora do cadastro do banco) entram em `perfisAtletas` com o clube da lista de partida.
-7. **Congelamento:** o SHA-256 da planilha entra em `Dados/arquivosCongelados.sha256` (`<ano>/exportadoSiteHelga.xlsx`). Hash já registrado e diferente recusa a extração. A planilha não é versionada (como o `.mdb`), e o JSON complementar traz o hash em `sha256Fonte`.
+7. **Congelamento:** o SHA-256 da planilha entra em `Dados/arquivosCongelados.sha256` (`<ano>/exportadoSiteHelga.xlsx`). Hash já registrado e diferente recusa a extração. A planilha é versionada no Git como memória de cálculo esportiva pública, e o JSON complementar traz o hash em `sha256Fonte`.
 
 ## Critérios de Aceitação
 - [x] Leitura da lista de partida e do resultado com testes sintéticos (leitura de tempo `mm:ss` e `h:mm:ss`, status, NP, categorias militares, recusas).
