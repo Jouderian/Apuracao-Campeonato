@@ -4,7 +4,7 @@ description: Índice da base de conhecimento do projeto — decisões arquitetur
 
 # Base de Conhecimento
 
-Última atualização: 2026-11-11
+Última atualização: 2026-11-13
 
 Índice das páginas da wiki. As decisões formais ficam em `decisions/` como ADRs; specs, planos e workflows continuam sendo a fonte de verdade de cada iniciativa.
 
@@ -18,7 +18,8 @@ description: Índice da base de conhecimento do projeto — decisões arquitetur
 | [ADR-004](decisions/ADR-004-endurecimento-de-seguranca-e-cadeia-de-suprimentos.md) | Endurecimento de segurança e cadeia de suprimentos | Extração sem injeção no PowerShell, validação das entradas, `mypy`/`ruff`/`bandit` no CI, dependências com hash, Actions fixadas por SHA e revisão recorrente |
 | [ADR-005](decisions/ADR-005-regulamento-por-ano-na-apuracao.md) | Regulamento por ano na apuração | Cada edição é apurada pelo regulamento do seu ano, com regras registradas por ano e competição; ano sem regras é recusado; interpretações adotadas onde o regulamento de 2025 é omisso |
 | [ADR-006](decisions/ADR-006-planilha-do-site-helga-como-fonte-complementar.md) | Planilha do site do Helga como fonte complementar | Etapas com banco perdido ou sem resultados usam a planilha exportada do site (lista de partida e resultado), congelada por SHA-256 e conferida automaticamente |
-| [ADR-007](decisions/ADR-007-resultado-oficial-publicado-prevalece.md) | O resultado oficial publicado prevalece | O publicado vale mesmo com erro; a soma de clubes de 2025 segue o publicado e cada divergência pontual vira ajuste auditável no `voluntariosCCO.md` |
+| [ADR-007](decisions/ADR-007-resultado-oficial-publicado-prevalece.md) | O resultado oficial publicado prevalece (substituída) | Substituída pela ADR-008 |
+| [ADR-008](decisions/ADR-008-regulamento-prevalece-sobre-o-publicado.md) | O regulamento prevalece sobre o publicado | A apuração segue estritamente o regulamento do ano, a pedido da FECORI; resultados publicados não vinculam; ícone do campeão é medalha; interpretações em ADR |
 
 ## Páginas Técnicas
 

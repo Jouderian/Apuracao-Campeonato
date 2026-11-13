@@ -1,10 +1,10 @@
 ---
-description: Decisão de que o resultado oficial já publicado prevalece sobre o recálculo, com as divergências registradas como ajustes auditáveis e as regras de clubes de 2025 (soma, federação e contagem de atletas) iguais às do publicado.
+description: SUBSTITUÍDA pela ADR-008. Decisão de que o resultado oficial já publicado prevalece sobre o recálculo, com as divergências registradas como ajustes auditáveis e as regras de clubes de 2025 (soma, federação e contagem de atletas) iguais às do publicado.
 ---
 
 # ADR 007: O resultado oficial publicado prevalece
 
-> Registrada em 2026-11-11.
+> Registrada em 2026-11-11. **Substituída pela [ADR-008](ADR-008-regulamento-prevalece-sobre-o-publicado.md) em 2026-11-13:** a FECORI pediu que o repositório siga estritamente o regulamento. Só o item 8 (layout dos PDFs) continua valendo.
 
 ## Contexto
 - O resultado de 2025 foi calculado à mão e publicado pela FECORI. Ao reapurar 2025 com o motor, a comparação com o publicado (atleta por atleta e por clube) mostrou duas famílias de diferenças:

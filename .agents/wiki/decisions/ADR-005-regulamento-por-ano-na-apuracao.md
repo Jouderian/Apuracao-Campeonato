@@ -19,10 +19,10 @@ description: Decisão de apurar cada edição pelo regulamento do seu próprio a
 ## Interpretações adotadas para 2025
 O regulamento de 2025 é omisso ou ambíguo em três pontos. São **escolhas do apurador**, não fatos esportivos; a FECORI pode revê-las e, se mudarem, basta ajustar o campo correspondente em `regulamentos.py`.
 
-| Ponto | Texto de 2025 | Interpretação |
+| Ponto | Texto de 2025 | Interpretação (revista na [ADR-008](ADR-008-regulamento-prevalece-sobre-o-publicado.md)) |
 | :--- | :--- | :--- |
-| Mínimo de etapas do voluntário (Art. 36, § 1º) | "competir em, no mínimo, a metade das etapas realizadas" | **A etapa de voluntário/árbitro conta no mínimo**, como em 2026. Confirmado pelo resultado oficial publicado: Ronald (CODL), com um único resultado e uma etapa de apoio, recebeu a média. A metade é arredondada **para cima** (leitura literal; com 4 etapas realizadas dá o mesmo que arredondar para baixo, então o arredondamento ainda não foi testado pelos dados). |
-| Média do voluntário (Art. 36) | "a média da pontuação conquistada nas outras etapas" | A soma dos pontos das outras etapas é dividida pelo número de **todas as outras etapas realizadas**, inclusive as sem inscrição e a outra etapa de apoio (0 ponto). Confirmado pelo oficial: um único resultado de 35 pontos rende 35/3 = 11,67; Joelson, com 67 pontos e outra etapa de apoio, rende 67/3 = 22,33. Em 2026 o divisor é só o das etapas em que o atleta se inscreveu. |
+| Mínimo de etapas do voluntário (Art. 36, § 1º) | "competir em, no mínimo, a metade das etapas realizadas" | **A etapa de voluntário/árbitro não conta no mínimo:** o texto exige *competir* (em 2026 é *participar*, e a etapa de apoio conta). A metade é arredondada **para cima** (leitura literal de "no mínimo a metade"). |
+| Média do voluntário (Art. 36) | "a média da pontuação conquistada nas outras etapas" | A soma dos pontos das outras etapas é dividida pelo número de **todas as outras etapas realizadas**, inclusive as sem inscrição e a outra etapa de apoio (0 ponto). Em 2026 o divisor é só o das etapas em que o atleta se inscreveu. A média de cada voluntário é arredondada a 2 casas antes de somar, como em 2026. |
 | Último confronto direto (Art. 38, Parágrafo Único, "b") | "melhor resultado no último confronto direto" | Vale a etapa mais recente em que **todos** os atletas empatados foram classificados na mesma categoria; vence a melhor colocação nela. Se não houver etapa assim, o empate segue para a idade. |
 | Maior idade (Art. 38, Parágrafo Único, "c") | critério final | Não aplicado, como em 2026 ([ADR-003](ADR-003-sem-ano-de-nascimento-e-desempate-por-idade.md)): o empate é sinalizado (`empateNaoResolvido`) para decisão do apurador. |
 
