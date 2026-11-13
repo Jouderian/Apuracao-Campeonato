@@ -148,6 +148,11 @@ class TestPdfGerado(unittest.TestCase):
         self.assertIn("Art.33 - Pontuação por média", paginas[-1])
         self.assertIn("Art.39 §1° - Participação mínima", paginas[-1])
         self.assertIn("Art.31 §2° - Atleta não classificado", paginas[-1])
+        self.assertIn("Art.34 - Pontuação descartada", paginas[-1])   # 2026 tem descarte (Art. 34)
+
+    def test_legenda_so_traz_o_descarte_quando_o_regulamento_do_ano_o_preve(self):
+        paginas, _ = self._gerar(REGRAS_CCO_2025, "XIX")
+        self.assertNotIn("descartada", paginas[-1])
 
 
 if __name__ == "__main__":
