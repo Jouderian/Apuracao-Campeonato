@@ -45,6 +45,11 @@ ORDEM_CATEGORIAS: tuple[str, ...] = (
 LARGURA, ALTURA = 841.92, 595.32
 X_ESQ, X_DIR = 14.0, 832.0
 ALT_CABECALHO, ALT_LINHA = 19.5, 18.4
+# Margens dos quadros finais, como no layout da FECORI: 2 linhas abaixo da linha de totais e 2,2 linhas entre o
+# quadro de Premiação e a Legenda.
+MARGEM_QUADROS_V, MARGEM_QUADROS_H = 2.0 * ALT_LINHA, 2.2 * ALT_LINHA
+# Largura do quadro de Premiação: 4,85 alturas de linha, como na imagem da FECORI (a Legenda tem cerca de 12 linhas).
+LARGURA_QUADRO_PREMIACAO = 4.85 * ALT_LINHA
 Y_CAB_PRIMEIRA, Y_CAB_DEMAIS = 105.0, 29.0
 Y_LIMITE_LINHAS = 551.0
 X_CATEGORIA, X_CLASS_CENTRO, X_CBO_DIR, X_ATLETA, X_CLUBE = 16.0, 105.6, 169.7, 173.6, 411.0
@@ -168,19 +173,25 @@ def _desenharMedalha(page: Any, cx: float, cy: float, cor: Cor, digito: str, fon
     _inserirTextoAlinhado(page, cx - 4.0, cx + 4.0, cy + 3.7, digito, fonte, 5.8, "center", cor)
 
 
-def _desenharMedalhaColorida(page: Any, cx: float, cy: float, fundo: Cor, digito: str, fonte: Fonte) -> None:
-    """Medalha do quadro de premiação: fitas escuras, disco colorido (ouro, prata ou bronze) e o dígito."""
+def _desenharMedalhaColorida(page: Any, cx: float, cy: float, fundo: Cor, digito: str, fonte: Fonte,
+                             k: float = 1.2) -> None:
+    """Medalha do quadro de premiação: fitas escuras, disco colorido (ouro, prata ou bronze) e o dígito.
+
+    `cy` é o centro da medalha inteira; `k` amplia o desenho (1,0 = tamanho dos ícones da coluna Premiação).
+    """
     import pymupdf as fitz
 
-    p = fitz.Point
+    def ponto(dx: float, dy: float) -> Any:
+        return fitz.Point(cx + dx * k, cy + (dy - 0.5) * k)
+
     for lado in (-1, 1):   # fitas
         page.draw_polyline(
-            [p(cx + lado * 3.9, cy - 6.4), p(cx + lado * 1.3, cy - 6.4), p(cx - lado * 0.8, cy - 1.4),
-             p(cx + lado * 1.8, cy - 1.4), p(cx + lado * 3.9, cy - 6.4)],
+            [ponto(lado * 3.9, -6.4), ponto(lado * 1.3, -6.4), ponto(-lado * 0.8, -1.4),
+             ponto(lado * 1.8, -1.4), ponto(lado * 3.9, -6.4)],
             color=AZUL_FITA, fill=AZUL_FITA, width=0.3, closePath=True,
         )
-    page.draw_circle(p(cx, cy + 1.9), 4.3, color=PRETO, fill=fundo, width=0.9)
-    _inserirTextoAlinhado(page, cx - 4.0, cx + 4.0, cy + 4.0, digito, fonte, 6.4, "center", PRETO)
+    page.draw_circle(ponto(0.0, 1.9), 4.3 * k, color=PRETO, fill=fundo, width=0.9)
+    _inserirTextoAlinhado(page, cx - 4.0 * k, cx + 4.0 * k, cy + (4.0 - 0.5) * k, digito, fonte, 6.4 * k, "center", PRETO)
 
 
 def _desenharPremio(page: Any, premio: str | None, topo: float, fontes: Fonte, fonteNegrito: Fonte,
@@ -288,7 +299,7 @@ def _desenharQuadros(page: Any, topo: float, contagem: dict[str, int], regras: A
 
     negrito = fontes["bold"]
     # Quadro de premiação
-    xe, xd = X_ESQ, 159.0
+    xe, xd = X_ESQ, X_ESQ + LARGURA_QUADRO_PREMIACAO
     page.draw_rect(fitz.Rect(xe, topo, xd, topo + 21.0), color=None, fill=AZUL)
     _texto(page, xe, xd, topo + 14.5, "Premiação", negrito, 12.0, "center", BRANCO)
     alturaTabela = 21.0 + 3 * ALT_LINHA
@@ -301,13 +312,16 @@ def _desenharQuadros(page: Any, topo: float, contagem: dict[str, int], regras: A
             page.draw_line(fitz.Point(xe, y0), fitz.Point(xd, y0), color=CINZA_TRACO, width=0.5, dashes="[1.5 1.5] 0")
         numero = {PREMIO_OURO: "1", PREMIO_PRATA: "2", PREMIO_BRONZE: "3"}[premio]
         corDisco = {PREMIO_OURO: OURO, PREMIO_PRATA: PRATA, PREMIO_BRONZE: BRONZE}[premio]
-        _texto(page, xe + 12, xe + 44, y0 + 12.9, f"{numero}°", regular, 12.0, "left", PRETO)
-        _desenharMedalhaColorida(page, xe + 62.0, y0 + 8.4, corDisco, numero, negrito)
-        _texto(page, xe + 90, xd - 8, y0 + 12.9, str(contagem.get(premio, 0)), regular, 12.0, "right", PRETO)
+        larg = xd - xe
+        _texto(page, xe + 0.12 * larg, xe + 0.40 * larg, y0 + 12.9, f"{numero}°", regular, 12.0, "left", PRETO)
+        _desenharMedalhaColorida(page, xe + 0.46 * larg, y0 + ALT_LINHA / 2.0, corDisco, numero, negrito)
+        _texto(page, xe + 0.55 * larg, xd - 0.08 * larg, y0 + 12.9, str(contagem.get(premio, 0)), regular, 12.0,
+               "right", PRETO)
     page.draw_rect(fitz.Rect(xe, topo, xd, topo + alturaTabela), color=PRETO, width=1.0)
 
     # Legenda
-    xl0, xl1 = 170.0, 410.0
+    xl0 = xd + MARGEM_QUADROS_H
+    xl1 = xl0 + 240.0
     page.draw_rect(fitz.Rect(xl0, topo, xl1, topo + 21.0), color=None, fill=AZUL)
     _texto(page, xl0, xl1, topo + 14.5, "Legenda", negrito, 12.0, "center", BRANCO)
     art = regras.artigos
@@ -360,11 +374,17 @@ def gerarPdfResultadoIndividualFinal(
     capDemais = int((Y_LIMITE_LINHAS - (Y_CAB_DEMAIS + ALT_CABECALHO)) / ALT_LINHA)
     paginas = _paginar(categorias, capPrimeira, capDemais)
     topoLinhas = [Y_CAB_PRIMEIRA + ALT_CABECALHO] + [Y_CAB_DEMAIS + ALT_CABECALHO] * (len(paginas) - 1)
-    # A linha de totais e os quadros precisam caber depois da última linha; senão vão para uma página própria.
+    # A linha de totais fica na última página de linhas quando couber; os quadros ficam abaixo dela se couberem,
+    # senão vão para uma página própria (sem repetir o total). Se o total não couber, ele e os quadros vão juntos.
     linhasLegenda = 6 if regras.temDescarte and regras.artigos.descarte else 5
-    alturaFinal = ALT_LINHA + 28.0 + 21.0 + linhasLegenda * ALT_LINHA
-    paginaSoQuadros = topoLinhas[-1] + len(paginas[-1]) * ALT_LINHA + alturaFinal > ALTURA - 20.0
-    if paginaSoQuadros:
+    alturaTotal = ALT_LINHA + 1.6
+    alturaQuadros = MARGEM_QUADROS_V + 21.0 + linhasLegenda * ALT_LINHA
+    yFimLinhas = topoLinhas[-1] + len(paginas[-1]) * ALT_LINHA
+    limite = ALTURA - 20.0
+    totalNaUltima = yFimLinhas + alturaTotal <= limite
+    quadrosNaUltima = totalNaUltima and yFimLinhas + alturaTotal + alturaQuadros <= limite
+    paginaExtra = not (totalNaUltima and quadrosNaUltima)   # página sem linhas de atletas, só com total e/ou quadros
+    if paginaExtra:
         paginas.append([])
         topoLinhas.append(Y_CAB_DEMAIS)
 
@@ -391,14 +411,18 @@ def gerarPdfResultadoIndividualFinal(
                 page.insert_image(fitz.Rect(700.0, 53.0, 826.0, 81.2), filename=caminhoLogoFecori, keep_proportion=True)
             else:
                 _texto(page, 700.0, 826.0, 76.0, "FECORI", negrito, 21.0, "right", (0.15, 0.15, 0.15))
-        if linhasPagina or not paginaSoQuadros or numeroPagina != len(paginas):
+        if linhasPagina or not paginaExtra or numeroPagina != len(paginas):
             _desenharCabecalho(page, Y_CAB_PRIMEIRA if numeroPagina == 1 else Y_CAB_DEMAIS, colunas, negrito, regular)
         y = topoLinhas[numeroPagina - 1]
         for ficha, ultima in linhasPagina:
             _desenharLinha(page, ficha, y, indiceGlobal % 2 == 0, ultima, colunas, fontes, rotuloArt42)
             indiceGlobal += 1
             y += ALT_LINHA
-        if numeroPagina == len(paginas):
+        ultimaPagina = numeroPagina == len(paginas)
+        # Total na última página de linhas (penúltima, se houver página extra) ou no topo da página extra.
+        total = (numeroPagina == len(paginas) - 1 and paginaExtra and totalNaUltima) or (
+            ultimaPagina and (not paginaExtra or not totalNaUltima))
+        if total:
             page.draw_line(fitz.Point(X_ESQ, y), fitz.Point(X_DIR, y), color=PRETO, width=0.8)
             _texto(page, X_CATEGORIA, X_CLASS_CENTRO + 40, y + 13.0, "Total", negrito, 12.0, "left", PRETO)
             _texto(page, X_ATLETA, X_CLUBE, y + 13.0, str(len(todas)), negrito, 12.0, "center", PRETO)
@@ -407,7 +431,9 @@ def gerarPdfResultadoIndividualFinal(
             for deslocamento in (ALT_LINHA, ALT_LINHA + 1.6):
                 page.draw_line(fitz.Point(X_ESQ, y + deslocamento), fitz.Point(X_DIR, y + deslocamento),
                                color=PRETO, width=0.7)
-            _desenharQuadros(page, y + ALT_LINHA + 28.0, contagemPremios, regras, fontes)
+            y += alturaTotal
+        if ultimaPagina:
+            _desenharQuadros(page, y + (MARGEM_QUADROS_V if total else 0.0), contagemPremios, regras, fontes)
         _texto(page, X_ESQ, 200.0, Y_RODAPE, carimbo, regular, 9.0, "left", PRETO)
         _texto(page, 700.0, X_DIR, Y_RODAPE, f"{numeroPagina} / {len(paginas)}", regular, 9.0, "right", PRETO)
 
