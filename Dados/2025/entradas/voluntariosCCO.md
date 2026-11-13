@@ -56,67 +56,26 @@ Relação oficial de atletas convocados formalmente por seus clubes para atuarem
 | 116958 | 23620 | Carla Cristinna Silva Cidrão | TRILHA NORTE |
 | 251234 | 910002 | Rossana Maria Castro De Andrade | INDIV |
 
-## Ajustes do Resultado Oficial Publicado
+## Desempates Decididos pela FECORI
 
-O resultado de 2025 foi calculado à mão e publicado pela FECORI; o publicado vale, mesmo onde difere do que os dados e o regulamento produziriam (ADR-007). Cada linha abaixo é um ponto em que o publicado difere, com o valor publicado.
+Posição na categoria dos atletas que o regulamento deixa empatados após o Art. 38, Parágrafo Único, "a" e "b", e que a FECORI desempatou por critério que o repositório não aplica (maior idade, "c"; ADR-003). Vale a ordem decidida pela FECORI no resultado de 2025; a posição é o índice da lista da categoria no cálculo, que conta as linhas "(Art. 35)" de quem trocou de categoria.
 
-| Etapa | CBO | Categoria | Pontos publicados | Motivo | Destaque |
-| :---: | :---: | :--- | :---: | :--- | :---: |
-| 1ª | 3952 | H Vet A | 17,5 | Média atribuída a atleta que não consta da lista de voluntários | média |
-| 1ª | 23152 | H Adulto B | 0 | Desclassificado (DC): publicado sem ponto | |
-| 3ª | 3448 | D Sênior A | 0 | Publicado sem pontos, embora tenha concluído em 1º lugar | |
-| 3ª | 16453 | H Vet A | 21 | Publicado 21; os dados dão 31 (6º lugar) | |
-| 3ª | 22310 | H Master B | 32 | Publicado com a mesma pontuação do 5º colocado, embora o tempo seja diferente | |
-| 3ª | 9716 | H Master B | 31 | Efeito do empate de pontos publicado entre o 5º e o 6º colocados | |
-| 3ª | 23141 | H Master B | 30 | Efeito do empate de pontos publicado entre o 5º e o 6º colocados | |
-| 3ª | 18448 | H Master B | 29 | Efeito do empate de pontos publicado entre o 5º e o 6º colocados | |
-| 3ª | 7203 | H Sênior A | 0 | Média da etapa de apoio lançada na 4ª etapa no publicado | |
-| 4ª | 7203 | H Sênior A | 10 | Média da etapa de apoio da 3ª etapa lançada aqui no publicado | média |
-
-## Posições do Resultado Oficial Publicado
-
-Posição na categoria que o resultado publicado deu aos atletas empatados (o publicado os resolveu por critério que o repositório não aplica, como a idade, ADR-003) e a quem ele colocou em posição diferente da calculada. Vale a posição publicada (ADR-007).
-
-| Categoria | CBO | Posição publicada | Motivo |
+| Categoria | CBO | Posição | Motivo |
 | :--- | :---: | :---: | :--- |
-| D Junior E | 17481 | 1 | Empate resolvido no publicado |
-| D Junior E | 20940 | 2 | Empate resolvido no publicado |
-| D Juven B | 22516 | 2 | Posição diferente da calculada no publicado |
-| D Juven B | 22283 | 3 | Posição diferente da calculada no publicado |
-| D Sênior B | 14762 | 6 | Posição diferente da calculada no publicado |
-| D Vet B | 3485 | 3 | Empate resolvido no publicado |
-| D Vet B | 14836 | 4 | Empate resolvido no publicado |
-| H Adulto B | 19256 | 13 | Empate resolvido no publicado |
-| H Adulto B | 18359 | 14 | Empate resolvido no publicado |
-| H Adulto B | 23152 | 20 | Empate resolvido no publicado |
-| H Adulto B | 23162 | 21 | Empate resolvido no publicado |
-| H Adulto B | 23193 | 22 | Empate resolvido no publicado |
-| H Adulto B | 23158 | 23 | Empate resolvido no publicado |
-| H Adulto B | 23195 | 24 | Empate resolvido no publicado |
-| H Adulto B | 23159 | 25 | Empate resolvido no publicado |
-| H Adulto N | 10806 | 6 | Empate resolvido no publicado |
-| H Adulto N | 3989 | 7 | Empate resolvido no publicado |
-| H Juven B | 18105 | 8 | Empate resolvido no publicado |
-| H Juven B | 23185 | 9 | Empate resolvido no publicado |
-| H Master A | 16127 | 4 | Empate resolvido no publicado |
-| H Master A | 16592 | 5 | Empate resolvido no publicado |
-| H Master B | 18448 | 11 | Empate resolvido no publicado |
-| H Master B | 22050 | 12 | Empate resolvido no publicado |
-| H Sênior B | 16241 | 13 | Posição diferente da calculada no publicado |
-| H Sênior B | 8439 | 14 | Posição diferente da calculada no publicado |
-
-## Atletas Fora do Resultado Oficial Publicado
-
-O resultado publicado de 2025 não lista estes atletas, todos sem pontos: o banco da 2ª etapa se perdeu e o publicado só conhecia as inscrições das etapas 1, 3 e 4. Eles constam da lista de partida da 2ª etapa (não largaram) ou são voluntários sem inscrição nas etapas apuradas (ADR-007).
-
-| Categoria | CBO | Motivo |
-| :--- | :---: | :--- |
-| D Adulto B | 15355 | Voluntária da 2ª etapa, sem inscrição nas etapas apuradas pelo publicado |
-| D Adulto N | 116957 | Só consta da lista de partida da 2ª etapa (não largou) |
-| D Master N | 22968 | Só consta da lista de partida da 2ª etapa (não largou) |
-| D Sênior B | 8446 | Só consta da lista de partida da 2ª etapa (não largou) |
-| H Adulto A | 16719 | Voluntário da 2ª etapa, sem inscrição nas etapas apuradas pelo publicado |
-| H Master B | 22601 | Só consta da lista de partida da 2ª etapa (não largou) |
-| H Sênior N | 21907 | Voluntário da 4ª etapa, sem inscrição nas etapas apuradas pelo publicado |
-| H Vet A | 10641 | Voluntário das etapas 1 e 4, sem inscrição nas etapas apuradas pelo publicado |
-
+| D Junior E | 17481 | 1 | Desempate decidido pela FECORI |
+| D Junior E | 20940 | 2 | Desempate decidido pela FECORI |
+| D Vet B | 3485 | 3 | Desempate decidido pela FECORI |
+| D Vet B | 14836 | 4 | Desempate decidido pela FECORI |
+| H Adulto B | 19256 | 13 | Desempate decidido pela FECORI |
+| H Adulto B | 18359 | 14 | Desempate decidido pela FECORI |
+| H Adulto B | 23162 | 21 | Desempate decidido pela FECORI |
+| H Adulto B | 23193 | 22 | Desempate decidido pela FECORI |
+| H Adulto B | 23158 | 23 | Desempate decidido pela FECORI |
+| H Adulto B | 23195 | 24 | Desempate decidido pela FECORI |
+| H Adulto B | 23159 | 25 | Desempate decidido pela FECORI |
+| H Adulto N | 10806 | 6 | Desempate decidido pela FECORI |
+| H Adulto N | 3989 | 7 | Desempate decidido pela FECORI |
+| H Juven B | 18105 | 8 | Desempate decidido pela FECORI |
+| H Juven B | 23185 | 9 | Desempate decidido pela FECORI |
+| H Master A | 16127 | 5 | Desempate decidido pela FECORI |
+| H Master A | 16592 | 6 | Desempate decidido pela FECORI |
