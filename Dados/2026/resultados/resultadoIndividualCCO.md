@@ -1,20 +1,20 @@
 # Classificação Individual — XX CCO (2026)
 
-Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Competições Cearenses de Orientação de 2026:
+Apuração calculada conforme o Regulamento das Competições Cearenses de Orientação (2026) (pontuação: **Art. 31**; troca de categoria: **Art. 32**; classificação geral: **Art. 34**):
 - **Descarte obrigatório (Art. 34):** 1 etapa de menor pontuação descartada, indicada com valores tachados (ex.: `~~35,00 (3º)~~`) (campeonato com 4 etapas).
 - **Voluntários e Árbitros (Art. 33, § 1º):** atribuição de pontuação média na etapa de atuação, indicada com valores em itálico (ex.: `*20,00*`).
 - **Elegibilidade à premiação final (Art. 39, § 1º):** filiado à CBO e com participação em no mínimo metade das etapas realizadas (mínimo de 2 etapas).
 
 ## Categoria: D Adulto A
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 22151 | Maria Fernanda Oliveira Martinez | COFORT | 1,00 (NC) | ~~0,00 (-)~~ | 37,00 (2º) | 40,00 (1º) | **78,00** | Sim |
 | **2º** | 10597 | Tayssa Maria Paiva de Sousa | COqueiro | *20,00* | ~~0,00 (NP)~~ | 40,00 (1º) | 0,00 (NP) | **60,00** | Sim |
 
 ## Categoria: D Adulto B
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 19551 | Lara Coelho de Brito | COqueiro | ~~35,00 (3º)~~ | 40,00 (1º) | 40,00 (1º) | 37,00 (2º) | **117,00** | Sim |
 | **2º** | 23620 | Carla Cristinna Silva Cidrão | TRILHA NORTE | 37,00 (2º) | ~~1,00 (NC)~~ | 35,00 (3º) | 33,00 (4º) | **105,00** | Sim |
@@ -29,7 +29,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: D Adulto E
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 18422 | Luana Kist Alves | COFORT | 40,00 (1º) | ~~35,00 (3º)~~ | 40,00 (1º) | 37,00 (2º) | **117,00** | Sim |
 | **2º** | 19699 | Alexsandra Oliveira dos Santos Martinez | COFORT | ~~35,00 (3º)~~ | 37,00 (2º) | 37,00 (2º) | 40,00 (1º) | **114,00** | Sim |
@@ -37,7 +37,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: D Adulto N
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 23787 | Francisca Nathalya Lopes De Gois | COqueiro | 40,00 (1º) | ~~37,00 (2º)~~ | 40,00 (1º) | 40,00 (1º) | **120,00** | Sim |
 | **2º** | 23734 | Antonia Giovana Gonçalves Ferreira | CORR | ~~37,00 (2º)~~ | 40,00 (1º) | 37,00 (2º) | 37,00 (2º) | **114,00** | Sim |
@@ -49,7 +49,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: D Juven B
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 23714 | Ana Júlia Alves De Abreu | COqueiro | 40,00 (1º) | ~~37,00 (2º)~~ | 37,00 (2º) | 40,00 (1º) | **117,00** | Sim |
 | **2º** | 16521 | Ana Luiza Melo de Vasconcelos | COFORT | ~~0,00 (NP)~~ | 40,00 (1º) | 40,00 (1º) | 1,00 (NC) | **81,00** | Sim |
@@ -60,14 +60,14 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: D Juven N
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 16522 | Mariana Melo de Vasconcelos | COFORT | 40,00 (1º) | ~~0,00 (NP)~~ | 40,00 (1º) | 40,00 (1º) | **120,00** | Sim |
 | **2º** | 24209 | Luiza Eduarda Silva Aleixo | COqueiro | ~~0,00 (-)~~ | 40,00 (1º) | 37,00 (2º) | 37,00 (2º) | **114,00** | Sim |
 
 ## Categoria: D Master A
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 9031 | Suelen Ferreira de Araújo | COFORT | 40,00 (1º) | 40,00 (1º) | 40,00 (1º) | ~~0,00 (NP)~~ | **120,00** | Sim |
 | **2º** | 16545 | Inelia Cardoso Brito Braga | COFORT | ~~0,00 (NP)~~ | 37,00 (2º) | 37,00 (2º) | 40,00 (1º) | **114,00** | Sim |
@@ -76,7 +76,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: D Master B
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 20520 | Andresiane Sousa da Silva | COqueiro | ~~37,00 (2º)~~ | 40,00 (1º) | 37,00 (2º) | 40,00 (1º) | **117,00** | Sim |
 | **2º** | 9329 | Elba Antares Souto de Amorim | CORR | ~~0,00 (-)~~ | 0,00 (-) | 40,00 (1º) | 0,00 (-) | **40,00** | Não (1/4) |
@@ -85,14 +85,14 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: D Master N
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 24418 | Maria Lorrine Silva Sampaio | COFORT | ~~0,00 (-)~~ | 0,00 (-) | 0,00 (-) | 40,00 (1º) | **40,00** | Não (1/4) |
 | **2º** | 9071 | Ticiane Gonçalves Ricarte | TRILHA NORTE | 1,00 (NC) | ~~0,00 (-)~~ | 0,00 (-) | 0,00 (-) | **1,00** | Não (1/4) |
 
 ## Categoria: D Sênior A
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 3448 | Cristine Medeiros Antunes | COFORT | ~~40,00 (1º)~~ | 40,00 (1º) | 40,00 (1º) | 40,00 (1º) | **120,00** | Sim |
 | **2º** | 3491 | Ariluce Silva de Sousa | CODL | ~~35,00 (3º)~~ | 35,00 (3º) | 37,00 (2º) | 37,00 (2º) | **109,00** | Sim |
@@ -100,7 +100,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: D Sênior B
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 16226 | Cristiane Helena Menezes da Silva | COqueiro | 40,00 (1º) | ~~37,00 (2º)~~ | 40,00 (1º) | 40,00 (1º) | **120,00** | Sim |
 | **2º** | 15183 | Ana Carolina de Paula Melo de Vasconcelos | COFORT | 37,00 (2º) | 35,00 (3º) | 37,00 (2º) | ~~0,00 (NP)~~ | **109,00** | Sim |
@@ -110,52 +110,52 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: D Sênior N
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | - | 21958 | Cristina Vasconcelos Lopes Mendes | COqueiro | ~~0,00 (NP)~~ | 0,00 (-) | 0,00 (-) | 0,00 (-) | 0,00 | Não (0/4) |
 | - | 24424 | Adriana Cavalcante | COFORT | ~~0,00 (-)~~ | 0,00 (-) | 0,00 (-) | 0,00 (NP) | 0,00 | Não (0/4) |
 
 ## Categoria: D Vet A
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 10631 | Maria Eleneusa Cordeiro Cruz | COFORT | 1,00 (NC) | ~~0,00 (NP)~~ | 0,00 (-) | 40,00 (1º) | **41,00** | Sim |
 
 ## Categoria: D Vet B
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 22030 | Maria Dalva Siebra E Silva | COFORT | ~~40,00 (1º)~~ | 40,00 (1º) | 40,00 (1º) | 40,00 (1º) | **120,00** | Sim |
 | **2º** | 13820 | Tânia Maria Paiva de Sousa | COqueiro | *19,00* | ~~0,00 (NP)~~ | 37,00 (2º) | 1,00 (NC) | **57,00** | Sim |
 
 ## Categoria: D Vet N
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 19765 | Maria Luiza Rodrigues de Souza | TRILHA NORTE | 40,00 (1º) | ~~0,00 (-)~~ | 0,00 (-) | 0,00 (-) | **40,00** | Não (1/4) |
 
 ## Categoria: D65B
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 14836 | Francisca Mary Monteiro Pereira | COqueiro | ~~37,00 (2º)~~ | 40,00 (1º) | 40,00 (1º) | 40,00 (1º) | **120,00** | Sim |
 | **2º** | 18482 | Gerusa Maria Maciel De Alcantara | TRILHA NORTE | 40,00 (1º) | 37,00 (2º) | ~~1,00 (NC)~~ | 37,00 (2º) | **114,00** | Sim |
 
 ## Categoria: D65N
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 14507 | Maria Auri Amorim de Paula | TRILHA NORTE | ~~40,00 (1º)~~ | 40,00 (1º) | 40,00 (1º) | 40,00 (1º) | **120,00** | Sim |
 
 ## Categoria: D80B
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 5577 | Gledy Medeiros Antunes | COFORT | ~~0,00 (NP)~~ | 40,00 (1º) | 40,00 (1º) | 40,00 (1º) | **120,00** | Sim |
 
 ## Categoria: H Adulto A
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 8859 | Delano Melo Uchoa | TRILHA NORTE | ~~28,00 (9º)~~ | 35,00 (3º) | 35,00 (3º) | 37,00 (2º) | **107,00** | Sim |
 | **2º** | 24095 | Gustavo De Amorim Martins Fernandes | COqueiro | ~~29,00 (8º)~~ | 33,00 (4º) | 32,00 (5º) | 40,00 (1º) | **105,00** | Sim |
@@ -172,7 +172,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: H Adulto B
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 23192 | Victor Alef Da Silva Araújo | COFORT | 40,00 (1º) | 40,00 (1º) | ~~1,00 (NC)~~ | 33,00 (4º) | **113,00** | Sim |
 | **2º** | 24181 | Ronaldo Arrais Alencar Lopes De Freitas | COqueiro | ~~0,00 (-)~~ | 35,00 (3º) | 40,00 (1º) | 37,00 (2º) | **112,00** | Sim |
@@ -198,7 +198,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: H Adulto E
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 22261 | Carlos Vinícius De Moura Leal | COCAP | 37,00 (2º) | ~~0,00 (-)~~ | 40,00 (1º) | 35,00 (3º) | **112,00** | Sim |
 | **2º** | 16577 | José Ronaldo de Brito Filho | COMaNE | 35,00 (3º) | 40,00 (1º) | 35,00 (3º) | ~~29,00 (8º)~~ | **110,00** | Sim |
@@ -214,7 +214,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: H Adulto N
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 22702 | Filipe Conde Amorim | COFORT | ~~0,00 (-)~~ | 0,00 (-) | 37,00 (2º) | 40,00 (1º) | **77,00** | Sim |
 | **2º** | 999004 | Vasco Stascxak Neto | Individual | ~~0,00 (-)~~ | 0,00 (-) | 40,00 (1º) | 0,00 (-) | **40,00** | Não (1/4) |
@@ -225,7 +225,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: H Infant N
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 22416 | Erik Leon Lima Reges | TRILHA NORTE | ~~37,00 (2º)~~ | 40,00 (1º) | 37,00 (2º) | 40,00 (1º) | **117,00** | Sim |
 | **2º** | 23182 | Luiz Nicolas Furtado Do Nascimento | COFORT | 35,00 (3º) | ~~0,00 (NP)~~ | 40,00 (1º) | 0,00 (-) | **75,00** | Sim |
@@ -233,28 +233,28 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: H Junior A
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 19326 | Matheus Cacau Pinheiro Nunes | COqueiro | 40,00 (1º) | 40,00 (1º) | 40,00 (1º) | ~~0,00 (-)~~ | **120,00** | Sim |
 | - | 20426 | Cristian Levi de Souza Silveira | COqueiro | ~~0,00 (NP)~~ | 0,00 (-) | 0,00 (-) | 0,00 (-) | 0,00 | Não (0/4) |
 
 ## Categoria: H Junior B
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 18112 | João Victor Vieira Barreto Gomes | COqueiro | 40,00 (1º) | 40,00 (1º) | 40,00 (1º) | ~~0,00 (-)~~ | **120,00** | Sim |
 | **2º** | 23859 | Davi Alencar Bezerra | COFORT | 37,00 (2º) | ~~0,00 (-)~~ | 0,00 (-) | 0,00 (-) | **37,00** | Não (1/4) |
 
 ## Categoria: H Juven A
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 17883 | Jan Pablo Cardoso Braga | COFORT | ~~40,00 (1º)~~ | 40,00 (1º) | 40,00 (1º) | 40,00 (1º) | **120,00** | Sim |
 | **2º** | 21544 | Gabriel Satoshi Albuquerque Trentini | COqueiro | 37,00 (2º) | 37,00 (2º) | ~~0,00 (-)~~ | 0,00 (-) | **74,00** | Sim |
 
 ## Categoria: H Juven B
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 23437 | Arthur Siébra De Sousa | COqueiro | ~~37,00 (2º)~~ | 40,00 (1º) | 40,00 (1º) | 37,00 (2º) | **117,00** | Sim |
 | **2º** | 21846 | Saul Sena Ferreira | COFORT | ~~1,00 (NC)~~ | 37,00 (2º) | 35,00 (3º) | 40,00 (1º) | **112,00** | Sim |
@@ -262,7 +262,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: H Juven N
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 24139 | Pedro Batista Beserra Neto | COqueiro | ~~0,00 (-)~~ | 40,00 (1º) | 35,00 (3º) | 37,00 (2º) | **112,00** | Sim |
 | **2º** | 24113 | Gustavo De Souza Vergueiro | INDIV | ~~1,00 (NC)~~ | 1,00 (NC) | 40,00 (1º) | 40,00 (1º) | **81,00** | Sim |
@@ -271,7 +271,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: H Master A
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 8638 | José Daniarly Rodrigues Januário | COqueiro | ~~40,00 (1º)~~ | 40,00 (1º) | 40,00 (1º) | 40,00 (1º) | **120,00** | Sim |
 | **2º** | 16592 | Felipe de Moura Carvalho | COFORT | ~~32,00 (5º)~~ | 37,00 (2º) | 37,00 (2º) | 37,00 (2º) | **111,00** | Sim |
@@ -282,7 +282,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: H Master B
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 21979 | Diego Marreira Aires De Alencar | COFORT | 37,00 (2º) | 40,00 (1º) | 37,00 (2º) | ~~32,00 (5º)~~ | **114,00** | Sim |
 | **2º** | 22719 | Mário José Maia Leitão | COFORT | ~~31,00 (6º)~~ | 37,00 (2º) | 35,00 (3º) | 40,00 (1º) | **112,00** | Sim |
@@ -298,7 +298,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: H Sênior A
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 16626 | Josieudes de Sousa Claudio | COFORT | 40,00 (1º) | 40,00 (1º) | ~~30,00 (7º)~~ | 37,00 (2º) | **117,00** | Sim |
 | **2º** | 16711 | Alisson Roberto de Aquino Rodrigues | COFORT | 37,00 (2º) | 35,00 (3º) | ~~27,00 (10º)~~ | 40,00 (1º) | **112,00** | Sim |
@@ -315,7 +315,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: H Sênior B
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 3119 | Isaú Alves de Castro | COqueiro | 40,00 (1º) | ~~35,00 (3º)~~ | 40,00 (1º) | 40,00 (1º) | **120,00** | Sim |
 | **2º** | 22471 | Henrique Alves Ribeiro Filho | COFORT | 37,00 (2º) | ~~33,00 (4º)~~ | 37,00 (2º) | 33,00 (4º) | **107,00** | Sim |
@@ -331,7 +331,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: H Sênior N
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 21907 | Silvio Murillo Baltazar Moreira | CORR | ~~0,00 (-)~~ | 40,00 (1º) | 40,00 (1º) | 40,00 (1º) | **120,00** | Sim |
 | - | 24422 | Marcio Ferreira Barros | COFORT | ~~0,00 (-)~~ | 0,00 (-) | 0,00 (-) | 0,00 (NP) | 0,00 | Não (0/4) |
@@ -339,7 +339,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: H Vet A
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 15059 | Walber de Almeida Andrade | CAATINGA TREKKERS | 40,00 (1º) | 35,00 (3º) | 40,00 (1º) | ~~0,00 (NP)~~ | **115,00** | Sim |
 | **2º** | 16453 | Antonio Augusto Araujo do Nascimento | COqueiro | 33,00 (4º) | ~~30,00 (7º)~~ | 33,00 (4º) | 40,00 (1º) | **106,00** | Sim |
@@ -360,7 +360,7 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: H Vet B
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 11686 | Jefferson Luis da Rosa Gonçalves | COFORT | 40,00 (1º) | ~~33,00 (4º)~~ | 40,00 (1º) | 40,00 (1º) | **120,00** | Sim |
 | **2º** | 20440 | Humberto Silva Lima | COqueiro | ~~33,00 (4º)~~ | 40,00 (1º) | 33,00 (4º) | 37,00 (2º) | **110,00** | Sim |
@@ -373,51 +373,51 @@ Apuração calculada conforme os **Arts. 31 a 34 e 39** do Regulamento das Compe
 
 ## Categoria: H Vet N
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 22707 | Ivo Alexandre Lopes | COFORT | ~~0,00 (-)~~ | 0,00 (-) | 40,00 (1º) | 40,00 (1º) | **80,00** | Sim |
 | **2º** | 23845 | Francisco Luiz Grangeiro Bezerra | COFORT | 1,00 (NC) | ~~0,00 (-)~~ | 0,00 (-) | 0,00 (-) | **1,00** | Não (1/4) |
 
 ## Categoria: H65A
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 786 | Wladimir Chagas de Sant'anna | COFORT | ~~40,00 (1º)~~ | *40,00* | 40,00 (1º) | *40,00* | **120,00** | Sim |
 | **2º** | 3483 | Francisco Sávio de Oliveira Barros | CORR | 37,00 (2º) | ~~0,00 (NP)~~ | 37,00 (2º) | 0,00 (NP) | **74,00** | Sim |
 
 ## Categoria: H65B
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 22053 | Luiz Manoel Acioli Matos | COFORT | ~~40,00 (1º)~~ | 40,00 (1º) | 40,00 (1º) | 40,00 (1º) | **120,00** | Sim |
 
 ## Categoria: H70A
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 9622 | Paulo José Figueiredo | COFORT | ~~40,00 (1º)~~ | 40,00 (1º) | 40,00 (1º) | 40,00 (1º) | **120,00** | Sim |
 
 ## Categoria: H70B
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | **1º** | 6646 | Claudemir Alcântara Lima | CORR | 1,00 (NC) | ~~0,00 (-)~~ | 0,00 (-) | 0,00 (-) | **1,00** | Não (1/4) |
 
 ## Categoria: H80B
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | *(Art. 32)* | 3482 | Valentim Antunes Garcia | COFORT | ~~0,00 (NP)~~ | 0,00 (-) | 0,00 (-) | 0,00 (-) | 0,00 | Não (0/4) |
 
 ## Categoria: H85B
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | - | 3482 | Valentim Antunes Garcia | COFORT | ~~0,00 (-)~~ | 0,00 (-) | 0,00 (NP) | 0,00 (NP) | 0,00 | Não (0/4) |
 
 ## Categoria: H85N
 
-| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39) |
+| Col. | CBO | Atleta | Clube | 1ª Etapa | 2ª Etapa | 3ª Etapa | 4ª Etapa | Total | Premiação (Art. 39, § 1º) |
 | :---: | :---: | :--- | :---: | :---: | :---: | :---: | :---: | ---: | :---: |
 | *(Art. 32)* | 3482 | Valentim Antunes Garcia | COFORT | ~~0,00 (-)~~ | 0,00 (NP) | 0,00 (-) | 0,00 (-) | 0,00 | Não (0/4) |
 
