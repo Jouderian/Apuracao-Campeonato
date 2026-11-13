@@ -651,8 +651,8 @@ def _montarTextoObservacao(
     if nAjustes or nPosicoes:
         itensBullet.append([
             (
-                f"Este resultado segue o resultado oficial publicado pela FECORI, que prevalece sobre o recálculo: "
-                f"{nAjustes} notas e {nPosicoes} posições foram mantidas como publicadas.",
+                f"Seguem decisão formal da FECORI, e não o cálculo do regulamento: "
+                f"{nAjustes} notas e {nPosicoes} posições de desempate.",
                 "r",
             ),
         ])

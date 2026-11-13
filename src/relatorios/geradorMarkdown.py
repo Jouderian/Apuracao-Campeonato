@@ -143,9 +143,8 @@ def gerarRelatorioIndividualMarkdown(
     nOmissoes = len(resultadoApuracao.get("omissoesOficiais", []))
     if nAjustes or nPosicoes or nOmissoes:
         linhas.append(
-            f"- **Resultado oficial publicado (ADR-007):** o publicado pela FECORI prevalece sobre o recálculo; "
-            f"{nAjustes} notas (marcadas com †), {nPosicoes} posições e {nOmissoes} atletas fora da lista foram "
-            "mantidos como publicados."
+            f"- **Decisões formais da FECORI (ADR-008):** {nAjustes} notas (marcadas com †), {nPosicoes} posições "
+            f"de desempate e {nOmissoes} atletas fora da lista seguem decisão da FECORI, não o cálculo do regulamento."
         )
     linhas.append("")
 

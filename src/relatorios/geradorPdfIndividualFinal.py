@@ -3,7 +3,7 @@
 
 Uma linha por atleta e categoria, categorias na ordem da FECORI e mantidas inteiras na página, pontos por etapa
 com destaque (amarelo = média de voluntário/árbitro, laranja claro = não classificado com 1 ponto), coluna de
-Premiação (troféu, medalhas ou "Art.42 §…" para quem não cumpriu a participação mínima) e, na última página, a
+Premiação (medalhas ou "Art.42 §…" para quem não cumpriu a participação mínima) e, na última página, a
 linha de totais, o quadro de premiação e a legenda. O parcial (não oficial) usa outro layout, em geradorExcelPdf.
 """
 import os
@@ -68,7 +68,7 @@ VERMELHO: Cor = (1.0, 0.0, 0.0)
 PRETO: Cor = (0.0, 0.0, 0.0)
 BRANCO: Cor = (1.0, 1.0, 1.0)
 
-PREMIO_TROFEU, PREMIO_OURO, PREMIO_PRATA, PREMIO_BRONZE, PREMIO_ART42 = "trofeu", "ouro", "prata", "bronze", "art42"
+PREMIO_OURO, PREMIO_PRATA, PREMIO_BRONZE, PREMIO_ART42 = "ouro", "prata", "bronze", "art42"
 
 
 def ordenarCategorias(categorias: list[str]) -> list[str]:
@@ -86,7 +86,9 @@ def rotuloArtigo(artigo: str) -> str:
 
 
 def classificarPremio(ficha: ClassificacaoAtletaCategoria) -> str | None:
-    """Premiação do atleta: troféu (campeão), ouro (campeão de categoria Novato), prata, bronze ou Art.42.
+    """Premiação do atleta: medalha de ouro (campeão), prata, bronze ou rótulo do artigo da participação mínima.
+
+    Os regulamentos premiam atletas só com medalhas (2025 Art. 42; 2026 Art. 38); o troféu é dos clubes.
 
     Medalha: colocação final de 1º a 3º com participação mínima e filiação. O rótulo do Art.42 (participação
     mínima) segue a posição na categoria, como no resultado publicado: quem está entre os 3 primeiros com pontos,
@@ -94,7 +96,7 @@ def classificarPremio(ficha: ClassificacaoAtletaCategoria) -> str | None:
     """
     if 1 <= ficha.colocacaoFinal <= 3 and ficha.elegivelPremiacao:
         if ficha.colocacaoFinal == 1:
-            return PREMIO_OURO if ficha.categoria.endswith(" N") else PREMIO_TROFEU
+            return PREMIO_OURO
         return PREMIO_PRATA if ficha.colocacaoFinal == 2 else PREMIO_BRONZE
     if 1 <= ficha.colocacaoNaCategoria <= 3 and ficha.pontuacaoTotal > 0:
         return PREMIO_ART42
@@ -150,21 +152,6 @@ def _texto(page: Any, x0: float, x1: float, y: float, texto: str, fonte: Fonte, 
         _inserirTextoAlinhado(page, x0, x1, y, texto, fonte, tamanho, alinhamento, cor)
 
 
-def _desenharTrofeu(page: Any, cx: float, cy: float, cor: Cor) -> None:
-    import pymupdf as fitz
-
-    p = fitz.Point
-    page.draw_polyline(
-        [p(cx - 3.6, cy - 4.6), p(cx + 3.6, cy - 4.6), p(cx + 2.8, cy + 0.2), p(cx + 1.0, cy + 2.0),
-         p(cx - 1.0, cy + 2.0), p(cx - 2.8, cy + 0.2), p(cx - 3.6, cy - 4.6)], color=cor, width=0.8,
-    )
-    for lado in (-1, 1):   # alças
-        page.draw_bezier(p(cx + lado * 3.6, cy - 3.6), p(cx + lado * 6.4, cy - 3.8),
-                         p(cx + lado * 6.0, cy - 0.4), p(cx + lado * 2.6, cy - 0.3), color=cor, width=0.8)
-    page.draw_line(p(cx, cy + 2.0), p(cx, cy + 3.8), color=cor, width=0.8)
-    page.draw_rect(fitz.Rect(cx - 2.4, cy + 3.8, cx + 2.4, cy + 4.9), color=cor, width=0.8)
-
-
 def _desenharMedalha(page: Any, cx: float, cy: float, cor: Cor, digito: str, fonte: Fonte) -> None:
     import pymupdf as fitz
 
@@ -192,19 +179,15 @@ def _desenharPremio(page: Any, premio: str | None, topo: float, fontes: Fonte, f
         page.draw_rect(fitz.Rect(x0, topo, x1, topo + ALT_LINHA), color=None, fill=LARANJA)
         _texto(page, x0, x1, base, rotuloArt42, fonteNegrito, 10.5, "center", PRETO)
         return
-    numero = {PREMIO_TROFEU: "1", PREMIO_OURO: "1", PREMIO_PRATA: "2", PREMIO_BRONZE: "3"}[premio]
-    if premio != PREMIO_TROFEU:
-        page.draw_rect(fitz.Rect(x0, topo, x1, topo + ALT_LINHA), color=None, fill=CINZA_ESCURO)
-    cor = {PREMIO_TROFEU: PRETO, PREMIO_OURO: OURO, PREMIO_PRATA: BRANCO, PREMIO_BRONZE: BRONZE}[premio]
+    numero = {PREMIO_OURO: "1", PREMIO_PRATA: "2", PREMIO_BRONZE: "3"}[premio]
+    page.draw_rect(fitz.Rect(x0, topo, x1, topo + ALT_LINHA), color=None, fill=CINZA_ESCURO)
+    cor = {PREMIO_OURO: OURO, PREMIO_PRATA: BRANCO, PREMIO_BRONZE: BRONZE}[premio]
     rotulo = f"{numero}°"
     largura = fonteNegrito[2].text_length(rotulo, fontsize=11.0) + 3.0 + 9.0
     xTexto = x0 + ((x1 - x0) - largura) / 2.0
     _texto(page, xTexto, xTexto + 40.0, base, rotulo, fonteNegrito, 11.0, "left", cor)
     xIcone = xTexto + fonteNegrito[2].text_length(rotulo, fontsize=11.0) + 3.0 + 4.5
-    if premio == PREMIO_TROFEU:
-        _desenharTrofeu(page, xIcone, topo + 9.0, cor)
-    else:
-        _desenharMedalha(page, xIcone, topo + 8.4, cor, numero, fonteNegrito)
+    _desenharMedalha(page, xIcone, topo + 8.4, cor, numero, fonteNegrito)
 
 
 def _colunasEtapas(numeros: list[int]) -> dict[int, float]:
@@ -291,16 +274,13 @@ def _desenharQuadros(page: Any, topo: float, contagem: dict[str, int], regras: A
     xe, xd = X_ESQ, 159.0
     page.draw_rect(fitz.Rect(xe, topo, xd, topo + 21.0), color=None, fill=AZUL)
     _texto(page, xe, xd, topo + 14.5, "Premiação", negrito, 12.0, "center", BRANCO)
-    alturaTabela = 21.0 + 4 * ALT_LINHA
-    for i, premio in enumerate((PREMIO_TROFEU, PREMIO_OURO, PREMIO_PRATA, PREMIO_BRONZE)):
+    alturaTabela = 21.0 + 3 * ALT_LINHA
+    for i, premio in enumerate((PREMIO_OURO, PREMIO_PRATA, PREMIO_BRONZE)):
         y0 = topo + 21.0 + i * ALT_LINHA
         page.draw_rect(fitz.Rect(xe, y0, xd, y0 + ALT_LINHA), color=None, fill=AZUL_CLARO)
-        numero = {PREMIO_TROFEU: "1", PREMIO_OURO: "1", PREMIO_PRATA: "2", PREMIO_BRONZE: "3"}[premio]
+        numero = {PREMIO_OURO: "1", PREMIO_PRATA: "2", PREMIO_BRONZE: "3"}[premio]
         _texto(page, xe + 12, xe + 44, y0 + 12.9, f"{numero}°", negrito, 11.0, "left", PRETO)
-        if premio == PREMIO_TROFEU:
-            _desenharTrofeu(page, xe + 54.0, y0 + 9.0, PRETO)
-        else:
-            _desenharMedalha(page, xe + 54.0, y0 + 8.4, PRETO, numero, negrito)
+        _desenharMedalha(page, xe + 54.0, y0 + 8.4, PRETO, numero, negrito)
         _texto(page, xe + 90, xd - 8, y0 + 12.9, str(contagem.get(premio, 0)), negrito, 11.0, "right", PRETO)
     page.draw_rect(fitz.Rect(xe, topo, xd, topo + alturaTabela), color=PRETO, width=1.4)
 
