@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""O resultado oficial publicado prevalece (ADR-007): ajustes de notas, posições e soma de clubes de 2025."""
+"""Mecanismos de ajuste por decisão formal da FECORI (ADR-008): notas, posições e omissões; hoje sem uso nos dados."""
 from decimal import Decimal
 import unittest
 
@@ -93,28 +93,15 @@ class TestClubes2025(unittest.TestCase):
         nomes = {1: "A", 2: "B", 3: "C", 4: "D"}
         return _dados((1, 2), [_registro(e, c, nomes[c], t) for e, ts in tempos.items() for c, t in ts.items()])
 
-    def test_2025_soma_os_3_maiores_totais_e_2026_os_3_melhores_por_etapa(self):
-        r2025 = apurarCampeonatoCCO(*self._quatro_atletas_duas_etapas(), REGRAS_CCO_2025)
-        r2026 = apurarCampeonatoCCO(*self._quatro_atletas_duas_etapas(), REGRAS_CCO_2026)
-        clube2025 = r2025["classificacaoClubes"][0]
-        self.assertEqual(clube2025["totalPontos"], Decimal("222.00"))   # A 77 + D 73 + B 72
-        self.assertEqual(r2026["classificacaoClubes"][0]["totalPontos"], Decimal("224.00"))   # 112 + 112 por etapa
-        self.assertEqual({d["cbo"] for d in clube2025["detalheTop3PorEtapa"][1][CATEGORIA]}, {1, 2, 4})   # C fica de fora
-        self.assertEqual(sum(clube2025["pontosPorEtapa"].values()), Decimal("222.00"))
-
-    def test_total_do_clube_arredonda_so_no_fim(self):
-        # Três voluntárias, média 77/3 = 25,666... cada: arredondar cada uma daria 3 x 25,67 = 77,01.
-        registros = [_registro(e, 1, "Ana", 1000) for e in (1, 2, 3, 4)]
-        voluntarios = []
-        for cbo, nome in ((5, "V1"), (6, "V2"), (7, "V3")):
-            registros += [_registro(1, cbo, nome, 1100 + cbo), _registro(3, cbo, nome, 1100 + cbo)]
-            voluntarios.append({"etapa": 2, "cbo": cbo, "nome": nome})
-        resultado = apurarCampeonatoCCO(*_dados((1, 2, 3, 4), registros, voluntarios), REGRAS_CCO_2025)
-        fichas = _fichas(resultado)
-        self.assertNotEqual(fichas[5].etapas[2].pontosFinais, fichas[5].etapas[2].pontosFinais.quantize(Decimal("0.01")))
-        clube = next(c for c in resultado["classificacaoClubes"] if c["sigla"] == "AAA")
-        exatos = sorted((sum(d.pontosFinais for d in f.etapas.values()) for f in fichas.values()), reverse=True)
-        self.assertEqual(clube["totalPontos"], sum(exatos[:3], Decimal("0")).quantize(Decimal("0.01")))
+    def test_2025_e_2026_somam_os_3_melhores_de_cada_categoria_por_etapa(self):
+        for regras in (REGRAS_CCO_2025, REGRAS_CCO_2026):
+            with self.subTest(ano=regras.ano):
+                resultado = apurarCampeonatoCCO(*self._quatro_atletas_duas_etapas(), regras)
+                clube = resultado["classificacaoClubes"][0]
+                self.assertEqual(clube["totalPontos"], Decimal("224.00"))   # 112 + 112 por etapa
+                # Etapa 1: A 37... os 3 melhores da etapa; a quarta colocada fica de fora em cada etapa.
+                self.assertEqual(len(clube["detalheTop3PorEtapa"][1][CATEGORIA]), 3)
+                self.assertEqual(sum(clube["pontosPorEtapa"].values()), Decimal("224.00"))
 
 
 def _naoLargou(etapa: int, cbo: int, nome: str) -> dict:
@@ -123,7 +110,7 @@ def _naoLargou(etapa: int, cbo: int, nome: str) -> dict:
     return reg
 
 
-class TestRegrasDeClubes2025(unittest.TestCase):
+class TestRegrasDeClubes(unittest.TestCase):
     def test_clube_de_outra_federacao_nao_e_classificado_em_2025_mas_e_em_2026(self):
         reg = _registro(1, 8, "Ze", 1100)
         reg.update({"clubeId": 2, "clubeSigla": "BBB", "clubeNome": "Clube B"})
@@ -135,30 +122,27 @@ class TestRegrasDeClubes2025(unittest.TestCase):
         self.assertEqual(siglas2025, ["AAA"])
         self.assertEqual(sorted(siglas2026), ["AAA", "BBB"])
 
-    def test_coluna_atletas_conta_linhas_do_resultado_em_2025_e_atletas_distintos_em_2026(self):
+    def test_coluna_atletas_conta_atletas_distintos_nos_dois_anos(self):
         outraCategoria = _registro(2, 5, "Eva", 1000)
         outraCategoria["categoria"] = "H Adulto B"
         registros = [_registro(1, 1, "Ana", 1000), _registro(1, 5, "Eva", 1100), outraCategoria]
         dados = _dados((1, 2), registros)
-        qtd2025 = apurarCampeonatoCCO(*dados, REGRAS_CCO_2025)["classificacaoClubes"][0]["qtdAtletas"]
-        qtd2026 = apurarCampeonatoCCO(*dados, REGRAS_CCO_2026)["classificacaoClubes"][0]["qtdAtletas"]
-        self.assertEqual(qtd2025, 3)   # Ana + Eva em duas categorias
-        self.assertEqual(qtd2026, 2)   # Ana e Eva
+        for regras in (REGRAS_CCO_2025, REGRAS_CCO_2026):
+            with self.subTest(ano=regras.ano):
+                self.assertEqual(apurarCampeonatoCCO(*dados, regras)["classificacaoClubes"][0]["qtdAtletas"], 2)
 
 
 class TestOmissoesDoPublicado(unittest.TestCase):
     def _dados(self):
         return _dados((1,), [_registro(1, 1, "Ana", 1000), _naoLargou(1, 4, "Dani")])
 
-    def test_atleta_omitido_sai_do_resultado_e_da_contagem_de_clubes(self):
+    def test_atleta_omitido_sai_do_resultado(self):
         dadosHelga, dadosVol = self._dados()
         com = apurarCampeonatoCCO(dadosHelga, dadosVol, REGRAS_CCO_2025)
         self.assertIn(4, _fichas(com))
-        self.assertEqual(com["classificacaoClubes"][0]["qtdAtletas"], 2)
         dadosVol["omissoesOficiais"] = [{"categoria": CATEGORIA, "cbo": 4, "motivo": "fora da lista publicada"}]
         sem = apurarCampeonatoCCO(dadosHelga, dadosVol, REGRAS_CCO_2025)
         self.assertNotIn(4, _fichas(sem))
-        self.assertEqual(sem["classificacaoClubes"][0]["qtdAtletas"], 1)
         self.assertEqual(sem["omissoesOficiais"], [{"categoria": CATEGORIA, "cbo": 4}])
         self.assertIn("1 atletas fora da lista", gerarRelatorioIndividualMarkdown(2025, "XIX CCO", sem))
 
@@ -191,7 +175,7 @@ class TestLeituraDasSecoes(unittest.TestCase):
             "| :---: | :---: | :--- | :---: | :--- | :---: |\n"
             "| 3ª | 16453 | H Vet A | 21 | Publicado 21 | |\n"
             "| 1ª | 3952 | H Vet A | 17,5 | Média lançada | Média |\n\n"
-            "## Posições do Resultado Oficial Publicado\n\n"
+            "## Desempates Decididos pela FECORI\n\n"
             "| Categoria | CBO | Posição publicada | Motivo |\n| :--- | :---: | :---: | :--- |\n"
             "| D Juven B | 22516 | 2 | Empate resolvido no publicado |\n"
         )

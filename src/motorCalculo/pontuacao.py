@@ -429,10 +429,10 @@ def aplicarPosicoesOficiais(
     posicoesOficiais: dict[tuple[int, str], int],
     aplicadas: set[tuple[int, str]],
 ) -> None:
-    """Coloca nas posições do resultado oficial publicado os atletas listados (ADR-007).
+    """Coloca nas posições decididas pela FECORI os atletas listados (ADR-008).
 
-    Os demais mantêm a ordem calculada. O atleta com posição publicada deixa de ter empate pendente,
-    pois o publicado já o resolveu (por critério que o repositório não aplica, como a idade, ADR-003).
+    Os demais mantêm a ordem calculada. O atleta com posição decidida deixa de ter empate pendente,
+    pois a FECORI já o resolveu (por critério que o repositório não aplica, como a idade, ADR-003).
     """
     marcados = [(posicoesOficiais[(f.cbo, categoria)], f) for f in lista if (f.cbo, categoria) in posicoesOficiais]
     if not marcados:
@@ -881,34 +881,7 @@ def apurarCampeonatoCCO(
                     clubeAcum["contagemColocacoes"].get(des.colocacao, 0) + 1
                 )
 
-    if regras.clubeSomaTop3Por == "totalDoCampeonato":
-        # 2025 (como no resultado publicado, ADR-007): os 3 maiores totais finais de cada categoria do clube.
-        for clubeId, clubeAcum in resultadoClubes.items():
-            fichasPorCatNoClube: dict[str, list[ClassificacaoAtletaCategoria]] = {}
-            for f in fichasPorAtletaCat:
-                if (
-                    f.clubeId == clubeId and not ehCategoriaSemPontuacao(f.categoria)
-                    and atletaFiliadoCBO(f.cbo) and f.pontuacaoTotal > 0
-                ):
-                    fichasPorCatNoClube.setdefault(f.categoria, []).append(f)
-            for cat, fichasCat in sorted(fichasPorCatNoClube.items()):
-                fichasCat.sort(key=lambda f: (-f.pontuacaoTotal, f.cbo))
-                for f in fichasCat[:3]:
-                    for et in numerosEtapas:
-                        des = f.etapas[et]
-                        ptsEtapa = Decimal('0.00') if des.descartada else des.pontosFinais
-                        if ptsEtapa > 0:
-                            clubeAcum["totalBruto"] = clubeAcum.get("totalBruto", Decimal('0')) + ptsEtapa
-                            clubeAcum["pontosPorEtapa"][et] += ptsEtapa
-                            clubeAcum["detalheTop3PorEtapa"][et].setdefault(cat, []).append(
-                                {"cbo": f.cbo, "nome": f.nome, "pontos": str(ptsEtapa)}
-                            )
-            for et in numerosEtapas:
-                clubeAcum["pontosPorEtapa"][et] = arredondarPontuacao(clubeAcum["pontosPorEtapa"][et])
-
     for et in numerosEtapas:
-        if regras.clubeSomaTop3Por != "etapa":
-            break
         for clubeId, clubeAcum in resultadoClubes.items():
             porCatNoClube: dict[str, list[tuple[Decimal, int, str]]] = {}
             for f in fichasPorAtletaCat:
@@ -933,17 +906,8 @@ def apurarCampeonatoCCO(
 
     listaClubesOrdenada = list(resultadoClubes.values())
     for c in listaClubesOrdenada:
-        totalBruto = c.pop("totalBruto", None)   # soma exata (2025): arredonda só o total, como no publicado
-        c["totalPontos"] = arredondarPontuacao(
-            totalBruto if totalBruto is not None else sum(c["pontosPorEtapa"].values(), Decimal('0.00'))
-        )
-        if regras.clubeContaAtletasPor == "linhasDoResultado":
-            c["qtdAtletas"] = sum(
-                1 for f in fichasPorAtletaCat
-                if f.clubeId == c["clubeId"] and not ehCategoriaSemPontuacao(f.categoria)
-            )
-        else:
-            c["qtdAtletas"] = len(c["atletasFiliadosParticipantes"])
+        c["totalPontos"] = arredondarPontuacao(sum(c["pontosPorEtapa"].values(), Decimal('0.00')))
+        c["qtdAtletas"] = len(c["atletasFiliadosParticipantes"])
 
     # Art. 35, Parágrafo Único: desempate por mais 1ºs lugares, depois 2ºs, sucessivamente
     listaClubesOrdenada.sort(

@@ -14,12 +14,6 @@ CriterioDesempateIndividual = Literal["ultimoPercurso", "primeirosLugares"]
 # Divisor da média do voluntário: só as outras etapas em que o atleta se inscreveu, ou todas as outras etapas
 # realizadas (as sem inscrição e a outra etapa de apoio entram com 0 ponto).
 DivisorMediaVoluntario = Literal["inscritas", "todasAsOutras"]
-# Soma de clubes: os 3 melhores de cada categoria em cada etapa (texto do Art. 35 de 2026) ou os 3 melhores totais
-# finais da categoria (método do resultado publicado de 2025, ADR-007).
-SomaClubes = Literal["etapa", "totalDoCampeonato"]
-# Coluna "Atletas" do resultado de clubes: atletas distintos que participaram, ou as linhas (atleta e categoria)
-# que o clube tem no resultado individual (método do resultado publicado de 2025, ADR-007).
-ContagemAtletasClube = Literal["atletasDistintos", "linhasDoResultado"]
 
 TABELA_PONTOS_26_PRIMEIROS: tuple[int, ...] = (
     40, 37, 35, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24,
@@ -69,11 +63,9 @@ class RegrasRegulamento:
     voluntarioContaEtapaDeApoioNoMinimo: bool
     mediaVoluntarioDivideEntre: DivisorMediaVoluntario
     # `True`: cada média de voluntário é arredondada a 2 casas antes de somar (2026).
-    # `False`: a média entra com a fração exata e só o total é arredondado (resultado publicado de 2025).
+    # `False`: a média entra com a fração exata e só o total é arredondado.
     arredondaMediaVoluntario: bool
     desempateIndividual: CriterioDesempateIndividual
-    clubeSomaTop3Por: SomaClubes
-    clubeContaAtletasPor: ContagemAtletasClube
     # Federação a que o clube precisa ser filiado para entrar no resultado de clubes; `None` = basta a filiação à CBO.
     federacaoExigidaDoClube: str | None
 
@@ -113,16 +105,15 @@ REGRAS_CCO_2025 = RegrasRegulamento(
     pontosParticipacao=1,
     etapasRealizadasParaDescarte=None,
     minimoMetadeArredondaPara="cima",
-    # Confirmado pelo resultado oficial publicado de 2025 (ADR-005): a etapa de apoio conta no mínimo e a média
-    # divide por todas as outras etapas (ex.: um único resultado de 35 pontos rende 35/3 = 11,67 de média).
-    voluntarioContaEtapaDeApoioNoMinimo=True,
+    # Art. 36, § 1º: o voluntário deve "competir" em metade das etapas; a etapa de apoio não conta (ADR-008).
+    voluntarioContaEtapaDeApoioNoMinimo=False,
+    # Art. 36: "a média da pontuação conquistada nas outras etapas": divide por todas as outras etapas realizadas,
+    # sem inscrição ou de apoio entram com 0 ponto (interpretação do apurador, ADR-008).
     mediaVoluntarioDivideEntre="todasAsOutras",
-    arredondaMediaVoluntario=False,
+    arredondaMediaVoluntario=True,
     desempateIndividual="primeirosLugares",
-    # O Art. 37 fala em "por etapa", mas o resultado publicado (que vale, ADR-007) soma os 3 melhores totais finais.
-    clubeSomaTop3Por="totalDoCampeonato",
-    clubeContaAtletasPor="linhasDoResultado",
-    # Art. 40: o clube não filiado (à FECORI, Art. 2º) não é classificado; o publicado deixou o CODAC (FOMS) de fora.
+    # Arts. 37 e 39: os 3 melhores atletas filiados de cada categoria, por etapa.
+    # Art. 40: o clube não filiado à FECORI (Art. 2º) não é classificado no resultado final por clube.
     federacaoExigidaDoClube="FECORI",
 )
 
@@ -155,8 +146,6 @@ REGRAS_CCO_2026 = RegrasRegulamento(
     mediaVoluntarioDivideEntre="inscritas",
     arredondaMediaVoluntario=True,
     desempateIndividual="ultimoPercurso",
-    clubeSomaTop3Por="etapa",
-    clubeContaAtletasPor="atletasDistintos",
     federacaoExigidaDoClube=None,   # Art. 35: clubes não filiados à CBO não participam
 )
 

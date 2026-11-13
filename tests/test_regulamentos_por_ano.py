@@ -129,32 +129,33 @@ class TestApuracao2025(unittest.TestCase):
         self.assertTrue(resultado["descarteAplicado"])
         self.assertEqual(_fichas(resultado)[1].pontuacaoTotal, Decimal("120.00"))
 
-    def test_media_do_voluntario_divide_por_todas_as_outras_etapas_em_2025_e_so_pelas_inscritas_em_2026(self):
+    def test_2025_exige_competir_e_2026_conta_a_etapa_de_apoio_no_minimo_do_voluntario(self):
         registros = [_registro(e, 1, "Ana", 1000) for e in (1, 2, 3)]
         registros.append(_registro(1, 4, "Dani", 1100))       # Dani compete só na 1ª etapa (2ª colocada, 37)
         dadosHelga, dadosVol = _dados((1, 2, 3), registros, [{"etapa": 2, "cbo": 4, "nome": "Dani"}])
 
         r2025 = _fichas(apurarCampeonatoCCO(dadosHelga, dadosVol, REGRAS_CCO_2025))[4]
         r2026 = _fichas(apurarCampeonatoCCO(dadosHelga, dadosVol, REGRAS_CCO_2026))[4]
-        # Nos dois anos a etapa de apoio conta no mínimo (2 de 3 em 2025; 1 de 3 em 2026): Dani tem 1 + 1 etapas.
-        # 2025: média sobre as 2 outras etapas realizadas (37 na 1ª e 0 na 3ª, sem inscrição): 18,50.
-        self.assertEqual(r2025.etapas[2].pontosFinais, Decimal("18.50"))
-        self.assertEqual(r2025.pontuacaoTotal, Decimal("55.50"))
-        # 2026: média só sobre as etapas em que se inscreveu (a 1ª): 37.
+        # 2025 (Art. 36, § 1º): o voluntário deve competir em 2 das 3 etapas e Dani competiu em 1: sem média.
+        self.assertEqual(r2025.etapas[2].pontosFinais, Decimal("0.00"))
+        self.assertEqual(r2025.pontuacaoTotal, Decimal("37.00"))
+        # 2026 (Art. 33, § 1º, "participar"): a etapa de apoio conta (1 + 1 de 3, mínimo 1) e a média é só sobre as
+        # etapas em que se inscreveu (a 1ª): 37.
         self.assertEqual(r2026.etapas[2].pontosFinais, Decimal("37.00"))
         self.assertEqual(r2026.pontuacaoTotal, Decimal("74.00"))
 
-    def test_minimo_do_voluntario_conta_a_etapa_de_apoio(self):
+    def test_2025_voluntario_precisa_competir_em_metade_das_etapas_sem_contar_a_de_apoio(self):
         registros = [_registro(e, 1, "Ana", 1000) for e in (1, 2, 3, 4)]
         registros.append(_registro(3, 4, "Dani", 1100))       # Dani compete só na 3ª etapa (2º colocado, 37 pontos)
         dadosHelga, dadosVol = _dados((1, 2, 3, 4), registros, [{"etapa": 2, "cbo": 4, "nome": "Dani"}])
         ficha = _fichas(apurarCampeonatoCCO(dadosHelga, dadosVol, REGRAS_CCO_2025))[4]
-        # Dani compete em 1 etapa e apoia em 1: 2 de 4 (o mínimo) -> média = 37 / 3 outras etapas = 12,33.
-        self.assertEqual(ficha.etapas[2].pontosFinais.quantize(Decimal("0.01")), Decimal("12.33"))
-        # Sem a etapa de apoio (1 de 4), não teria a média.
-        dadosHelga2, dadosVol2 = _dados((1, 2, 3, 4), registros, [])
-        semApoio = _fichas(apurarCampeonatoCCO(dadosHelga2, dadosVol2, REGRAS_CCO_2025))[4]
-        self.assertEqual(semApoio.etapas[2].pontosFinais, Decimal("0.00"))
+        # Competiu em 1 de 4 etapas (mínimo 2): a etapa de apoio não conta, então não há média.
+        self.assertEqual(ficha.etapas[2].pontosFinais, Decimal("0.00"))
+        # Competindo também na 1ª etapa, são 2 de 4: média = (37 + 37) / 3 outras etapas = 24,67.
+        registros.append(_registro(1, 4, "Dani", 1100))
+        ficha2 = _fichas(apurarCampeonatoCCO(*_dados((1, 2, 3, 4), registros, [{"etapa": 2, "cbo": 4, "nome": "Dani"}]),
+                                              REGRAS_CCO_2025))[4]
+        self.assertEqual(ficha2.etapas[2].pontosFinais.quantize(Decimal("0.01")), Decimal("24.67"))
 
     def test_outra_etapa_de_apoio_entra_com_zero_no_divisor(self):
         registros = [_registro(e, 1, "Ana", 1000) for e in (1, 2, 3, 4)]
@@ -164,8 +165,8 @@ class TestApuracao2025(unittest.TestCase):
         # Média de cada etapa de apoio: (37 + 37 + 0 da outra etapa de apoio) / 3 = 24,67.
         self.assertEqual(ficha.etapas[2].pontosFinais.quantize(Decimal("0.01")), Decimal("24.67"))
         self.assertEqual(ficha.etapas[4].pontosFinais.quantize(Decimal("0.01")), Decimal("24.67"))
-        # 37 + 74/3 + 37 + 74/3 = 123,3333 (soma exata, arredondada só no total), sem descarte
-        self.assertEqual(ficha.pontuacaoTotal, Decimal("123.33"))
+        # 37 + 24,67 + 37 + 24,67 (cada média arredondada a 2 casas, como em 2026), sem descarte
+        self.assertEqual(ficha.pontuacaoTotal, Decimal("123.34"))
 
     def test_voluntario_de_etapa_ausente_dos_dados_nao_cria_ficha(self):
         registros = [_registro(e, 1, "Ana", 1000) for e in (1, 3, 4)]

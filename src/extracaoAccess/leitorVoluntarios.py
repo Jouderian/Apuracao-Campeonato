@@ -36,7 +36,7 @@ def lerVoluntariosMarkdown(textoMd: str) -> dict[str, Any]:
                 secaoAtual = "omissoes"
             elif "ajuste" in titulo:
                 secaoAtual = "ajustes"
-            elif "posições" in titulo or "posicoes" in titulo:
+            elif "posições" in titulo or "posicoes" in titulo or "desempate" in titulo:
                 secaoAtual = "posicoes"
             else:
                 secaoAtual = "voluntarios"
@@ -67,7 +67,7 @@ def lerVoluntariosMarkdown(textoMd: str) -> dict[str, Any]:
             continue
 
         if secaoAtual == "posicoes":
-            # | Categoria | CBO | Posição publicada | Motivo |
+            # | Categoria | CBO | Posição | Motivo |
             mCboPos = re.search(_NUMERO, celulas[1])
             mPos = re.search(_NUMERO, celulas[2])
             if not mCboPos or not mPos:
