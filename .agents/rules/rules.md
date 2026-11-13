@@ -52,11 +52,11 @@ trigger: always_on
   - `Dados/logoFECORI.png` e `Dados/brasoes/<sigla>.png`: logos usadas nos PDFs finais (a da FECORI e o brasão de cada clube, com o nome da sigla em camelCase, ex.: `trilhaNorte.png`), extraídas do resultado de clubes oficial de 2025. A logo da edição fica em `Dados/<ano>/logoCCO.*`.
   - `Dados/<ano>/resultados/`: armazena os relatórios finais calculados (`.md`, `.pdf`, `.xlsx`).
 
-## Resultados Oficiais Publicados
+## O Regulamento Prevalece
 
-- **O publicado prevalece:** o resultado de uma edição já publicado oficialmente pela FECORI vale mesmo que contenha erro de cálculo; o repositório o reproduz e não o recalcula ([ADR-007](../wiki/decisions/ADR-007-resultado-oficial-publicado-prevalece.md)).
-- **Divergências registradas, nunca embutidas:** cada ponto em que o publicado difere do que o regulamento e os dados produziriam fica na seção `Ajustes do Resultado Oficial Publicado` do `voluntariosCCO.md`, uma linha por atleta e etapa, com o valor publicado e o motivo. O motor recusa ajuste que não encontra o atleta, e o relatório sinaliza as células ajustadas.
-- **O agente não corrige resultado publicado:** ao achar divergência, lista-a ao usuário; só registra o ajuste com autorização expressa.
+- **Estritamente o regulamento:** a apuração segue o texto do regulamento do ano da edição, a pedido da FECORI ([ADR-008](../wiki/decisions/ADR-008-regulamento-prevalece-sobre-o-publicado.md)). Um resultado já publicado não vincula o repositório: onde difere do que o regulamento e os dados produzem, vale o cálculo do regulamento, que substitui o publicado.
+- **Interpretação onde o regulamento é omisso ou ambíguo:** é escolha do apurador, registrada em ADR ou na spec, e a FECORI pode revê-la. Nenhuma interpretação se apoia em "foi assim que se publicou".
+- **O agente não decide empate por critério fora do regulamento nem corrige resultado por conta própria:** ao achar ambiguidade ou divergência, lista-a ao usuário. Ajuste por decisão formal da FECORI (seções de ajustes do `voluntariosCCO.md`) só se registra com autorização expressa e referência à decisão.
 
 ## Controle de Pendências
 
