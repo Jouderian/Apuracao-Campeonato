@@ -51,6 +51,7 @@ trigger: always_on
   - `Dados/<ano>/extraidos/`: armazena os arquivos `.json` higienizados extraídos do banco Access.
   - `Dados/logoFECORI.png` e `Dados/brasoes/<sigla>.png`: logos usadas nos PDFs finais (a da FECORI e o brasão de cada clube, com o nome da sigla em camelCase, ex.: `trilhaNorte.png`), extraídas do resultado de clubes oficial de 2025. A logo da edição fica em `Dados/<ano>/logoCCO.*`.
   - `Dados/<ano>/resultados/`: armazena os relatórios finais calculados (`.md`, `.pdf`, `.xlsx`).
+- **Sigilo do resultado de clubes do ano vigente:** o resultado de clubes do ano em curso (`Dados/<ano>/resultados/resultadoClubesCCO.*`) nunca deve ser publicado no Git (`commit` ou `push`) sem autorização expressa, pois a FECORI precisa autorizar formalmente a divulgação antes da publicação.
 
 ## O Regulamento Prevalece
 
