@@ -289,17 +289,24 @@ def _desenharQuadros(page: Any, topo: float, contagem: dict[str, int], regras: A
     page.draw_rect(fitz.Rect(xl0, topo, xl1, topo + 21.0), color=None, fill=AZUL)
     _texto(page, xl0, xl1, topo + 14.5, "Legenda", negrito, 12.0, "center", BRANCO)
     art = regras.artigos
-    itens = (
-        (CINZA_LEGENDA, PRETO, f"{rotuloArtigo(art.penalidadeChegada)} - Abandono da competição"),
-        (VERMELHO, BRANCO, f"{rotuloArtigo(art.percursoAnulado)} - Percurso anulado"),
-        (LARANJA_CLARO, VERMELHO, f"{rotuloArtigo(art.naoClassificado)} - Atleta não classificado"),
-        (AMARELO, PRETO, f"{rotuloArtigo(art.voluntarios)} - Pontuação por média"),
-        (LARANJA, PRETO, f"{rotuloArtigo(art.premiacao)} - Participação mínima"),
-    )
-    for i, (fundo, corTexto, texto) in enumerate(itens):
+    itens: list[tuple[Cor | None, Cor, str, bool]] = [
+        (CINZA_LEGENDA, PRETO, f"{rotuloArtigo(art.penalidadeChegada)} - Abandono da competição", False),
+        (VERMELHO, BRANCO, f"{rotuloArtigo(art.percursoAnulado)} - Percurso anulado", False),
+        (LARANJA_CLARO, VERMELHO, f"{rotuloArtigo(art.naoClassificado)} - Atleta não classificado", False),
+        (AMARELO, PRETO, f"{rotuloArtigo(art.voluntarios)} - Pontuação por média", False),
+    ]
+    if regras.temDescarte and art.descarte:   # só quando o regulamento do ano prevê descarte
+        itens.append((None, CINZA_TRACO, f"{rotuloArtigo(art.descarte)} - Pontuação descartada", True))
+    itens.append((LARANJA, PRETO, f"{rotuloArtigo(art.premiacao)} - Participação mínima", False))
+    for i, (fundo, corTexto, texto, riscado) in enumerate(itens):
         y0 = topo + 21.0 + i * ALT_LINHA
-        page.draw_rect(fitz.Rect(xl0, y0, xl1, y0 + ALT_LINHA), color=None, fill=fundo)
+        if fundo is not None:
+            page.draw_rect(fitz.Rect(xl0, y0, xl1, y0 + ALT_LINHA), color=None, fill=fundo)
         _texto(page, xl0 + 3.0, xl1, y0 + 12.9, texto, negrito, 10.0, "left", corTexto)
+        if riscado:   # como a nota descartada nas linhas: texto cinza riscado
+            largura = negrito[2].text_length(texto, fontsize=10.0)
+            page.draw_line(fitz.Point(xl0 + 3.0, y0 + 9.5), fitz.Point(xl0 + 3.0 + largura, y0 + 9.5),
+                           color=CINZA_TRACO, width=0.9)
     page.draw_rect(fitz.Rect(xl0, topo, xl1, topo + 21.0 + len(itens) * ALT_LINHA), color=PRETO, width=1.4)
 
 
@@ -332,7 +339,8 @@ def gerarPdfResultadoIndividualFinal(
     paginas = _paginar(categorias, capPrimeira, capDemais)
     topoLinhas = [Y_CAB_PRIMEIRA + ALT_CABECALHO] + [Y_CAB_DEMAIS + ALT_CABECALHO] * (len(paginas) - 1)
     # A linha de totais e os quadros precisam caber depois da última linha; senão vão para uma página própria.
-    alturaFinal = ALT_LINHA + 28.0 + 21.0 + 5 * ALT_LINHA
+    linhasLegenda = 6 if regras.temDescarte and regras.artigos.descarte else 5
+    alturaFinal = ALT_LINHA + 28.0 + 21.0 + linhasLegenda * ALT_LINHA
     paginaSoQuadros = topoLinhas[-1] + len(paginas[-1]) * ALT_LINHA + alturaFinal > ALTURA - 20.0
     if paginaSoQuadros:
         paginas.append([])
