@@ -25,10 +25,11 @@ python src/analises/consultar.py "SELECT ..." --limite 1000 --json
 3. **Comparação:** ritmos só se comparam dentro da mesma categoria ou do mesmo percurso. Não há ritmo ajustado pela subida.
 4. **Nulo é dado ausente, nunca zero:** `NULL` em distância, subida ou ritmo significa que o Helga não informou ou que não se pôde calcular. Não estime; explique a ausência (`motivoSemRitmo`).
 5. **`competitionId` repete-se entre anos:** una sempre por `ano` junto.
-6. **Cobertura:** 2024 não tem percursos nem parciais (sem ritmo). Em 2025 entram só as etapas 1 e 4; as etapas 2 e 3 foram apuradas pela planilha do site e ficam fora. 2026 tem as quatro etapas.
+6. **Cobertura:** 2024 e 2026 têm as quatro etapas, com percursos e parciais. Em 2025 entram só as etapas 1 e 4; as etapas 2 e 3 foram apuradas pela planilha do site e ficam fora. Na etapa 4 de 2024, muitas parciais ficaram em `ocorrenciaParcial` porque a soma não fecha o tempo oficial.
 7. **Distância do trecho** vem de `Controls.Distance` do Helga; a soma dos trechos fica de 0,3% a 1,7% abaixo da distância do percurso (8 percursos de 2026 medidos). O ritmo por trecho não reproduz exatamente o ritmo do percurso.
-8. **Parciais** valem a última leitura do chip e só são aceitas quando a soma fecha o tempo oficial (tolerância de 1 s); as demais estão em `ocorrenciaParcial`.
-9. **Privacidade:** a base não tem ano de nascimento nem dado pessoal além do nome e do CBO já presentes nos JSON; não há recorte por idade, só por categoria.
+8. **Parciais** valem a última leitura do chip e só são aceitas quando a soma fecha o tempo oficial (tolerância de 1 s); as demais estão em `ocorrenciaParcial`. Segundo o apurador, parte da diferença pode vir de relógios das bases das parciais fora de sincronia (hipótese não verificada nos dados).
+9. **Categorias não competitivas ficam de fora:** as acompanhadas (`HN1` a `HN3`, `DN1` a `DN3`), sem classificação, e o percurso aberto (`Aberto ...`), que não pontua, não entram na base, conforme os regulamentos de 2024 a 2026 (decisão do apurador, 2026-11-14).
+10. **Privacidade:** a base não tem ano de nascimento nem dado pessoal além do nome e do CBO já presentes nos JSON; não há recorte por idade, só por categoria.
 
 ## Tabelas e visões
 
