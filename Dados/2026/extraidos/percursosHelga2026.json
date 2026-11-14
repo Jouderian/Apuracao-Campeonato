@@ -155,14 +155,6 @@
       "subidaM": 35
     },
     {
-      "percursoId": 3352,
-      "competitionId": 35,
-      "numero": 20,
-      "nome": "G20N4",
-      "distanciaM": 2900,
-      "subidaM": 25
-    },
-    {
       "percursoId": 3353,
       "competitionId": 35,
       "numero": 21,
@@ -682,18 +674,6 @@
     },
     {
       "competitionId": 35,
-      "categoriaId": 104,
-      "categoria": "DN1",
-      "percursoId": 3353
-    },
-    {
-      "competitionId": 35,
-      "categoriaId": 110,
-      "categoria": "DN3",
-      "percursoId": 3352
-    },
-    {
-      "competitionId": 35,
       "categoriaId": 153,
       "categoria": "H Adulto A",
       "percursoId": 3335
@@ -825,18 +805,6 @@
       "percursoId": 3348
     },
     {
-      "competitionId": 35,
-      "categoriaId": 105,
-      "categoria": "HN1",
-      "percursoId": 3353
-    },
-    {
-      "competitionId": 35,
-      "categoriaId": 111,
-      "categoria": "HN2",
-      "percursoId": 3353
-    },
-    {
       "competitionId": 36,
       "categoriaId": 152,
       "categoria": "D Adulto A",
@@ -925,24 +893,6 @@
       "categoriaId": 125,
       "categoria": "D80B",
       "percursoId": 3366
-    },
-    {
-      "competitionId": 36,
-      "categoriaId": 104,
-      "categoria": "DN1",
-      "percursoId": 3368
-    },
-    {
-      "competitionId": 36,
-      "categoriaId": 109,
-      "categoria": "DN2",
-      "percursoId": 3368
-    },
-    {
-      "competitionId": 36,
-      "categoriaId": 110,
-      "categoria": "DN3",
-      "percursoId": 3368
     },
     {
       "competitionId": 36,
@@ -1071,18 +1021,6 @@
       "percursoId": 3367
     },
     {
-      "competitionId": 36,
-      "categoriaId": 105,
-      "categoria": "HN1",
-      "percursoId": 3368
-    },
-    {
-      "competitionId": 36,
-      "categoriaId": 112,
-      "categoria": "HN3",
-      "percursoId": 3368
-    },
-    {
       "competitionId": 37,
       "categoriaId": 152,
       "categoria": "D Adulto A",
@@ -1165,18 +1103,6 @@
       "categoriaId": 125,
       "categoria": "D80B",
       "percursoId": 3384
-    },
-    {
-      "competitionId": 37,
-      "categoriaId": 104,
-      "categoria": "DN1",
-      "percursoId": 3388
-    },
-    {
-      "competitionId": 37,
-      "categoriaId": 110,
-      "categoria": "DN3",
-      "percursoId": 3388
     },
     {
       "competitionId": 37,
@@ -1311,18 +1237,6 @@
       "percursoId": 3384
     },
     {
-      "competitionId": 37,
-      "categoriaId": 105,
-      "categoria": "HN1",
-      "percursoId": 3388
-    },
-    {
-      "competitionId": 37,
-      "categoriaId": 112,
-      "categoria": "HN3",
-      "percursoId": 3388
-    },
-    {
       "competitionId": 38,
       "categoriaId": 152,
       "categoria": "D Adulto A",
@@ -1423,12 +1337,6 @@
       "categoriaId": 125,
       "categoria": "D80B",
       "percursoId": 3402
-    },
-    {
-      "competitionId": 38,
-      "categoriaId": 104,
-      "categoria": "DN1",
-      "percursoId": 3404
     },
     {
       "competitionId": 38,
@@ -1549,24 +1457,6 @@
       "categoriaId": 135,
       "categoria": "H85B",
       "percursoId": 3401
-    },
-    {
-      "competitionId": 38,
-      "categoriaId": 105,
-      "categoria": "HN1",
-      "percursoId": 3404
-    },
-    {
-      "competitionId": 38,
-      "categoriaId": 111,
-      "categoria": "HN2",
-      "percursoId": 3404
-    },
-    {
-      "competitionId": 38,
-      "categoriaId": 112,
-      "categoria": "HN3",
-      "percursoId": 3404
     }
   ],
   "participacoes": [
@@ -2013,13 +1903,6 @@
     },
     {
       "competitionId": 35,
-      "runnerPk": 134155,
-      "percursoId": 3353,
-      "horaLargada": "08:10:00",
-      "horaChegada": "08:41:14"
-    },
-    {
-      "competitionId": 35,
       "runnerPk": 134251,
       "percursoId": 3339,
       "horaLargada": "08:16:00",
@@ -2136,13 +2019,6 @@
       "percursoId": 3346,
       "horaLargada": "08:33:19",
       "horaChegada": "10:51:57"
-    },
-    {
-      "competitionId": 35,
-      "runnerPk": 137633,
-      "percursoId": 3353,
-      "horaLargada": "08:10:00",
-      "horaChegada": "08:40:15"
     },
     {
       "competitionId": 35,
@@ -2545,13 +2421,6 @@
     },
     {
       "competitionId": 35,
-      "runnerPk": 138829,
-      "percursoId": 3352,
-      "horaLargada": "08:30:00",
-      "horaChegada": "09:54:57"
-    },
-    {
-      "competitionId": 35,
       "runnerPk": 138830,
       "percursoId": 3353,
       "horaLargada": "08:00:00",
@@ -2570,41 +2439,6 @@
       "percursoId": 3353,
       "horaLargada": "08:06:00",
       "horaChegada": "08:55:32"
-    },
-    {
-      "competitionId": 35,
-      "runnerPk": 138833,
-      "percursoId": 3353,
-      "horaLargada": "08:10:00",
-      "horaChegada": "08:41:42"
-    },
-    {
-      "competitionId": 35,
-      "runnerPk": 138834,
-      "percursoId": 3353,
-      "horaLargada": "08:10:00",
-      "horaChegada": "08:41:05"
-    },
-    {
-      "competitionId": 35,
-      "runnerPk": 138835,
-      "percursoId": 3353,
-      "horaLargada": "08:07:45",
-      "horaChegada": "08:39:08"
-    },
-    {
-      "competitionId": 35,
-      "runnerPk": 138836,
-      "percursoId": 3353,
-      "horaLargada": "08:10:00",
-      "horaChegada": "08:41:21"
-    },
-    {
-      "competitionId": 35,
-      "runnerPk": 138837,
-      "percursoId": 3353,
-      "horaLargada": "08:07:39",
-      "horaChegada": "08:39:52"
     },
     {
       "competitionId": 36,
@@ -3070,13 +2904,6 @@
     },
     {
       "competitionId": 36,
-      "runnerPk": 134155,
-      "percursoId": 3368,
-      "horaLargada": "08:49:00",
-      "horaChegada": "08:52:06"
-    },
-    {
-      "competitionId": 36,
       "runnerPk": 134251,
       "percursoId": 3359,
       "horaLargada": "08:40:00",
@@ -3130,13 +2957,6 @@
       "percursoId": 3358,
       "horaLargada": "08:46:00",
       "horaChegada": "10:48:51"
-    },
-    {
-      "competitionId": 36,
-      "runnerPk": 136266,
-      "percursoId": 3368,
-      "horaLargada": "08:40:00",
-      "horaChegada": "08:53:40"
     },
     {
       "competitionId": 36,
@@ -3483,27 +3303,6 @@
     },
     {
       "competitionId": 36,
-      "runnerPk": 138833,
-      "percursoId": 3368,
-      "horaLargada": "08:53:00",
-      "horaChegada": "09:12:30"
-    },
-    {
-      "competitionId": 36,
-      "runnerPk": 138836,
-      "percursoId": 3368,
-      "horaLargada": "08:51:00",
-      "horaChegada": "08:53:39"
-    },
-    {
-      "competitionId": 36,
-      "runnerPk": 138837,
-      "percursoId": 3368,
-      "horaLargada": "08:50:00",
-      "horaChegada": null
-    },
-    {
-      "competitionId": 36,
       "runnerPk": 138838,
       "percursoId": 3360,
       "horaLargada": "08:14:00",
@@ -3546,45 +3345,10 @@
     },
     {
       "competitionId": 36,
-      "runnerPk": 138844,
-      "percursoId": 3368,
-      "horaLargada": "08:57:00",
-      "horaChegada": "09:14:40"
-    },
-    {
-      "competitionId": 36,
-      "runnerPk": 138845,
-      "percursoId": 3368,
-      "horaLargada": "08:55:00",
-      "horaChegada": "09:12:40"
-    },
-    {
-      "competitionId": 36,
       "runnerPk": 138846,
       "percursoId": 3367,
       "horaLargada": "08:24:00",
       "horaChegada": "08:41:10"
-    },
-    {
-      "competitionId": 36,
-      "runnerPk": 138847,
-      "percursoId": 3368,
-      "horaLargada": "08:58:00",
-      "horaChegada": "09:14:34"
-    },
-    {
-      "competitionId": 36,
-      "runnerPk": 138848,
-      "percursoId": 3368,
-      "horaLargada": "08:59:00",
-      "horaChegada": "09:15:36"
-    },
-    {
-      "competitionId": 36,
-      "runnerPk": 138849,
-      "percursoId": 3368,
-      "horaLargada": "08:52:00",
-      "horaChegada": "09:07:23"
     },
     {
       "competitionId": 36,
@@ -3599,20 +3363,6 @@
       "percursoId": 3367,
       "horaLargada": "08:33:00",
       "horaChegada": "09:02:42"
-    },
-    {
-      "competitionId": 36,
-      "runnerPk": 138852,
-      "percursoId": 3368,
-      "horaLargada": "08:54:00",
-      "horaChegada": "09:11:53"
-    },
-    {
-      "competitionId": 36,
-      "runnerPk": 138853,
-      "percursoId": 3368,
-      "horaLargada": "08:56:00",
-      "horaChegada": "09:11:42"
     },
     {
       "competitionId": 37,
@@ -4057,13 +3807,6 @@
     },
     {
       "competitionId": 37,
-      "runnerPk": 134155,
-      "percursoId": 3388,
-      "horaLargada": "09:03:00",
-      "horaChegada": "09:33:40"
-    },
-    {
-      "competitionId": 37,
       "runnerPk": 134251,
       "percursoId": 3375,
       "horaLargada": "08:24:00",
@@ -4463,27 +4206,6 @@
     },
     {
       "competitionId": 37,
-      "runnerPk": 138833,
-      "percursoId": 3388,
-      "horaLargada": "09:02:00",
-      "horaChegada": "09:32:35"
-    },
-    {
-      "competitionId": 37,
-      "runnerPk": 138836,
-      "percursoId": 3388,
-      "horaLargada": "09:03:00",
-      "horaChegada": "09:33:39"
-    },
-    {
-      "competitionId": 37,
-      "runnerPk": 138837,
-      "percursoId": 3388,
-      "horaLargada": "09:03:00",
-      "horaChegada": "09:33:58"
-    },
-    {
-      "competitionId": 37,
       "runnerPk": 138840,
       "percursoId": 3378,
       "horaLargada": "08:18:00",
@@ -4547,13 +4269,6 @@
     },
     {
       "competitionId": 37,
-      "runnerPk": 138858,
-      "percursoId": 3388,
-      "horaLargada": "09:01:00",
-      "horaChegada": "09:32:07"
-    },
-    {
-      "competitionId": 37,
       "runnerPk": 138859,
       "percursoId": 3371,
       "horaLargada": "08:17:00",
@@ -4614,20 +4329,6 @@
       "percursoId": 3386,
       "horaLargada": "08:21:00",
       "horaChegada": "10:56:40"
-    },
-    {
-      "competitionId": 37,
-      "runnerPk": 138868,
-      "percursoId": 3388,
-      "horaLargada": "09:02:00",
-      "horaChegada": "11:52:39"
-    },
-    {
-      "competitionId": 37,
-      "runnerPk": 138869,
-      "percursoId": 3388,
-      "horaLargada": "09:00:00",
-      "horaChegada": "09:20:56"
     },
     {
       "competitionId": 38,
@@ -5051,13 +4752,6 @@
     },
     {
       "competitionId": 38,
-      "runnerPk": 134155,
-      "percursoId": 3404,
-      "horaLargada": "08:59:00",
-      "horaChegada": null
-    },
-    {
-      "competitionId": 38,
       "runnerPk": 134251,
       "percursoId": 3395,
       "horaLargada": "08:13:00",
@@ -5090,13 +4784,6 @@
       "percursoId": 3390,
       "horaLargada": "08:22:00",
       "horaChegada": "09:09:49"
-    },
-    {
-      "competitionId": 38,
-      "runnerPk": 136266,
-      "percursoId": 3404,
-      "horaLargada": "09:02:00",
-      "horaChegada": "09:35:18"
     },
     {
       "competitionId": 38,
@@ -5373,34 +5060,6 @@
     },
     {
       "competitionId": 38,
-      "runnerPk": 138833,
-      "percursoId": 3404,
-      "horaLargada": "08:56:00",
-      "horaChegada": "09:28:42"
-    },
-    {
-      "competitionId": 38,
-      "runnerPk": 138834,
-      "percursoId": 3404,
-      "horaLargada": "09:01:00",
-      "horaChegada": null
-    },
-    {
-      "competitionId": 38,
-      "runnerPk": 138836,
-      "percursoId": 3404,
-      "horaLargada": "08:58:00",
-      "horaChegada": "09:30:39"
-    },
-    {
-      "competitionId": 38,
-      "runnerPk": 138837,
-      "percursoId": 3404,
-      "horaLargada": "09:00:00",
-      "horaChegada": null
-    },
-    {
-      "competitionId": 38,
       "runnerPk": 138842,
       "percursoId": 3403,
       "horaLargada": "08:33:00",
@@ -5496,13 +5155,6 @@
       "percursoId": 3401,
       "horaLargada": "08:20:00",
       "horaChegada": null
-    },
-    {
-      "competitionId": 38,
-      "runnerPk": 138875,
-      "percursoId": 3404,
-      "horaLargada": "08:57:00",
-      "horaChegada": "09:27:42"
     },
     {
       "competitionId": 38,
