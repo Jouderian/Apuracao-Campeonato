@@ -24,6 +24,13 @@ python src/extracaoAccess/extrairPercursos.py --ano 2026
 
 O arquivo `Dados/<ano>/extraidos/percursosHelga<ano>.json` só é gerado se o hash do `.mdb` constar do manifesto, e seu ritmo se consulta com `python src/analises/ritmoAtletas.py --ano <ano>`.
 
+Para as parciais por posto (Camada B), com o mesmo requisito de hash:
+
+```powershell
+python src/extracaoAccess/extrairParciais.py --ano 2026
+python src/analises/parciaisAtleta.py --ano 2026 --etapa 4 --cbo <CBO>
+```
+
 ## Tabelas Principais do `HelgaDat.mdb`
 
 | Tabela no Access | Papel na Apuração | Campos Utilizados (Higienizados) | Campos Ignorados (LGPD / Internos) |
@@ -37,6 +44,9 @@ O arquivo `Dados/<ano>/extraidos/percursosHelga<ano>.json` só é gerado se o ha
 | `Course` | Inscrições, tempos e status por etapa | `Competition_PK`, `Runner_PK`, `Category_FK`, `Club_FK`, `Status_FK`, `ClassifyYN`, `CourseTime`, `CourseTime_ms`; para a análise de desempenho também `Parcours_FK`, `StartTime` e `FinishTime` | `EmitBadge`, `Rented`, `RealBadgeNumber` |
 | `Parcours` | Percursos de cada etapa (análise de desempenho, [spec](../specs/analise-desempenho/spec.md)) | `ID`, `Competition_FK`, `Number`, `ParcName`, `Length` (distância em metros) e `Climbing` (subida em metros); zero significa não informado | `VariationName`, `NbMaps`, `PenaltyGap`, `Box_FK` |
 | `Cat_Parc` | Percurso de cada categoria em cada etapa (análise de desempenho) | `Competition_PK`, `Category_PK`, `Parcours_PK` | `StartFrom`, `StartStep`, `TimeLimit` (vazio em 2026) |
+| `Controls` | Postos de cada percurso (análise de desempenho, Camada B) | `Parcours_FK`, `Number` (código do posto; 999 é a chegada), `Order_Number`, `Distance` (distância do trecho em metros) | `ID`, `MaxCrossing` |
+| `EmitData` | Leituras dos chips; o mesmo chip pode ter várias linhas e vale a última (maior `id`) | `id`, `Competition_FK`, `BadgeNumber` (liga-se a `Course.EmitBadge`) | `SIData`, `MachineName`, `SeqNo`, `SIAC_Volt`, `Controls` (texto bruto da leitura) |
+| `EmitData_Details` | Passagens da leitura, uma por posto | `EmitData_pk`, `seq`, `control`, `split` (tempo do trecho) | `Control_ID` (vem zerado), `split_raw` |
 | `Status` | Dicionário de status de chegada | `code`, `status`, `status_short` | — |
 
 ## Códigos da Tabela `Status` e Regra de Pontuação (Art. 31)

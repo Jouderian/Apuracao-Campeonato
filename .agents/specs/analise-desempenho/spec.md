@@ -37,7 +37,7 @@ Os números por etapa de `Controls` e das passagens, e a unidade de `Length`, ai
 
 ### Saída
 `Dados/<ano>/extraidos/percursosHelga<ano>.json`, com `fonte`, `sha256Fonte` e:
-- `percursos`: `percursoId`, `competitionId`, `numero`, `nome`, `distanciaM`, `subidaM` (ambos nulos quando o Helga traz zero, que ali significa campo não informado) e, se a Camada B existir, a lista ordenada de postos.
+- `percursos`: `percursoId`, `competitionId`, `numero`, `nome`, `distanciaM`, `subidaM` (ambos nulos quando o Helga traz zero, que ali significa campo não informado).
 - `categoriaPercurso`: `competitionId`, `categoriaId`, `percursoId`.
 - `participacoes`: `competitionId`, `runnerPk`, `percursoId` (de `Course.Parcours_FK`), `horaLargada`, `horaChegada`.
 
@@ -52,14 +52,19 @@ Os números por etapa de `Controls` e das passagens, e a unidade de `Length`, ai
 ## Camada B: Parciais por Posto
 
 ### Saída
-`Dados/<ano>/extraidos/parciaisHelga<ano>.json`, com `fonte`, `sha256Fonte` e, por participação, a lista ordenada de passagens (`ordem`, `codigoPosto`, `tempoParcialSegundos`).
+`Dados/<ano>/extraidos/parciaisHelga<ano>.json`, com `fonte`, `sha256Fonte` e:
+- `percursos`: `percursoId` e a lista ordenada de `postos` (`ordem`, `codigoPosto`, `distanciaM` do trecho que termina no posto, de `Controls.Distance`).
+- `participacoes`: de quem concluiu (`statusCodigo` 0) e teve as parciais aceitas: `competitionId`, `runnerPk`, `percursoId`, `tempoOficialSegundos`, `passagens` (`ordem`, `codigoPosto`, `tempoParcialSegundos`) e `postosConferem` (a sequência lida é igual à do percurso).
+- `ocorrencias`: `competitionId`, `runnerPk` e `motivo` de cada concluinte sem parciais aceitas ou com sequência divergente.
 
 ### Regras
-1. As passagens vêm de `EmitData_Details` (ligada a `EmitData` por `EmitData_pk` = `id`), e `EmitData` liga-se a `Course` por `Competition_FK` = `Competition_PK` e `BadgeNumber` = `Course.EmitBadge` (`RealBadgeNumber` vem vazio). Se o vínculo não for unívoco para uma participação, ela vai para a lista de recusas, e não se escolhe por aproximação.
-1. **Leituras repetidas (decidido em 2026-11-13):** o mesmo chip pode ter várias linhas em `EmitData`. Vale apenas a **última leitura** (maior `id`). Como conferência, a soma das parciais, incluindo o posto de chegada (`control` 999), deve igualar `Course.CourseTime`; quando não igualar, a participação fica sem parciais e vai para a lista de ocorrências, sem trocar de leitura nem corrigir.
-2. A distância de cada trecho vem de `Controls.Distance`. Sem ela, o ritmo por trecho não se calcula e o trecho fica só com o tempo.
-3. Posto fora da ordem do percurso, ou passagem repetida, é registrado como ocorrência da participação, sem correção.
-4. Participações sem passagens (etapas de 2025 recuperadas pela planilha do site) ficam sem parciais; a ausência é explícita.
+1. **Vínculo:** as passagens vêm de `EmitData_Details` (ligada a `EmitData` por `EmitData_pk` = `id`), e `EmitData` liga-se a `Course` por `Competition_FK` = `Competition_PK` e `BadgeNumber` = `Course.EmitBadge` (`RealBadgeNumber` vem vazio). O número do chip não vai para o JSON.
+2. **Leituras repetidas (decidido em 2026-11-13):** o mesmo chip pode ter várias linhas em `EmitData`. Vale apenas a **última leitura** (maior `id`).
+3. **Conferência da soma:** a soma das parciais, incluindo o posto de chegada (`control` 999), deve igualar `Course.CourseTime` com tolerância de 1 s. Quando não igualar (ou não houver chip ou passagens), a participação fica sem parciais e vai para `ocorrencias` com os dois valores, sem trocar de leitura nem corrigir.
+4. **Sequência dos postos:** igual à de `Controls` (por `Order_Number`), `postosConferem` é verdadeiro. Diferente (posto pulado, repetido ou fora de ordem), as parciais são mantidas com `postosConferem` falso e a participação entra em `ocorrencias`, sem correção; nesse caso não há ritmo por trecho, pois a distância do trecho só vale na sequência do percurso.
+5. **Distância do trecho:** `Controls.Distance` (o primeiro trecho parte da largada; o último, posto 999, é o da chegada). Em 8 percursos de 2026, a soma dos trechos fica entre 0,3% e 1,7% abaixo de `Parcours.Length`; a natureza dessa distância (por exemplo, em linha reta) não foi verificada. Por isso o ritmo por trecho não reproduz exatamente o ritmo do percurso e é informativo, com a mesma regra de comparação da Camada A (mesma categoria ou mesmo percurso).
+6. **Ritmo por trecho:** `calcularRitmoSegundosPorKm` da Camada A sobre a parcial e a distância do trecho; parcial zero ou negativa fica sem ritmo.
+7. **Escopo:** só quem concluiu. As etapas sem resultado no banco (2025, etapas 2 e 3) ficam fora, como na Camada A.
 
 ## Camada C: Consultas
 
@@ -96,7 +101,17 @@ Cada item precisa de decisão do apurador antes da implementação. Os que alter
    | 4 | H Adulto E | 5700 m | Lamarck Augusto Gadelha Reges (TRILHA NORTE) | 00:47:49 | 8'23"/km |
 
    As etapas 2 a 4 também discriminam percursos com subida zero ou muito alta (`Climbing`), úteis para olhar o efeito do terreno no ritmo.
-2. **Cobertura das parciais (respondido para 2026):** todos os concluintes têm chip e passagens: 120 (etapa 1), 112 (etapa 2), 121 (etapa 3) e 95 (etapa 4), 448 no total. Todos os postos têm `Distance` (316, 222, 340 e 236). O chip tem várias leituras por atleta (na etapa 1, 308 linhas em `EmitData` para 133 chips distintos), regra tratada na Camada B. Com a regra da última leitura, a soma das parciais fecha o `CourseTime` (tolerância de 1 s) em 433 dos 448 concluintes (114, 106, 119 e 94 por etapa); 15 não fecham (6, 6, 2 e 1), alguns com soma muito maior que o tempo oficial, possivelmente chip usado por mais de um atleta (não verificado), e outros com 2 a 7 s de diferença. Nenhuma outra leitura do mesmo chip fecha esses 15. Esses casos ficam sem parciais e listados. Falta medir o mesmo para 2025.
+2. **Cobertura das parciais (medida em 2026-11-14):** com a última leitura do chip e a soma das parciais igual ao tempo oficial (tolerância de 1 s), 419 dos 448 concluintes de 2026 (93,5%) e 210 dos 230 de 2025 (91,3%) têm parciais completas e sequência de postos igual à do percurso. Os demais:
+
+   | | 2026 | 2025 |
+   | :--- | ---: | ---: |
+   | Parciais e sequência conferem | 419 | 210 |
+   | Soma fecha, mas a sequência de postos difere do percurso (posto pulado ou repetido) | 14 | 13 |
+   | Sequência confere, mas a soma difere de 2 a 10 s do tempo oficial | 4 | 1 |
+   | Soma difere muito do tempo oficial (sequência confere) | 9 | 5 |
+   | Soma difere muito e a sequência difere | 2 | 1 |
+
+   Nos casos de soma muito diferente, a primeira parcial costuma vir desproporcional (em dois casos inspecionados, 03:15:33 e, numa releitura, 11:59:31); a causa não foi verificada. Todos os postos de 2026 têm distância (`Controls.Distance`).
 3. **Comparação de ritmos (decidido em 2026-11-13):** só dentro da mesma categoria ou do mesmo percurso. Sem ritmo ajustado pela subida.
 4. **Divulgação (decidido em 2026-11-13):** a FECORI não tem regramento para este tipo de análise. Enquanto não houver, as saídas não têm restrição formal de divulgação, mas o assunto volta a esta spec se a FECORI regrar.
 5. **Base consultável (decidido em 2026-11-13, [ADR-009](../../wiki/decisions/ADR-009-base-sqlite-gerada-para-analise-de-desempenho.md)):** JSON oficial, SQLite gerado dos JSON e consultado por `consultar.py` (somente leitura), com dicionário de dados em Markdown. Sem dependência nova; DuckDB, pandas, servidor MCP e site de página única ficam para decisão futura.
@@ -107,6 +122,6 @@ Cada item precisa de decisão do apurador antes da implementação. Os que alter
 - [x] Camada A para 2026: `percursosHelga2026.json` gerado e validado (71 percursos, 166 vínculos categoria-percurso, 563 participações); ritmo de 448 participações calculado e conferido contra o min/km do site em cinco casos (`python src/analises/ritmoAtletas.py --ano 2026`).
 - [x] Camada A para 2025: `percursosHelga2025.json` gerado (etapas 1 e 4, 230 participações com ritmo) e seis casos conferidos no site pelo apurador; as etapas 2 e 3 ficam fora (Camada A, regra 5).
 - [x] Testes sintéticos: ritmo (inclusive a metade do segundo), recusas (sem percurso, percurso inexistente, sem distância) e vínculo do percurso do atleta, e não da categoria (`tests/test_ritmo.py`).
-- [ ] Camada B, com a cobertura de 2025 medida antes de implementar.
+- [x] Camada B para 2025 e 2026: `parciaisHelga<ano>.json` gerado e validado (2026: 433 participações com parciais e 29 ocorrências; 2025: 223 e 20) e ritmo por trecho calculado por `python src/analises/parciaisAtleta.py --ano <ano> --etapa <N> --cbo <CBO>` (`tests/test_parciais.py`). Parciais conferidas no site do HelgaO pelo apurador (2026-11-14): os tempos de cada trecho de Lamarck Augusto Gadelha Reges na etapa 4 de 2026 batem; a distância por trecho não foi conferida no site.
 - [ ] Camada C: `gerarBase.py`, `consultar.py` (somente leitura, só `SELECT`, com limite de linhas) e dicionário de dados, com testes; ajuste do `.gitignore` e da seção de pastas de `Dados/` em `rules.md` com autorização expressa.
 - [ ] `schema-access.md` atualizado com as tabelas novas e `wiki/index.md` com os ADRs gerados.
