@@ -176,6 +176,7 @@ def checar_extraidos_validos(raiz):
     from src.extracaoAccess.validarEntrada import (
         EntradaInvalidaError,
         validarDadosHelga,
+        validarDadosParciais,
         validarDadosPercursos,
     )
 
@@ -188,8 +189,13 @@ def checar_extraidos_validos(raiz):
             if not nome.endswith('.json'):
                 continue
             rel = f'Dados/{ano}/extraidos/{nome}'
-            # percursosHelga<ano>.json (análise de desempenho) tem estrutura própria.
-            validar = validarDadosPercursos if nome.startswith('percursosHelga') else validarDadosHelga
+            # percursosHelga<ano>.json e parciaisHelga<ano>.json (análise de desempenho) têm estrutura própria.
+            if nome.startswith('percursosHelga'):
+                validar = validarDadosPercursos
+            elif nome.startswith('parciaisHelga'):
+                validar = validarDadosParciais
+            else:
+                validar = validarDadosHelga
             try:
                 validar(ler_json(os.path.join(pasta, nome)))
             except (OSError, ValueError, EntradaInvalidaError) as erro:

@@ -178,6 +178,68 @@ def validarDadosPercursos(dados: Any) -> None:
         raise EntradaInvalidaError("; ".join(resumo))
 
 
+CAMPOS_POSTO: dict[str, type | tuple[type, ...]] = {
+    "ordem": int, "codigoPosto": int, "distanciaM": (int, type(None)),
+}
+CAMPOS_PERCURSO_POSTOS: dict[str, type | tuple[type, ...]] = {"percursoId": int, "postos": list}
+CAMPOS_PASSAGEM: dict[str, type | tuple[type, ...]] = {
+    "ordem": int, "codigoPosto": int, "tempoParcialSegundos": int,
+}
+CAMPOS_PARTICIPACAO_PARCIAIS: dict[str, type | tuple[type, ...]] = {
+    "competitionId": int, "runnerPk": int, "percursoId": int, "tempoOficialSegundos": int,
+    "passagens": list, "postosConferem": bool,
+}
+CAMPOS_OCORRENCIA: dict[str, type | tuple[type, ...]] = {
+    "competitionId": int, "runnerPk": int, "motivo": str,
+}
+
+
+def validarDadosParciais(dados: Any) -> None:
+    """Valida o JSON de parciais (spec analise-desempenho, Camada B); levanta EntradaInvalidaError."""
+    erros: list[str] = []
+    if not isinstance(dados, dict):
+        raise EntradaInvalidaError("JSON de parciais: esperado objeto na raiz")
+
+    if not isinstance(dados.get("fonte"), str) or not dados.get("fonte"):
+        erros.append("fonte: texto obrigatório ausente")
+    elif os.path.basename(dados["fonte"]) != dados["fonte"]:
+        erros.append("fonte: deve ser apenas o nome do arquivo, sem pastas")
+    hashFonte = dados.get("sha256Fonte")
+    if not isinstance(hashFonte, str) or not PADRAO_SHA256.match(hashFonte):
+        erros.append("sha256Fonte: esperado SHA-256 em hexadecimal minúsculo (64 caracteres)")
+    for chave in ("percursos", "participacoes", "ocorrencias"):
+        if not isinstance(dados.get(chave), list):
+            erros.append(f"{chave}: ausente ou com tipo inválido (esperado list)")
+    if erros:
+        raise EntradaInvalidaError("; ".join(erros))
+
+    for i, percurso in enumerate(dados["percursos"]):
+        _validarCampos(f"percursos[{i}]", percurso, CAMPOS_PERCURSO_POSTOS, erros)
+        if isinstance(percurso, dict) and isinstance(percurso.get("postos"), list):
+            for j, posto in enumerate(percurso["postos"]):
+                _validarCampos(f"percursos[{i}].postos[{j}]", posto, CAMPOS_POSTO, erros)
+    for i, participacao in enumerate(dados["participacoes"]):
+        _validarCampos(f"participacoes[{i}]", participacao, CAMPOS_PARTICIPACAO_PARCIAIS, erros)
+        if isinstance(participacao, dict) and isinstance(participacao.get("passagens"), list):
+            for j, passagem in enumerate(participacao["passagens"]):
+                _validarCampos(f"participacoes[{i}].passagens[{j}]", passagem, CAMPOS_PASSAGEM, erros)
+    for i, ocorrencia in enumerate(dados["ocorrencias"]):
+        _validarCampos(f"ocorrencias[{i}]", ocorrencia, CAMPOS_OCORRENCIA, erros)
+    _varrerTextoECampos("json", dados, erros)
+
+    if not erros:
+        idsConhecidos = {p["percursoId"] for p in dados["percursos"]}
+        for i, participacao in enumerate(dados["participacoes"]):
+            if participacao["percursoId"] not in idsConhecidos:
+                erros.append(f"participacoes[{i}].percursoId: percurso {participacao['percursoId']} inexistente")
+
+    if erros:
+        resumo = erros[:20]
+        if len(erros) > 20:
+            resumo.append(f"... e mais {len(erros) - 20} problema(s)")
+        raise EntradaInvalidaError("; ".join(resumo))
+
+
 def lerManifestoSha256(caminhoManifesto: str) -> dict[str, str]:
     """Lê o manifesto `<sha256>  <ano>/<arquivo>` e retorna {caminho: hash}."""
     congelados: dict[str, str] = {}
