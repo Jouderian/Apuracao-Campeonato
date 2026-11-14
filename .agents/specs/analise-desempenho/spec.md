@@ -82,6 +82,7 @@ Relatórios em `Dados/<ano>/resultados/` (`.md` e `.xlsx`, como os demais). Para
 
 ## Fora de Escopo
 - Qualquer efeito sobre pontuação, descarte, desempate ou resultado de clubes.
+- Categorias não competitivas do regulamento do ano, que trazem muito ruído nos tempos e nas leituras (decidido pelo apurador em 2026-11-14): as acompanhadas (`HN1` a `HN3` e `DN1` a `DN3`), sem classificação (Art. 22 em 2024 e 2025; Art. 9º em 2026), e o percurso aberto (`Aberto ...`), que não pontua (Art. 34, § 3º em 2024 e 2025; Art. 31, § 3º em 2026). Os três regulamentos dizem o mesmo; um ano novo com regra diferente exige rever esta decisão. Ficam fora de todas as extrações (percursos e parciais), do cálculo de ritmo e da base, com a mesma verificação do motor de cálculo (`ehCategoriaSemPontuacao`). O JSON da apuração não muda.
 - Dados pessoais além dos já existentes nos JSON; recortes por idade; contato, endereço, documento.
 - Estimar distância, subida ou tempo ausentes.
 - Ritmo ajustado pela subida para comparar percursos diferentes.
@@ -101,15 +102,16 @@ Cada item precisa de decisão do apurador antes da implementação. Os que alter
    | 4 | H Adulto E | 5700 m | Lamarck Augusto Gadelha Reges (TRILHA NORTE) | 00:47:49 | 8'23"/km |
 
    As etapas 2 a 4 também discriminam percursos com subida zero ou muito alta (`Climbing`), úteis para olhar o efeito do terreno no ritmo.
-2. **Cobertura das parciais (medida em 2026-11-14):** com a última leitura do chip e a soma das parciais igual ao tempo oficial (tolerância de 1 s), 419 dos 448 concluintes de 2026 (93,5%) e 210 dos 230 de 2025 (91,3%) têm parciais completas e sequência de postos igual à do percurso. Os demais:
+2. **Cobertura das parciais (medida em 2026-11-14):** com a última leitura do chip e a soma das parciais igual ao tempo oficial (tolerância de 1 s), 396 dos 420 concluintes de 2026 (94,3%), 203 dos 218 de 2025 (93,1%) e 526 dos 598 de 2024 (88,0%) têm parciais completas e sequência de postos igual à do percurso, sem contar as categorias não competitivas (ver *Fora de Escopo*). Os demais:
 
-   | | 2026 | 2025 |
-   | :--- | ---: | ---: |
-   | Parciais e sequência conferem | 419 | 210 |
-   | Soma fecha, mas a sequência de postos difere do percurso (posto pulado ou repetido) | 14 | 13 |
-   | Sequência confere, mas a soma difere de 2 a 10 s do tempo oficial | 4 | 1 |
-   | Soma difere muito do tempo oficial (sequência confere) | 9 | 5 |
-   | Soma difere muito e a sequência difere | 2 | 1 |
+   | | 2026 | 2025 | 2024 |
+   | :--- | ---: | ---: | ---: |
+   | Parciais e sequência conferem | 396 | 203 | 526 |
+   | Soma fecha, mas a sequência de postos difere do percurso (posto pulado ou repetido) | 13 | 9 | 13 |
+   | Soma difere de 2 a 10 s do tempo oficial (sem parciais) | 3 | 1 | 1 |
+   | Soma difere mais de 10 s do tempo oficial (sem parciais) | 8 | 5 | 58 |
+
+   A etapa 4 de 2024 concentra 49 das 58 somas muito diferentes: em 42 delas a soma das parciais excede o tempo oficial em 1 a 59 minutos (por exemplo, 143 s e 303 s). O apurador explica que a diferença pode vir da falta de sincronismo de relógio entre as bases das parciais (hipótese dele, que os dados não permitem confirmar). Ela explica bem diferenças de segundos a minutos; não explica uma primeira parcial de horas, como os casos de 03:15:33 e 11:59:31, que seguem sem causa verificada.
 
    Nos casos de soma muito diferente, a primeira parcial costuma vir desproporcional (em dois casos inspecionados, 03:15:33 e, numa releitura, 11:59:31); a causa não foi verificada. Todos os postos de 2026 têm distância (`Controls.Distance`).
 3. **Comparação de ritmos (decidido em 2026-11-13):** só dentro da mesma categoria ou do mesmo percurso. Sem ritmo ajustado pela subida.
@@ -119,10 +121,12 @@ Cada item precisa de decisão do apurador antes da implementação. Os que alter
 
 ## Critérios de Aceitação
 - [x] Pontos em Aberto 1 (conferência no site do HelgaO) e 5 (base consultável) respondidos e registrados nesta spec.
-- [x] Camada A para 2026: `percursosHelga2026.json` gerado e validado (71 percursos, 166 vínculos categoria-percurso, 563 participações); ritmo de 448 participações calculado e conferido contra o min/km do site em cinco casos (`python src/analises/ritmoAtletas.py --ano 2026`).
-- [x] Camada A para 2025: `percursosHelga2025.json` gerado (etapas 1 e 4, 230 participações com ritmo) e seis casos conferidos no site pelo apurador; as etapas 2 e 3 ficam fora (Camada A, regra 5).
+- [x] Camada A para 2026: `percursosHelga2026.json` gerado e validado (70 percursos, 149 vínculos categoria-percurso, 529 participações); ritmo de 420 participações calculado e conferido contra o min/km do site em cinco casos (`python src/analises/ritmoAtletas.py --ano 2026`).
+- [x] Camada A para 2025: `percursosHelga2025.json` gerado (etapas 1 e 4, 218 participações com ritmo) e seis casos conferidos no site pelo apurador; as etapas 2 e 3 ficam fora (Camada A, regra 5).
 - [x] Testes sintéticos: ritmo (inclusive a metade do segundo), recusas (sem percurso, percurso inexistente, sem distância) e vínculo do percurso do atleta, e não da categoria (`tests/test_ritmo.py`).
-- [x] Camada B para 2025 e 2026: `parciaisHelga<ano>.json` gerado e validado (2026: 433 participações com parciais e 29 ocorrências; 2025: 223 e 20) e ritmo por trecho calculado por `python src/analises/parciaisAtleta.py --ano <ano> --etapa <N> --cbo <CBO>` (`tests/test_parciais.py`). Parciais conferidas no site do HelgaO pelo apurador (2026-11-14): os tempos de cada trecho de Lamarck Augusto Gadelha Reges na etapa 4 de 2026 batem; a distância por trecho não foi conferida no site.
+- [x] Camada A e Camada B para 2024 (autorizado pelo apurador em 2026-11-14): `percursosHelga2024.json` (64 percursos, 763 participações) e `parciaisHelga2024.json` (539 participações com parciais e 72 ocorrências); ritmo de 598 participações. A distância de 2024 ainda não foi conferida no site do HelgaO.
+- [x] Camada B para 2025 e 2026: `parciaisHelga<ano>.json` gerado e validado (2026: 409 participações com parciais e 24 ocorrências; 2025: 212 e 15) e ritmo por trecho calculado por `python src/analises/parciaisAtleta.py --ano <ano> --etapa <N> --cbo <CBO>` (`tests/test_parciais.py`). Parciais conferidas no site do HelgaO pelo apurador (2026-11-14): os tempos de cada trecho de Lamarck Augusto Gadelha Reges na etapa 4 de 2026 batem; a distância por trecho não foi conferida no site.
+- [x] Categorias não competitivas (acompanhadas e abertas) fora das extrações de percursos e parciais, do cálculo de ritmo e da base (decidido pelo apurador em 2026-11-14), com testes (`tests/test_ritmo.py`, `tests/test_parciais.py`, `tests/test_base_analise.py`).
 - [x] Camada C: `gerarBase.py`, `consultar.py` (somente leitura, só `SELECT`, com limite de linhas e interrupção de consulta longa), [dicionário de dados](../../wiki/dicionario-dados-analise.md) e `.gitignore`, com testes (`tests/test_base_analise.py`, que também exige o dicionário cobrindo todas as colunas da base).
 - [x] Seção de pastas de `Dados/` em `rules.md` com a pasta `Dados/analise/` (autorizado pelo apurador em 2026-11-14).
 - [ ] `schema-access.md` atualizado com as tabelas novas e `wiki/index.md` com os ADRs gerados.
