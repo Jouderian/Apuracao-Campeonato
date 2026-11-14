@@ -7,6 +7,8 @@ no descarte nem no desempate, e só se compara dentro da mesma categoria ou do m
 from dataclasses import dataclass
 from typing import Any
 
+from src.extracaoAccess.escopoAnalise import ehCategoriaNaoCompetitiva
+
 STATUS_CONCLUIU = 0
 
 
@@ -64,7 +66,8 @@ def calcularRitmos(
     """Calcula o ritmo de cada participação, ligando `registrosEtapas` e `participacoes` por competição e atleta.
 
     Só quem concluiu (`statusCodigo` 0) com tempo e percurso com distância recebe ritmo; os demais voltam em
-    `SemRitmo` com o motivo. Entradas já validadas por `validarDadosHelga` e `validarDadosPercursos`.
+    `SemRitmo` com o motivo. As categorias não competitivas (acompanhadas e abertas) ficam fora da análise e nem aparecem em `SemRitmo`.
+    Entradas já validadas por `validarDadosHelga` e `validarDadosPercursos`.
     """
     distanciaPorPercurso = {p["percursoId"]: p["distanciaM"] for p in dadosPercursos["percursos"]}
     percursoPorParticipacao = {
@@ -74,6 +77,8 @@ def calcularRitmos(
     ritmos: list[RitmoAtleta] = []
     semRitmo: list[SemRitmo] = []
     for r in dadosEtapas["registrosEtapas"]:
+        if ehCategoriaNaoCompetitiva(r["categoria"]):
+            continue
         base = (r["etapa"], r["cbo"], r["nome"], r["categoria"])
         if r["statusCodigo"] != STATUS_CONCLUIU:
             semRitmo.append(SemRitmo(*base, f"não concluiu ({r['statusSigla']})"))

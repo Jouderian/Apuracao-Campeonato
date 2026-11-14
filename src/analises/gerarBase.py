@@ -21,6 +21,7 @@ if RAIZ not in sys.path:
 
 from src.analises.parciais import calcularRitmosPorTrecho  # noqa: E402
 from src.analises.ritmo import calcularRitmos, formatarRitmo  # noqa: E402
+from src.extracaoAccess.escopoAnalise import ehCategoriaNaoCompetitiva  # noqa: E402
 from src.extracaoAccess.validarEntrada import (  # noqa: E402
     EntradaInvalidaError,
     conferirHashNoManifesto,
@@ -104,6 +105,14 @@ def etapasApenasDoBanco(dados: dict[str, Any], numerosSubstituidos: set[int]) ->
     }
 
 
+def semCategoriasNaoCompetitivas(dados: dict[str, Any]) -> dict[str, Any]:
+    """Tira os registros das categorias não competitivas (acompanhadas e abertas), que a análise ignora."""
+    return {
+        **dados,
+        "registrosEtapas": [r for r in dados["registrosEtapas"] if not ehCategoriaNaoCompetitiva(r["categoria"])],
+    }
+
+
 def carregarAno(ano: int, pastaDados: str) -> DadosAno:
     """Lê, valida e confere no manifesto os JSON do ano; levanta `EntradaInvalidaError`/`OSError` se recusar."""
     pasta = os.path.join(pastaDados, str(ano), "extraidos")
@@ -122,7 +131,7 @@ def carregarAno(ano: int, pastaDados: str) -> DadosAno:
         complemento = ler(os.path.basename(caminho), validarDadosHelga)
         substituidas |= {e["numeroEtapa"] for e in complemento["etapas"]}
 
-    resultado = DadosAno(ano=ano, etapas=etapasApenasDoBanco(etapas, substituidas))
+    resultado = DadosAno(ano=ano, etapas=semCategoriasNaoCompetitivas(etapasApenasDoBanco(etapas, substituidas)))
     if os.path.isfile(os.path.join(pasta, f"percursosHelga{ano}.json")):
         resultado.percursos = ler(f"percursosHelga{ano}.json", validarDadosPercursos)
     if os.path.isfile(os.path.join(pasta, f"parciaisHelga{ano}.json")):
