@@ -4,7 +4,7 @@ description: Índice das specs do projeto com a situação de cada uma — consu
 
 # Índice das Specs
 
-Última atualização: 2026-11-11
+Última atualização: 2026-11-13
 
 Consulte este índice antes de abrir uma spec: a `concluída` só serve de histórico e não precisa ser lida para trabalho novo. Toda inclusão de spec ou troca de `status` atualiza esta tabela no mesmo commit; o script `verificar-projeto.py` recusa spec fora do índice ou com situação divergente.
 
@@ -14,3 +14,4 @@ Consulte este índice antes de abrir uma spec: a `concluída` só serve de hist�
 | [scoring-engine](scoring-engine/spec.md) | ativa | Motor de cálculo de pontuação individual, descarte, voluntários, clubes e desempates |
 | [access-ingestion](access-ingestion/spec.md) | concluída | Ingestão, mapeamento de tabelas e higienização (LGPD) dos arquivos do Microsoft Access (`HelgaDat.mdb`) |
 | [web-results-ingestion](web-results-ingestion/spec.md) | ativa | Ingestão da planilha exportada do site de resultados do Helga (lista de partida e resultado) como fonte complementar do banco |
+| [analise-desempenho](analise-desempenho/spec.md) | ativa | Extração dos percursos e parciais do Helga e consultas de desempenho dos atletas (ritmo médio, evolução), fora da apuração |
