@@ -20,6 +20,7 @@ description: Índice da base de conhecimento do projeto — decisões arquitetur
 | [ADR-006](decisions/ADR-006-planilha-do-site-helga-como-fonte-complementar.md) | Planilha do site do Helga como fonte complementar | Etapas com banco perdido ou sem resultados usam a planilha exportada do site (lista de partida e resultado), congelada por SHA-256 e conferida automaticamente |
 | [ADR-007](decisions/ADR-007-resultado-oficial-publicado-prevalece.md) | O resultado oficial publicado prevalece (substituída) | Substituída pela ADR-008 |
 | [ADR-008](decisions/ADR-008-regulamento-prevalece-sobre-o-publicado.md) | O regulamento prevalece sobre o publicado | A apuração segue estritamente o regulamento do ano, a pedido da FECORI; resultados publicados não vinculam; ícone do campeão é medalha; interpretações em ADR |
+| [ADR-009](decisions/ADR-009-base-sqlite-gerada-para-analise-de-desempenho.md) | Base SQLite gerada para a análise de desempenho | JSON continuam a fonte oficial; base SQLite derivada (ignorada pelo Git), consultada só para leitura por script, com dicionário de dados em Markdown; sem dependência nova |
 
 ## Páginas Técnicas
 
