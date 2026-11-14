@@ -13,6 +13,7 @@ trigger: always_on
    - `src/extracaoAccess/`: leitura de arquivos `.mdb`/`.accdb`, validação de esquema e higienização (LGPD). Não calcula pontuação do campeonato.
    - `src/motorCalculo/`: funções puras e determinísticas que implementam os artigos do Regulamento (pontuação de etapa, descarte, média de voluntários, clubes e desempates). Não acessa banco de dados nem sistema de arquivos.
    - `src/relatorios/`: formatação dos resultados calculados em Markdown, PDF ou Excel.
+   - `src/analises/`: análises informativas de desempenho (ritmo, evolução, parciais), em funções puras sobre os JSON higienizados. Nunca abre `.mdb`/`.accdb`, nunca altera nem alimenta pontuação, descarte, desempate ou clubes; o resultado é rotulado como informativo ([spec](../specs/analise-desempenho/spec.md), [ADR-009](../wiki/decisions/ADR-009-base-sqlite-gerada-para-analise-de-desempenho.md)).
 2. **Rastreabilidade Normativa em Docstrings:**
    - Toda função de regra esportiva em `src/motorCalculo/` deve referenciar na docstring o artigo e o parágrafo correspondentes do regulamento vigente (ex.: `Regulamento 2026, Art. 34, § 1º`).
 3. **Tipagem Explícita e Imutabilidade:**
@@ -31,6 +32,7 @@ trigger: always_on
 ## Testes Automatizados
 
 - Toda regra em `src/motorCalculo/` deve ter teste unitário correspondente em `tests/`, cobrindo casos normais e casos de borda (empates, número ímpar de etapas para voluntários, campeonato com 3 etapas ou menos sem descarte, atleta penalizado pelo Art. 23 sem direito a descarte, troca de categoria).
+- Toda função de `src/analises/` tem teste unitário em `tests/`, incluindo o arredondamento e as recusas de entrada.
 - O CI e o script [`verificar-projeto.py`](../scripts/verificar-projeto.py) executam a suíte de testes automaticamente.
 - Todo achado de segurança corrigido ganha teste de regressão ([`revisao-seguranca.md`](../workflows/revisao-seguranca.md)); entradas de texto externas têm teste de propriedade (`hypothesis`).
 

@@ -4,7 +4,7 @@ description: Mapeamento das tabelas, colunas e códigos de status do banco de da
 
 # Esquema do Banco de Dados Microsoft Access (`HelgaDat.mdb`)
 
-Última atualização: 2026-11-08
+Última atualização: 2026-11-14
 
 Esta página documenta a estrutura real das tabelas do software de apuração **Helga** (`HelgaDat.mdb`), inspecionada a partir do banco oficial da temporada 2026.
 
@@ -16,6 +16,14 @@ Coloque o arquivo `HelgaDat.mdb` em `Dados/<ano>/entradas/` (protegido pelo `.gi
 python src/extracaoAccess/extrairHelga.py --mdb "Dados/2026/entradas/HelgaDat.mdb" --saida "Dados/2026/extraidos/etapasHelga2026.json"
 ```
 
+Para a análise de desempenho (distância e subida dos percursos), extraia também os percursos:
+
+```powershell
+python src/extracaoAccess/extrairPercursos.py --ano 2026
+```
+
+O arquivo `Dados/<ano>/extraidos/percursosHelga<ano>.json` só é gerado se o hash do `.mdb` constar do manifesto, e seu ritmo se consulta com `python src/analises/ritmoAtletas.py --ano <ano>`.
+
 ## Tabelas Principais do `HelgaDat.mdb`
 
 | Tabela no Access | Papel na Apuração | Campos Utilizados (Higienizados) | Campos Ignorados (LGPD / Internos) |
@@ -26,7 +34,9 @@ python src/extracaoAccess/extrairHelga.py --mdb "Dados/2026/entradas/HelgaDat.md
 | `Federation` | Federações estaduais e CBO | `ID`, `Name`, `LongName` | `DB_updated` |
 | `Categories` | Categorias disputadas | `ID`, `Name`, `Age`, `Gender` (`DN1..3` e `HN1..3` são categorias acompanhadas) | `Order`, `Order2` |
 | `Person` | Cadastro de atletas | `ID`, `Code` (número CBO), `Firstname`, `Name`, `Gender`, `Club_FK`, `Category_FK` | `Street1`, `Street2`, `Zip`, `Town`, `Phone1`, `Phone2`, `Fax`, `Email`, `Birthdate` e `YearOfBirth` (nenhuma data ou ano de nascimento é extraído; ver [ADR-003](decisions/ADR-003-sem-ano-de-nascimento-e-desempate-por-idade.md)) |
-| `Course` | Inscrições, tempos e status por etapa | `Competition_PK`, `Runner_PK`, `Category_FK`, `Club_FK`, `Status_FK`, `ClassifyYN`, `CourseTime`, `CourseTime_ms` | `EmitBadge`, `Rented`, `RealBadgeNumber` |
+| `Course` | Inscrições, tempos e status por etapa | `Competition_PK`, `Runner_PK`, `Category_FK`, `Club_FK`, `Status_FK`, `ClassifyYN`, `CourseTime`, `CourseTime_ms`; para a análise de desempenho também `Parcours_FK`, `StartTime` e `FinishTime` | `EmitBadge`, `Rented`, `RealBadgeNumber` |
+| `Parcours` | Percursos de cada etapa (análise de desempenho, [spec](../specs/analise-desempenho/spec.md)) | `ID`, `Competition_FK`, `Number`, `ParcName`, `Length` (distância em metros) e `Climbing` (subida em metros); zero significa não informado | `VariationName`, `NbMaps`, `PenaltyGap`, `Box_FK` |
+| `Cat_Parc` | Percurso de cada categoria em cada etapa (análise de desempenho) | `Competition_PK`, `Category_PK`, `Parcours_PK` | `StartFrom`, `StartStep`, `TimeLimit` (vazio em 2026) |
 | `Status` | Dicionário de status de chegada | `code`, `status`, `status_short` | — |
 
 ## Códigos da Tabela `Status` e Regra de Pontuação (Art. 31)
