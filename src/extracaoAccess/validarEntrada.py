@@ -121,6 +121,63 @@ def validarDadosHelga(dados: Any) -> None:
         raise EntradaInvalidaError("; ".join(resumo))
 
 
+CAMPOS_PERCURSO: dict[str, type | tuple[type, ...]] = {
+    "percursoId": int, "competitionId": int, "numero": int, "nome": str,
+    "distanciaM": (int, type(None)), "subidaM": (int, type(None)),
+}
+CAMPOS_CATEGORIA_PERCURSO: dict[str, type | tuple[type, ...]] = {
+    "competitionId": int, "categoriaId": int, "categoria": str, "percursoId": int,
+}
+CAMPOS_PARTICIPACAO: dict[str, type | tuple[type, ...]] = {
+    "competitionId": int, "runnerPk": int, "percursoId": (int, type(None)),
+    "horaLargada": (str, type(None)), "horaChegada": (str, type(None)),
+}
+
+
+def validarDadosPercursos(dados: Any) -> None:
+    """Valida o JSON de percursos (spec analise-desempenho, Camada A); levanta EntradaInvalidaError."""
+    erros: list[str] = []
+    if not isinstance(dados, dict):
+        raise EntradaInvalidaError("JSON de percursos: esperado objeto na raiz")
+
+    if not isinstance(dados.get("fonte"), str) or not dados.get("fonte"):
+        erros.append("fonte: texto obrigatório ausente")
+    elif os.path.basename(dados["fonte"]) != dados["fonte"]:
+        erros.append("fonte: deve ser apenas o nome do arquivo, sem pastas")
+    hashFonte = dados.get("sha256Fonte")
+    if not isinstance(hashFonte, str) or not PADRAO_SHA256.match(hashFonte):
+        erros.append("sha256Fonte: esperado SHA-256 em hexadecimal minúsculo (64 caracteres)")
+    for chave in ("percursos", "categoriaPercurso", "participacoes"):
+        if not isinstance(dados.get(chave), list):
+            erros.append(f"{chave}: ausente ou com tipo inválido (esperado list)")
+    if erros:
+        raise EntradaInvalidaError("; ".join(erros))
+
+    for i, percurso in enumerate(dados["percursos"]):
+        _validarCampos(f"percursos[{i}]", percurso, CAMPOS_PERCURSO, erros)
+    for i, item in enumerate(dados["categoriaPercurso"]):
+        _validarCampos(f"categoriaPercurso[{i}]", item, CAMPOS_CATEGORIA_PERCURSO, erros)
+    for i, participacao in enumerate(dados["participacoes"]):
+        _validarCampos(f"participacoes[{i}]", participacao, CAMPOS_PARTICIPACAO, erros)
+    _varrerTextoECampos("json", dados, erros)
+
+    if not erros:
+        idsConhecidos = {p["percursoId"] for p in dados["percursos"]}
+        for i, item in enumerate(dados["categoriaPercurso"]):
+            if item["percursoId"] not in idsConhecidos:
+                erros.append(f"categoriaPercurso[{i}].percursoId: percurso {item['percursoId']} inexistente")
+        for i, participacao in enumerate(dados["participacoes"]):
+            percursoId = participacao["percursoId"]
+            if percursoId is not None and percursoId not in idsConhecidos:
+                erros.append(f"participacoes[{i}].percursoId: percurso {percursoId} inexistente")
+
+    if erros:
+        resumo = erros[:20]
+        if len(erros) > 20:
+            resumo.append(f"... e mais {len(erros) - 20} problema(s)")
+        raise EntradaInvalidaError("; ".join(resumo))
+
+
 def lerManifestoSha256(caminhoManifesto: str) -> dict[str, str]:
     """Lê o manifesto `<sha256>  <ano>/<arquivo>` e retorna {caminho: hash}."""
     congelados: dict[str, str] = {}
