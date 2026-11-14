@@ -8,7 +8,7 @@ import unittest
 from typing import Any
 
 from src.analises.consultar import ConsultaRecusadaError, consultar, normalizarConsulta
-from src.analises.gerarBase import DadosAno, construirBase, etapasApenasDoBanco
+from src.analises.gerarBase import DadosAno, construirBase, etapasApenasDoBanco, semCategoriasNaoCompetitivas
 from src.extracaoAccess.extrairParciais import montarParciais
 from src.extracaoAccess.extrairPercursos import montarPercursos
 
@@ -47,11 +47,11 @@ def _dadosAno() -> DadosAno:
         ],
         "categoriaPercurso": [],
         "participacoes": [
-            {"competitionId": 36, "runnerPk": 1, "percursoId": 10, "statusCodigo": 0,
+            {"competitionId": 36, "runnerPk": 1, "percursoId": 10, "statusCodigo": 0, "categoria": "H Adulto E",
              "horaLargada": None, "horaChegada": None},
-            {"competitionId": 36, "runnerPk": 2, "percursoId": 20, "statusCodigo": 0,
+            {"competitionId": 36, "runnerPk": 2, "percursoId": 20, "statusCodigo": 0, "categoria": "D Adulto N",
              "horaLargada": None, "horaChegada": None},
-            {"competitionId": 36, "runnerPk": 3, "percursoId": 10, "statusCodigo": 3,
+            {"competitionId": 36, "runnerPk": 3, "percursoId": 10, "statusCodigo": 3, "categoria": "H Adulto E",
              "horaLargada": None, "horaChegada": None},
         ],
     }, "Sintetico.mdb", HASH)
@@ -61,8 +61,10 @@ def _dadosAno() -> DadosAno:
             {"percursoId": 10, "ordem": 2, "codigoPosto": 999, "distanciaM": 600},
         ],
         "concluintes": [
-            {"competitionId": 36, "runnerPk": 1, "percursoId": 10, "chip": 111, "tempo": "00:10:00"},
-            {"competitionId": 36, "runnerPk": 2, "percursoId": 20, "chip": 222, "tempo": "00:23:01"},
+            {"competitionId": 36, "runnerPk": 1, "percursoId": 10, "chip": 111, "tempo": "00:10:00",
+             "categoria": "H Adulto E"},
+            {"competitionId": 36, "runnerPk": 2, "percursoId": 20, "chip": 222, "tempo": "00:23:01",
+             "categoria": "D Adulto N"},
         ],
         "leituras": [
             {"leituraId": 1, "competitionId": 36, "chip": 111},
@@ -123,6 +125,14 @@ class TestGerarBase(BaseTemporaria):
         sobra = etapasApenasDoBanco(dados, {3})
         self.assertEqual([e["numeroEtapa"] for e in sobra["etapas"]], [2])
         self.assertEqual({r["etapa"] for r in sobra["registrosEtapas"]}, {2})
+
+    def test_categorias_nao_competitivas_ficam_fora_da_base(self):
+        dados = {"registrosEtapas": [_registro(1, 101, "Ana", "H Adulto E", 0, "OK", 600),
+                                     _registro(2, 102, "Bia", "DN1", 0, "OK", 300),
+                                     _registro(3, 103, "Caio", "hn3", 0, "OK", 300),
+                                     _registro(4, 104, "Duda", "Aberto D", 0, "OK", 400)]}
+        restantes = semCategoriasNaoCompetitivas(dados)["registrosEtapas"]
+        self.assertEqual([r["nome"] for r in restantes], ["Ana"])
 
     def test_base_nao_guarda_dado_pessoal_alem_de_nome_e_cbo(self):
         conn = sqlite3.connect(self.caminho)

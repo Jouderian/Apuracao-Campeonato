@@ -5,6 +5,7 @@ import unittest
 from typing import Any
 
 from src.analises.ritmo import calcularRitmos, calcularRitmoSegundosPorKm, formatarRitmo
+from src.extracaoAccess.escopoAnalise import ehCategoriaNaoCompetitiva
 from src.extracaoAccess.extrairPercursos import montarPercursos
 from src.extracaoAccess.validarEntrada import EntradaInvalidaError, validarDadosPercursos
 
@@ -17,20 +18,24 @@ def _bruto() -> dict[str, Any]:
             {"percursoId": 20, "competitionId": 36, "numero": 2, "nome": "", "distanciaM": 1500, "subidaM": 0},
             {"percursoId": 10, "competitionId": 36, "numero": 1, "nome": "", "distanciaM": 4000, "subidaM": 110},
             {"percursoId": 30, "competitionId": 36, "numero": 3, "nome": "", "distanciaM": 0, "subidaM": None},
+            {"percursoId": 40, "competitionId": 36, "numero": 4, "nome": "", "distanciaM": 800, "subidaM": 5},
         ],
         "categoriaPercurso": [
             {"competitionId": 36, "categoriaId": 2, "categoria": "D Adulto N", "percursoId": 20},
             {"competitionId": 36, "categoriaId": 1, "categoria": "H Adulto E", "percursoId": 10},
+            {"competitionId": 36, "categoriaId": 3, "categoria": "HN1", "percursoId": 40},
         ],
         "participacoes": [
-            {"competitionId": 36, "runnerPk": 2, "percursoId": 20, "statusCodigo": 0,
+            {"competitionId": 36, "runnerPk": 2, "percursoId": 20, "statusCodigo": 0, "categoria": "D Adulto N",
              "horaLargada": "09:00:00", "horaChegada": "09:23:01"},
-            {"competitionId": 36, "runnerPk": 1, "percursoId": 10, "statusCodigo": 0,
+            {"competitionId": 36, "runnerPk": 1, "percursoId": 10, "statusCodigo": 0, "categoria": "H Adulto E",
              "horaLargada": "09:00:00", "horaChegada": "10:03:26"},
-            {"competitionId": 36, "runnerPk": 3, "percursoId": 30, "statusCodigo": 3,
+            {"competitionId": 36, "runnerPk": 3, "percursoId": 30, "statusCodigo": 3, "categoria": "H Adulto E",
              "horaLargada": None, "horaChegada": None},
-            {"competitionId": 36, "runnerPk": 4, "percursoId": None, "statusCodigo": 3,
+            {"competitionId": 36, "runnerPk": 4, "percursoId": None, "statusCodigo": 3, "categoria": "H Adulto E",
              "horaLargada": None, "horaChegada": None},
+            {"competitionId": 36, "runnerPk": 8, "percursoId": 40, "statusCodigo": 0, "categoria": "HN1",
+             "horaLargada": "09:00:00", "horaChegada": "09:10:00"},
         ],
     }
 
@@ -84,6 +89,19 @@ class TestRitmo(unittest.TestCase):
         self.assertEqual(formatarRitmo(600), "10'00\"")
 
 
+class TestEscopoDaAnalise(unittest.TestCase):
+    def test_acompanhadas_e_abertas_sao_nao_competitivas(self):
+        for categoria in ("HN1", "HN2", "HN3", "DN1", "DN2", "DN3", " dn2 ", "Aberto C", "Aberto D", "Aberto H",
+                          "Aberto L"):
+            with self.subTest(categoria=categoria):
+                self.assertTrue(ehCategoriaNaoCompetitiva(categoria))
+
+    def test_categorias_competitivas_continuam(self):
+        for categoria in ("H Adulto E", "D Adulto N", "H Infant N", "H VIP A", "D Master B", "H Vet A", "D65B"):
+            with self.subTest(categoria=categoria):
+                self.assertFalse(ehCategoriaNaoCompetitiva(categoria))
+
+
 class TestMontarPercursos(unittest.TestCase):
     def test_zero_em_distancia_e_subida_vira_nulo_e_listas_saem_ordenadas(self):
         dados = montarPercursos(_bruto(), "Sintetico.mdb", HASH)
@@ -95,6 +113,20 @@ class TestMontarPercursos(unittest.TestCase):
         self.assertEqual([p["runnerPk"] for p in dados["participacoes"]], [1, 2, 3, 4])
         self.assertNotIn("statusCodigo", dados["participacoes"][0])
 
+    def test_categoria_nao_competitiva_fica_de_fora_com_o_percurso_que_so_ela_usava(self):
+        dados = montarPercursos(_bruto(), "Sintetico.mdb", HASH)
+        self.assertNotIn(8, [p["runnerPk"] for p in dados["participacoes"]])
+        self.assertNotIn("HN1", [c["categoria"] for c in dados["categoriaPercurso"]])
+        self.assertNotIn(40, [p["percursoId"] for p in dados["percursos"]])
+
+    def test_nao_competitiva_sem_percurso_ou_distancia_nao_recusa_a_extracao(self):
+        bruto = _bruto()
+        bruto["participacoes"].append({"competitionId": 36, "runnerPk": 11, "percursoId": None, "statusCodigo": 0,
+                                       "categoria": "DN2", "horaLargada": None, "horaChegada": None})
+        bruto["participacoes"].append({"competitionId": 36, "runnerPk": 12, "percursoId": None, "statusCodigo": 0,
+                                       "categoria": "Aberto D", "horaLargada": None, "horaChegada": None})
+        montarPercursos(bruto, "Sintetico.mdb", HASH)
+
     def test_quem_nao_concluiu_pode_ficar_sem_percurso_ou_sem_distancia(self):
         dados = montarPercursos(_bruto(), "Sintetico.mdb", HASH)
         self.assertIsNone(dados["participacoes"][3]["percursoId"])
@@ -102,11 +134,11 @@ class TestMontarPercursos(unittest.TestCase):
     def test_recusa_quem_concluiu_sem_percurso_com_percurso_inexistente_ou_sem_distancia(self):
         bruto = _bruto()
         bruto["participacoes"] = [
-            {"competitionId": 36, "runnerPk": 7, "percursoId": None, "statusCodigo": 0,
+            {"competitionId": 36, "runnerPk": 7, "percursoId": None, "statusCodigo": 0, "categoria": "H Adulto E",
              "horaLargada": None, "horaChegada": None},
-            {"competitionId": 36, "runnerPk": 8, "percursoId": 999, "statusCodigo": 0,
+            {"competitionId": 36, "runnerPk": 8, "percursoId": 999, "statusCodigo": 0, "categoria": "H Adulto E",
              "horaLargada": None, "horaChegada": None},
-            {"competitionId": 36, "runnerPk": 9, "percursoId": 30, "statusCodigo": 0,
+            {"competitionId": 36, "runnerPk": 9, "percursoId": 30, "statusCodigo": 0, "categoria": "H Adulto E",
              "horaLargada": None, "horaChegada": None},
         ]
         with self.assertRaises(EntradaInvalidaError) as ctx:
@@ -161,6 +193,16 @@ class TestCalcularRitmos(unittest.TestCase):
         self.assertEqual(motivos["Caio"], "não concluiu (NP)")
         self.assertEqual(motivos["Dani"], "sem tempo")
         self.assertEqual(motivos["Eva"], "sem percurso")
+
+    def test_categoria_nao_competitiva_nao_entra_nem_em_sem_ritmo(self):
+        dados = _dadosEtapas()
+        dados["registrosEtapas"].append({
+            "etapa": 2, "competitionId": 36, "runnerPk": 8, "cbo": 108, "nome": "Gui", "categoria": "HN1",
+            "statusCodigo": 0, "statusSigla": "OK", "tempoSegundos": 500,
+        })
+        percursos = montarPercursos(_bruto(), "Sintetico.mdb", HASH)
+        ritmos, semRitmo = calcularRitmos(dados, percursos)
+        self.assertNotIn("Gui", [r.nome for r in ritmos] + [s.nome for s in semRitmo])
 
     def test_atleta_na_mesma_categoria_usa_o_proprio_percurso(self):
         percursos = montarPercursos(_bruto(), "Sintetico.mdb", HASH)

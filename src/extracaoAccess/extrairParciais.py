@@ -18,6 +18,7 @@ RAIZ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 if RAIZ not in sys.path:
     sys.path.insert(0, RAIZ)
 
+from src.extracaoAccess.escopoAnalise import ehCategoriaNaoCompetitiva  # noqa: E402
 from src.extracaoAccess.extrairHelga import _caminhoPowerShell  # noqa: E402
 from src.extracaoAccess.inspecionarBanco import calcularSha256  # noqa: E402
 from src.extracaoAccess.validarEntrada import (  # noqa: E402
@@ -66,12 +67,13 @@ foreach ($r in (Get-Rows "SELECT Parcours_FK, Number, Order_Number, Distance FRO
 }
 
 $concluintes = @()
-foreach ($r in (Get-Rows "SELECT Competition_PK, Runner_PK, Parcours_FK, EmitBadge, Format(CourseTime, 'hh:nn:ss') AS Tempo FROM Course WHERE Competition_PK IN $etapas AND Status_FK = 0 ORDER BY Competition_PK, Runner_PK")) {
+foreach ($r in (Get-Rows "SELECT c.Competition_PK, c.Runner_PK, c.Parcours_FK, c.EmitBadge, cat.Name AS CatName, Format(c.CourseTime, 'hh:nn:ss') AS Tempo FROM Course c INNER JOIN Categories cat ON c.Category_FK = cat.ID WHERE c.Competition_PK IN $etapas AND c.Status_FK = 0 ORDER BY c.Competition_PK, c.Runner_PK")) {
     $concluintes += [ordered]@{
         competitionId = [int]$r.Competition_PK
         runnerPk = [int]$r.Runner_PK
         percursoId = IntOuNulo $r.Parcours_FK
         chip = IntOuNulo $r.EmitBadge
+        categoria = "$($r.CatName)".Trim()
         tempo = if ($r.Tempo -is [System.DBNull]) { $null } else { "$($r.Tempo)" }
     }
 }
@@ -142,7 +144,8 @@ def montarParciais(bruto: dict[str, Any], fonte: str, sha256Fonte: str) -> dict[
     Para cada concluinte vale a última leitura do chip (maior id). As parciais só são aceitas quando a soma,
     incluindo o posto de chegada (999), iguala o tempo oficial (tolerância de 1 s); caso contrário o concluinte
     vai para `ocorrencias`. Sequência de postos diferente da do percurso mantém as parciais, com
-    `postosConferem` falso e uma ocorrência. Nada é corrigido.
+    `postosConferem` falso e uma ocorrência. Nada é corrigido. Categorias não competitivas (acompanhadas e
+    abertas) ficam de fora, assim como os percursos que só elas usavam.
     """
     postosPorPercurso: dict[int, list[dict[str, Any]]] = {}
     for p in sorted(bruto["postos"], key=lambda p: (p["percursoId"], p["ordem"])):
@@ -167,7 +170,12 @@ def montarParciais(bruto: dict[str, Any], fonte: str, sha256Fonte: str) -> dict[
     def recusar(c: dict[str, Any], motivo: str) -> None:
         ocorrencias.append({"competitionId": c["competitionId"], "runnerPk": c["runnerPk"], "motivo": motivo})
 
-    for c in sorted(bruto["concluintes"], key=lambda c: (c["competitionId"], c["runnerPk"])):
+    concluintes = sorted(
+        (c for c in bruto["concluintes"] if not ehCategoriaNaoCompetitiva(c["categoria"])),
+        key=lambda c: (c["competitionId"], c["runnerPk"]),
+    )
+    percursosUsados = {c["percursoId"] for c in concluintes}
+    for c in concluintes:
         oficial = _segundosDoTempo(c["tempo"])
         if c["percursoId"] is None:
             recusar(c, "sem percurso")
@@ -205,7 +213,10 @@ def montarParciais(bruto: dict[str, Any], fonte: str, sha256Fonte: str) -> dict[
     dados: dict[str, Any] = {
         "fonte": fonte,
         "sha256Fonte": sha256Fonte,
-        "percursos": [{"percursoId": pid, "postos": postos} for pid, postos in sorted(postosPorPercurso.items())],
+        "percursos": [
+            {"percursoId": pid, "postos": postos} for pid, postos in sorted(postosPorPercurso.items())
+            if pid in percursosUsados
+        ],
         "participacoes": participacoes,
         "ocorrencias": ocorrencias,
     }

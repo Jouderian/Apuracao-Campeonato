@@ -18,6 +18,7 @@ RAIZ = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 if RAIZ not in sys.path:
     sys.path.insert(0, RAIZ)
 
+from src.extracaoAccess.escopoAnalise import ehCategoriaNaoCompetitiva  # noqa: E402
 from src.extracaoAccess.extrairHelga import _caminhoPowerShell  # noqa: E402
 from src.extracaoAccess.inspecionarBanco import calcularSha256  # noqa: E402
 from src.extracaoAccess.validarEntrada import (  # noqa: E402
@@ -83,12 +84,13 @@ foreach ($r in (Get-Rows "SELECT cp.Competition_PK, cp.Category_PK, cat.Name AS 
 }
 
 $participacoes = @()
-foreach ($r in (Get-Rows "SELECT Competition_PK, Runner_PK, Parcours_FK, Status_FK, Format(StartTime, 'hh:nn:ss') AS Largada, Format(FinishTime, 'hh:nn:ss') AS Chegada FROM Course WHERE Competition_PK IN $etapas ORDER BY Competition_PK, Runner_PK")) {
+foreach ($r in (Get-Rows "SELECT c.Competition_PK, c.Runner_PK, c.Parcours_FK, c.Status_FK, cat.Name AS CatName, Format(c.StartTime, 'hh:nn:ss') AS Largada, Format(c.FinishTime, 'hh:nn:ss') AS Chegada FROM Course c INNER JOIN Categories cat ON c.Category_FK = cat.ID WHERE c.Competition_PK IN $etapas ORDER BY c.Competition_PK, c.Runner_PK")) {
     $participacoes += [ordered]@{
         competitionId = [int]$r.Competition_PK
         runnerPk = [int]$r.Runner_PK
         percursoId = IntOuNulo $r.Parcours_FK
         statusCodigo = [int]$r.Status_FK
+        categoria = "$($r.CatName)".Trim()
         horaLargada = TextoOuNulo $r.Largada
         horaChegada = TextoOuNulo $r.Chegada
     }
@@ -127,7 +129,8 @@ def _valorOuNulo(valor: Any) -> int | None:
 def montarPercursos(bruto: dict[str, Any], fonte: str, sha256Fonte: str) -> dict[str, Any]:
     """Monta o JSON de percursos a partir da leitura bruta e recusa o que a Camada A não aceita.
 
-    Recusa (listando todos os problemas): participação que concluiu (`statusCodigo` 0) sem percurso, com
+    Categorias não competitivas (acompanhadas e abertas) ficam de fora (participações, vínculos
+    categoria-percurso e os percursos que só elas usavam). Recusa (listando todos os problemas): participação que concluiu (`statusCodigo` 0) sem percurso, com
     percurso inexistente ou sem distância. Quem não concluiu pode ficar sem percurso.
     """
     percursos = [
@@ -139,8 +142,14 @@ def montarPercursos(bruto: dict[str, Any], fonte: str, sha256Fonte: str) -> dict
     ]
     porId = {p["percursoId"]: p for p in percursos}
 
+    participacoesBrutas = [p for p in bruto["participacoes"] if not ehCategoriaNaoCompetitiva(p["categoria"])]
+    categoriaPercursoBruta = [c for c in bruto["categoriaPercurso"] if not ehCategoriaNaoCompetitiva(c["categoria"])]
+    usados = {c["percursoId"] for c in categoriaPercursoBruta} | {
+        p["percursoId"] for p in participacoesBrutas if p["percursoId"] is not None
+    }
+
     erros: list[str] = []
-    for part in bruto["participacoes"]:
+    for part in participacoesBrutas:
         if part["statusCodigo"] != STATUS_CONCLUIU:
             continue
         origem = f"competitionId {part['competitionId']}, runnerPk {part['runnerPk']}"
@@ -162,15 +171,15 @@ def montarPercursos(bruto: dict[str, Any], fonte: str, sha256Fonte: str) -> dict
             "competitionId": p["competitionId"], "runnerPk": p["runnerPk"], "percursoId": p["percursoId"],
             "horaLargada": p["horaLargada"], "horaChegada": p["horaChegada"],
         }
-        for p in sorted(bruto["participacoes"], key=lambda p: (p["competitionId"], p["runnerPk"]))
+        for p in sorted(participacoesBrutas, key=lambda p: (p["competitionId"], p["runnerPk"]))
     ]
     categoriaPercurso = sorted(
-        bruto["categoriaPercurso"], key=lambda c: (c["competitionId"], c["categoria"], c["categoriaId"]),
+        categoriaPercursoBruta, key=lambda c: (c["competitionId"], c["categoria"], c["categoriaId"]),
     )
     dados: dict[str, Any] = {
         "fonte": fonte,
         "sha256Fonte": sha256Fonte,
-        "percursos": percursos,
+        "percursos": [p for p in percursos if p["percursoId"] in usados],
         "categoriaPercurso": categoriaPercurso,
         "participacoes": participacoes,
     }

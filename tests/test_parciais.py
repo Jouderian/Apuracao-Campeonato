@@ -11,8 +11,10 @@ from src.extracaoAccess.validarEntrada import EntradaInvalidaError, validarDados
 HASH = "a" * 64
 
 
-def _concluinte(runnerPk: int, chip: int | None, tempo: str | None, percursoId: int | None = 10) -> dict[str, Any]:
-    return {"competitionId": 36, "runnerPk": runnerPk, "percursoId": percursoId, "chip": chip, "tempo": tempo}
+def _concluinte(runnerPk: int, chip: int | None, tempo: str | None, percursoId: int | None = 10,
+                categoria: str = "H Adulto E") -> dict[str, Any]:
+    return {"competitionId": 36, "runnerPk": runnerPk, "percursoId": percursoId, "chip": chip, "tempo": tempo,
+            "categoria": categoria}
 
 
 def _passagens(leituraId: int, trechos: list[tuple[int, int | None]]) -> list[dict[str, Any]]:
@@ -29,6 +31,7 @@ def _bruto() -> dict[str, Any]:
             {"percursoId": 10, "ordem": 1, "codigoPosto": 31, "distanciaM": 400},
             {"percursoId": 10, "ordem": 2, "codigoPosto": 32, "distanciaM": 600},
             {"percursoId": 10, "ordem": 3, "codigoPosto": 999, "distanciaM": 0},
+            {"percursoId": 50, "ordem": 1, "codigoPosto": 41, "distanciaM": 300},
         ],
         "concluintes": [
             _concluinte(1, 111, "00:10:00"),    # duas leituras: vale a última
@@ -38,6 +41,7 @@ def _bruto() -> dict[str, Any]:
             _concluinte(5, 555, "00:09:00"),    # chip sem leitura no banco
             _concluinte(6, 666, "00:10:00", percursoId=None),
             _concluinte(7, 777, "00:10:01"),    # diferença de 1 s: aceita
+            _concluinte(8, None, "00:05:00", percursoId=50, categoria="DN1"),   # não competitiva: fora da análise
         ],
         "leituras": [
             {"leituraId": 1, "competitionId": 36, "chip": 111},
@@ -61,6 +65,11 @@ class TestMontarParciais(unittest.TestCase):
         self.dados = montarParciais(_bruto(), "Sintetico.mdb", HASH)
         self.participacoes = {p["runnerPk"]: p for p in self.dados["participacoes"]}
         self.motivos = {o["runnerPk"]: o["motivo"] for o in self.dados["ocorrencias"]}
+
+    def test_categoria_nao_competitiva_fica_de_fora_com_o_percurso_que_so_ela_usava(self):
+        self.assertNotIn(8, self.participacoes)
+        self.assertNotIn(8, self.motivos)
+        self.assertEqual([p["percursoId"] for p in self.dados["percursos"]], [10])
 
     def test_vale_a_ultima_leitura_do_chip(self):
         passagens = self.participacoes[1]["passagens"]
