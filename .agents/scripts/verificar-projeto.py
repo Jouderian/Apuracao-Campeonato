@@ -173,7 +173,11 @@ def checar_origem_extraidos(raiz):
 # --------------------------------------------------------------------------
 def checar_extraidos_validos(raiz):
     sys.path.insert(0, raiz)
-    from src.extracaoAccess.validarEntrada import EntradaInvalidaError, validarDadosHelga
+    from src.extracaoAccess.validarEntrada import (
+        EntradaInvalidaError,
+        validarDadosHelga,
+        validarDadosPercursos,
+    )
 
     pasta_dados = os.path.join(raiz, 'Dados')
     for ano in sorted(os.listdir(pasta_dados)):
@@ -184,8 +188,10 @@ def checar_extraidos_validos(raiz):
             if not nome.endswith('.json'):
                 continue
             rel = f'Dados/{ano}/extraidos/{nome}'
+            # percursosHelga<ano>.json (análise de desempenho) tem estrutura própria.
+            validar = validarDadosPercursos if nome.startswith('percursosHelga') else validarDadosHelga
             try:
-                validarDadosHelga(ler_json(os.path.join(pasta, nome)))
+                validar(ler_json(os.path.join(pasta, nome)))
             except (OSError, ValueError, EntradaInvalidaError) as erro:
                 falha(rel, 0, f'extraído recusado pela validação das entradas: {erro}')
 
