@@ -1248,66 +1248,6 @@
       ]
     },
     {
-      "percursoId": 3348,
-      "postos": [
-        {
-          "ordem": 1,
-          "codigoPosto": 39,
-          "distanciaM": 310
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 36,
-          "distanciaM": 286
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 42,
-          "distanciaM": 228
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 45,
-          "distanciaM": 191
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 43,
-          "distanciaM": 148
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 46,
-          "distanciaM": 199
-        },
-        {
-          "ordem": 7,
-          "codigoPosto": 51,
-          "distanciaM": 151
-        },
-        {
-          "ordem": 8,
-          "codigoPosto": 50,
-          "distanciaM": 150
-        },
-        {
-          "ordem": 9,
-          "codigoPosto": 38,
-          "distanciaM": 354
-        },
-        {
-          "ordem": 10,
-          "codigoPosto": 95,
-          "distanciaM": 156
-        },
-        {
-          "ordem": 11,
-          "codigoPosto": 999,
-          "distanciaM": 113
-        }
-      ]
-    },
-    {
       "percursoId": 3349,
       "postos": [
         {
@@ -1582,71 +1522,6 @@
         },
         {
           "ordem": 16,
-          "codigoPosto": 999,
-          "distanciaM": 113
-        }
-      ]
-    },
-    {
-      "percursoId": 3352,
-      "postos": [
-        {
-          "ordem": 1,
-          "codigoPosto": 47,
-          "distanciaM": 295
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 31,
-          "distanciaM": 209
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 33,
-          "distanciaM": 209
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 36,
-          "distanciaM": 373
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 41,
-          "distanciaM": 267
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 44,
-          "distanciaM": 274
-        },
-        {
-          "ordem": 7,
-          "codigoPosto": 37,
-          "distanciaM": 219
-        },
-        {
-          "ordem": 8,
-          "codigoPosto": 51,
-          "distanciaM": 186
-        },
-        {
-          "ordem": 9,
-          "codigoPosto": 39,
-          "distanciaM": 212
-        },
-        {
-          "ordem": 10,
-          "codigoPosto": 92,
-          "distanciaM": 292
-        },
-        {
-          "ordem": 11,
-          "codigoPosto": 95,
-          "distanciaM": 201
-        },
-        {
-          "ordem": 12,
           "codigoPosto": 999,
           "distanciaM": 113
         }
@@ -9776,40 +9651,6 @@
     },
     {
       "competitionId": 35,
-      "runnerPk": 134155,
-      "percursoId": 3353,
-      "tempoOficialSegundos": 1874,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 35,
-          "tempoParcialSegundos": 445
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 39,
-          "tempoParcialSegundos": 362
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 47,
-          "tempoParcialSegundos": 348
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 38,
-          "tempoParcialSegundos": 453
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 266
-        }
-      ],
-      "postosConferem": false
-    },
-    {
-      "competitionId": 35,
       "runnerPk": 134251,
       "percursoId": 3339,
       "tempoOficialSegundos": 2714,
@@ -10946,45 +10787,6 @@
           "ordem": 17,
           "codigoPosto": 999,
           "tempoParcialSegundos": 18
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 35,
-      "runnerPk": 137633,
-      "percursoId": 3353,
-      "tempoOficialSegundos": 1815,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 35,
-          "tempoParcialSegundos": 375
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 39,
-          "tempoParcialSegundos": 356
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 47,
-          "tempoParcialSegundos": 345
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 38,
-          "tempoParcialSegundos": 414
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 292
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 33
         }
       ],
       "postosConferem": true
@@ -15135,75 +14937,6 @@
     },
     {
       "competitionId": 35,
-      "runnerPk": 138829,
-      "percursoId": 3352,
-      "tempoOficialSegundos": 5097,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 47,
-          "tempoParcialSegundos": 652
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 31,
-          "tempoParcialSegundos": 318
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 33,
-          "tempoParcialSegundos": 244
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 36,
-          "tempoParcialSegundos": 290
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 41,
-          "tempoParcialSegundos": 334
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 44,
-          "tempoParcialSegundos": 1109
-        },
-        {
-          "ordem": 7,
-          "codigoPosto": 37,
-          "tempoParcialSegundos": 983
-        },
-        {
-          "ordem": 8,
-          "codigoPosto": 51,
-          "tempoParcialSegundos": 195
-        },
-        {
-          "ordem": 9,
-          "codigoPosto": 39,
-          "tempoParcialSegundos": 520
-        },
-        {
-          "ordem": 10,
-          "codigoPosto": 92,
-          "tempoParcialSegundos": 217
-        },
-        {
-          "ordem": 11,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 216
-        },
-        {
-          "ordem": 12,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 19
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 35,
       "runnerPk": 138830,
       "percursoId": 3353,
       "tempoOficialSegundos": 3280,
@@ -15315,162 +15048,6 @@
           "ordem": 6,
           "codigoPosto": 999,
           "tempoParcialSegundos": 24
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 35,
-      "runnerPk": 138834,
-      "percursoId": 3353,
-      "tempoOficialSegundos": 1865,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 35,
-          "tempoParcialSegundos": 420
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 39,
-          "tempoParcialSegundos": 351
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 47,
-          "tempoParcialSegundos": 353
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 38,
-          "tempoParcialSegundos": 408
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 304
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 29
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 35,
-      "runnerPk": 138835,
-      "percursoId": 3353,
-      "tempoOficialSegundos": 1883,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 35,
-          "tempoParcialSegundos": 419
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 39,
-          "tempoParcialSegundos": 350
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 47,
-          "tempoParcialSegundos": 353
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 38,
-          "tempoParcialSegundos": 419
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 315
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 27
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 35,
-      "runnerPk": 138836,
-      "percursoId": 3353,
-      "tempoOficialSegundos": 1881,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 35,
-          "tempoParcialSegundos": 431
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 39,
-          "tempoParcialSegundos": 380
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 47,
-          "tempoParcialSegundos": 331
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 38,
-          "tempoParcialSegundos": 400
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 309
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 30
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 35,
-      "runnerPk": 138837,
-      "percursoId": 3353,
-      "tempoOficialSegundos": 1933,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 35,
-          "tempoParcialSegundos": 466
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 39,
-          "tempoParcialSegundos": 320
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 47,
-          "tempoParcialSegundos": 360
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 38,
-          "tempoParcialSegundos": 447
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 272
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 68
         }
       ],
       "postosConferem": true
@@ -23859,55 +23436,6 @@
     },
     {
       "competitionId": 36,
-      "runnerPk": 138833,
-      "percursoId": 3368,
-      "tempoOficialSegundos": 1170,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 33,
-          "tempoParcialSegundos": 324
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 64,
-          "tempoParcialSegundos": 47
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 69,
-          "tempoParcialSegundos": 107
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 92,
-          "tempoParcialSegundos": 104
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 31,
-          "tempoParcialSegundos": 265
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 62,
-          "tempoParcialSegundos": 176
-        },
-        {
-          "ordem": 7,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 80
-        },
-        {
-          "ordem": 8,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 67
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 36,
       "runnerPk": 138839,
       "percursoId": 3360,
       "tempoOficialSegundos": 10239,
@@ -24150,104 +23678,6 @@
     },
     {
       "competitionId": 36,
-      "runnerPk": 138844,
-      "percursoId": 3368,
-      "tempoOficialSegundos": 1060,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 33,
-          "tempoParcialSegundos": 332
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 64,
-          "tempoParcialSegundos": 77
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 69,
-          "tempoParcialSegundos": 89
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 92,
-          "tempoParcialSegundos": 112
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 31,
-          "tempoParcialSegundos": 219
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 62,
-          "tempoParcialSegundos": 81
-        },
-        {
-          "ordem": 7,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 78
-        },
-        {
-          "ordem": 8,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 72
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 36,
-      "runnerPk": 138845,
-      "percursoId": 3368,
-      "tempoOficialSegundos": 1060,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 33,
-          "tempoParcialSegundos": 323
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 64,
-          "tempoParcialSegundos": 65
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 69,
-          "tempoParcialSegundos": 99
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 92,
-          "tempoParcialSegundos": 122
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 31,
-          "tempoParcialSegundos": 219
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 62,
-          "tempoParcialSegundos": 92
-        },
-        {
-          "ordem": 7,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 61
-        },
-        {
-          "ordem": 8,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 79
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 36,
       "runnerPk": 138846,
       "percursoId": 3367,
       "tempoOficialSegundos": 1030,
@@ -24296,153 +23726,6 @@
           "ordem": 9,
           "codigoPosto": 999,
           "tempoParcialSegundos": 63
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 36,
-      "runnerPk": 138847,
-      "percursoId": 3368,
-      "tempoOficialSegundos": 994,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 33,
-          "tempoParcialSegundos": 272
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 64,
-          "tempoParcialSegundos": 59
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 69,
-          "tempoParcialSegundos": 68
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 92,
-          "tempoParcialSegundos": 101
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 31,
-          "tempoParcialSegundos": 334
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 62,
-          "tempoParcialSegundos": 53
-        },
-        {
-          "ordem": 7,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 59
-        },
-        {
-          "ordem": 8,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 48
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 36,
-      "runnerPk": 138848,
-      "percursoId": 3368,
-      "tempoOficialSegundos": 996,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 33,
-          "tempoParcialSegundos": 271
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 64,
-          "tempoParcialSegundos": 58
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 69,
-          "tempoParcialSegundos": 73
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 92,
-          "tempoParcialSegundos": 96
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 31,
-          "tempoParcialSegundos": 301
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 62,
-          "tempoParcialSegundos": 93
-        },
-        {
-          "ordem": 7,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 55
-        },
-        {
-          "ordem": 8,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 49
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 36,
-      "runnerPk": 138849,
-      "percursoId": 3368,
-      "tempoOficialSegundos": 923,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 33,
-          "tempoParcialSegundos": 262
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 64,
-          "tempoParcialSegundos": 62
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 69,
-          "tempoParcialSegundos": 78
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 92,
-          "tempoParcialSegundos": 86
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 31,
-          "tempoParcialSegundos": 178
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 62,
-          "tempoParcialSegundos": 134
-        },
-        {
-          "ordem": 7,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 71
-        },
-        {
-          "ordem": 8,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 52
         }
       ],
       "postosConferem": true
@@ -24507,104 +23790,6 @@
           "ordem": 11,
           "codigoPosto": 999,
           "tempoParcialSegundos": 60
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 36,
-      "runnerPk": 138852,
-      "percursoId": 3368,
-      "tempoOficialSegundos": 1073,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 33,
-          "tempoParcialSegundos": 287
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 64,
-          "tempoParcialSegundos": 59
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 69,
-          "tempoParcialSegundos": 82
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 92,
-          "tempoParcialSegundos": 106
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 31,
-          "tempoParcialSegundos": 288
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 62,
-          "tempoParcialSegundos": 99
-        },
-        {
-          "ordem": 7,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 77
-        },
-        {
-          "ordem": 8,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 75
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 36,
-      "runnerPk": 138853,
-      "percursoId": 3368,
-      "tempoOficialSegundos": 942,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 33,
-          "tempoParcialSegundos": 191
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 64,
-          "tempoParcialSegundos": 42
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 69,
-          "tempoParcialSegundos": 52
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 92,
-          "tempoParcialSegundos": 384
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 31,
-          "tempoParcialSegundos": 107
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 62,
-          "tempoParcialSegundos": 68
-        },
-        {
-          "ordem": 7,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 51
-        },
-        {
-          "ordem": 8,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 47
         }
       ],
       "postosConferem": true
@@ -30138,45 +29323,6 @@
     },
     {
       "competitionId": 37,
-      "runnerPk": 134155,
-      "percursoId": 3388,
-      "tempoOficialSegundos": 1840,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 32,
-          "tempoParcialSegundos": 524
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 35,
-          "tempoParcialSegundos": 431
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 34,
-          "tempoParcialSegundos": 323
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 33,
-          "tempoParcialSegundos": 354
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 166
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 42
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 37,
       "runnerPk": 134251,
       "percursoId": 3375,
       "tempoOficialSegundos": 4769,
@@ -34775,123 +33921,6 @@
     },
     {
       "competitionId": 37,
-      "runnerPk": 138833,
-      "percursoId": 3388,
-      "tempoOficialSegundos": 1835,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 32,
-          "tempoParcialSegundos": 513
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 35,
-          "tempoParcialSegundos": 427
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 34,
-          "tempoParcialSegundos": 331
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 33,
-          "tempoParcialSegundos": 364
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 151
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 49
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 37,
-      "runnerPk": 138836,
-      "percursoId": 3388,
-      "tempoOficialSegundos": 1839,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 32,
-          "tempoParcialSegundos": 513
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 35,
-          "tempoParcialSegundos": 431
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 34,
-          "tempoParcialSegundos": 331
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 33,
-          "tempoParcialSegundos": 363
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 154
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 47
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 37,
-      "runnerPk": 138837,
-      "percursoId": 3388,
-      "tempoOficialSegundos": 1858,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 32,
-          "tempoParcialSegundos": 524
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 35,
-          "tempoParcialSegundos": 427
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 34,
-          "tempoParcialSegundos": 317
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 33,
-          "tempoParcialSegundos": 356
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 180
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 54
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 37,
       "runnerPk": 138840,
       "percursoId": 3378,
       "tempoOficialSegundos": 5977,
@@ -35588,45 +34617,6 @@
           "ordem": 14,
           "codigoPosto": 999,
           "tempoParcialSegundos": 45
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 37,
-      "runnerPk": 138858,
-      "percursoId": 3388,
-      "tempoOficialSegundos": 1867,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 32,
-          "tempoParcialSegundos": 516
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 35,
-          "tempoParcialSegundos": 429
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 34,
-          "tempoParcialSegundos": 297
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 33,
-          "tempoParcialSegundos": 392
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 163
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 70
         }
       ],
       "postosConferem": true
@@ -40416,60 +39406,6 @@
     },
     {
       "competitionId": 38,
-      "runnerPk": 136266,
-      "percursoId": 3404,
-      "tempoOficialSegundos": 1998,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 37,
-          "tempoParcialSegundos": 249
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 36,
-          "tempoParcialSegundos": 209
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 39,
-          "tempoParcialSegundos": 209
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 42,
-          "tempoParcialSegundos": 248
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 52,
-          "tempoParcialSegundos": 210
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 43,
-          "tempoParcialSegundos": 259
-        },
-        {
-          "ordem": 7,
-          "codigoPosto": 54,
-          "tempoParcialSegundos": 331
-        },
-        {
-          "ordem": 8,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 235
-        },
-        {
-          "ordem": 9,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 48
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 38,
       "runnerPk": 136353,
       "percursoId": 3397,
       "tempoOficialSegundos": 5815,
@@ -43595,114 +42531,6 @@
     },
     {
       "competitionId": 38,
-      "runnerPk": 138833,
-      "percursoId": 3404,
-      "tempoOficialSegundos": 1962,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 37,
-          "tempoParcialSegundos": 236
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 36,
-          "tempoParcialSegundos": 233
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 39,
-          "tempoParcialSegundos": 184
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 42,
-          "tempoParcialSegundos": 237
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 52,
-          "tempoParcialSegundos": 222
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 43,
-          "tempoParcialSegundos": 246
-        },
-        {
-          "ordem": 7,
-          "codigoPosto": 54,
-          "tempoParcialSegundos": 307
-        },
-        {
-          "ordem": 8,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 261
-        },
-        {
-          "ordem": 9,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 36
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 38,
-      "runnerPk": 138836,
-      "percursoId": 3404,
-      "tempoOficialSegundos": 1959,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 37,
-          "tempoParcialSegundos": 222
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 36,
-          "tempoParcialSegundos": 228
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 39,
-          "tempoParcialSegundos": 194
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 42,
-          "tempoParcialSegundos": 242
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 52,
-          "tempoParcialSegundos": 221
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 43,
-          "tempoParcialSegundos": 248
-        },
-        {
-          "ordem": 7,
-          "codigoPosto": 54,
-          "tempoParcialSegundos": 304
-        },
-        {
-          "ordem": 8,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 263
-        },
-        {
-          "ordem": 9,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 37
-        }
-      ],
-      "postosConferem": true
-    },
-    {
-      "competitionId": 38,
       "runnerPk": 138842,
       "percursoId": 3403,
       "tempoOficialSegundos": 1079,
@@ -44456,60 +43284,6 @@
         }
       ],
       "postosConferem": true
-    },
-    {
-      "competitionId": 38,
-      "runnerPk": 138875,
-      "percursoId": 3404,
-      "tempoOficialSegundos": 1842,
-      "passagens": [
-        {
-          "ordem": 1,
-          "codigoPosto": 37,
-          "tempoParcialSegundos": 207
-        },
-        {
-          "ordem": 2,
-          "codigoPosto": 36,
-          "tempoParcialSegundos": 234
-        },
-        {
-          "ordem": 3,
-          "codigoPosto": 39,
-          "tempoParcialSegundos": 195
-        },
-        {
-          "ordem": 4,
-          "codigoPosto": 42,
-          "tempoParcialSegundos": 191
-        },
-        {
-          "ordem": 5,
-          "codigoPosto": 52,
-          "tempoParcialSegundos": 247
-        },
-        {
-          "ordem": 6,
-          "codigoPosto": 43,
-          "tempoParcialSegundos": 212
-        },
-        {
-          "ordem": 7,
-          "codigoPosto": 54,
-          "tempoParcialSegundos": 344
-        },
-        {
-          "ordem": 8,
-          "codigoPosto": 95,
-          "tempoParcialSegundos": 175
-        },
-        {
-          "ordem": 9,
-          "codigoPosto": 999,
-          "tempoParcialSegundos": 37
-        }
-      ],
-      "postosConferem": true
     }
   ],
   "ocorrencias": [
@@ -44530,11 +43304,6 @@
     },
     {
       "competitionId": 35,
-      "runnerPk": 134155,
-      "motivo": "sequência de postos lida difere da do percurso"
-    },
-    {
-      "competitionId": 35,
       "runnerPk": 137237,
       "motivo": "soma das parciais (17722 s) diverge do tempo oficial (6966 s)"
     },
@@ -44547,11 +43316,6 @@
       "competitionId": 35,
       "runnerPk": 138782,
       "motivo": "sequência de postos lida difere da do percurso"
-    },
-    {
-      "competitionId": 35,
-      "runnerPk": 138833,
-      "motivo": "soma das parciais (1895 s) diverge do tempo oficial (1902 s)"
     },
     {
       "competitionId": 36,
@@ -44580,28 +43344,13 @@
     },
     {
       "competitionId": 36,
-      "runnerPk": 134155,
-      "motivo": "soma das parciais (1352 s) diverge do tempo oficial (186 s)"
-    },
-    {
-      "competitionId": 36,
       "runnerPk": 136129,
       "motivo": "sequência de postos lida difere da do percurso"
     },
     {
       "competitionId": 36,
-      "runnerPk": 136266,
-      "motivo": "soma das parciais (44020 s) diverge do tempo oficial (820 s)"
-    },
-    {
-      "competitionId": 36,
       "runnerPk": 138781,
       "motivo": "sequência de postos lida difere da do percurso"
-    },
-    {
-      "competitionId": 36,
-      "runnerPk": 138836,
-      "motivo": "soma das parciais (1541 s) diverge do tempo oficial (159 s)"
     },
     {
       "competitionId": 37,
