@@ -21,6 +21,10 @@ Dados/*/resultados/resultadoParcial*.pdf
 Dados/2026/resultados/resultadoClubesCCO.*
 Dados/2026/resultados/apuracaoCampeonato2026.xlsx
 
+# Base SQLite de análise de desempenho: derivada e reconstruível a partir dos JSON (ADR-009)
+Dados/analise/*.sqlite
+Dados/analise/*.sqlite.tmp
+
 # Arquivos temporários de Office e sistema
 ~$*.doc
 ~$*.docx
