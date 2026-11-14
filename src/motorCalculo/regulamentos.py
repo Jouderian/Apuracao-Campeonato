@@ -80,6 +80,38 @@ class RegrasRegulamento:
         return f"{self.competicao} {self.ano}"
 
 
+REGRAS_CCO_2024 = RegrasRegulamento(
+    ano=2024,
+    competicao="CCO",
+    nomeRegulamento="Regulamento do XVIII Campeonato Cearense de Orientação (2024)",
+    arquivoFonte="Documentos/2024/regulamentoCCO.md",
+    artigos=ArtigosRegulamento(
+        pontuacao="Art. 34",
+        trocaCategoria="Art. 35",
+        voluntarios="Art. 36",
+        voluntariosMinimo="Art. 36, § 1º",
+        classificacaoGeral="Art. 38",
+        desempateIndividual="Art. 38, Parágrafo Único",
+        clubes="Art. 37",
+        desempateClubes="Art. 39, Parágrafo Único",
+        premiacao="Art. 42, § 2º",
+        penalidadeChegada="Art. 20, Parágrafo Único",
+        percursoAnulado="Art. 34, § 1º",
+        naoClassificado="Art. 34, § 2º",
+        descarte=None,
+    ),
+    tabelaPontos=TABELA_PONTOS_26_PRIMEIROS,
+    pontosDaPosicaoSeguinteEmDiante=10,
+    pontosParticipacao=1,
+    etapasRealizadasParaDescarte=None,
+    minimoMetadeArredondaPara="cima",
+    voluntarioContaEtapaDeApoioNoMinimo=False,
+    mediaVoluntarioDivideEntre="todasAsOutras",
+    arredondaMediaVoluntario=True,
+    desempateIndividual="primeirosLugares",
+    federacaoExigidaDoClube="FECORI",
+)
+
 REGRAS_CCO_2025 = RegrasRegulamento(
     ano=2025,
     competicao="CCO",
@@ -150,7 +182,7 @@ REGRAS_CCO_2026 = RegrasRegulamento(
 )
 
 REGRAS_POR_EDICAO: dict[tuple[int, str], RegrasRegulamento] = {
-    (r.ano, r.competicao): r for r in (REGRAS_CCO_2025, REGRAS_CCO_2026)
+    (r.ano, r.competicao): r for r in (REGRAS_CCO_2024, REGRAS_CCO_2025, REGRAS_CCO_2026)
 }
 
 

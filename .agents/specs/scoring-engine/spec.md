@@ -17,18 +17,18 @@ Este repositório complementa o [Regulamentos-de-Orientacao](https://github.com/
 4. **Para registrar um ano novo:** ler o regulamento daquele ano, comparar com os já mapeados (tabela abaixo), registrar o conjunto de regras com os artigos, atualizar esta spec e criar testes. Interpretação de regra esportiva ambígua vai para ADR ([ADR-005](../../wiki/decisions/ADR-005-regulamento-por-ano-na-apuracao.md)).
 
 ### Diferenças entre os regulamentos mapeados (CCO)
-| Tema | 2025 (XIX CCO) | 2026 (XX CCO) |
-| :--- | :--- | :--- |
-| Pontuação por etapa | Art. 34 (tabela de 40 a 11; 10 a partir do 27º; 1 ponto para anulado/não classificado) | Art. 31 (mesma tabela e valores) |
-| Troca de categoria | Art. 35 | Art. 32 |
-| Voluntários e árbitros | Art. 36: média das outras etapas, dividida por **todas** as outras etapas realizadas (0 nas sem inscrição e na outra etapa de apoio); o voluntário precisa **competir** em metade das etapas (arredondada para cima); a etapa de apoio **não** conta no mínimo | Art. 33: média das etapas em que se inscreveu, após descarte; metade das etapas realizadas, arredondando para baixo; a etapa de apoio conta |
-| Descarte | **Não há** (Art. 38: "sem descartes") | 1 etapa, se o campeonato tiver mais de 3 etapas realizadas (Art. 34) |
-| Penalidade de não registrar chegada | Art. 20, Parágrafo Único (etapa não passível de descarte; sem efeito prático por não haver descarte) | Art. 23, Parágrafo Único |
-| Clubes | Art. 37 e Art. 39: 3 melhores atletas filiados por categoria, por etapa; só clubes filiados à FECORI (Art. 40); atletas distintos | Art. 35: 3 melhores filiados por categoria, por etapa; clubes filiados à CBO; atletas distintos |
-| Desempate individual | Art. 38, Parágrafo Único: mais 1ºs lugares, depois 2ºs e assim por diante; melhor resultado no último confronto direto; maior idade | Art. 34, § 2º: melhor resultado no último percurso, percursos anteriores sucessivamente; maior idade |
-| Desempate de clubes | Art. 39, Parágrafo Único: mais 1ºs lugares, depois 2ºs | Art. 35, Parágrafo Único (idem) |
-| Premiação final | Art. 42, § 1º | Art. 39, § 1º |
-| Premiação dos atletas | Art. 42: medalhas (troféu só para clubes, Art. 41) | Art. 38: medalhas (troféu só para clubes, Art. 39) |
+| Tema | 2024 (XVIII CCO) | 2025 (XIX CCO) | 2026 (XX CCO) |
+| :--- | :--- | :--- | :--- |
+| Pontuação por etapa | Art. 34 (tabela de 40 a 11; 10 a partir do 27º; 1 ponto para anulado/não classificado) | Art. 34 (mesma tabela e valores) | Art. 31 (mesma tabela e valores) |
+| Troca de categoria | Art. 35 | Art. 35 | Art. 32 |
+| Voluntários e árbitros | Art. 36: média das outras etapas, dividida por **todas** as outras etapas realizadas; o voluntário precisa **competir** em metade das etapas (arredondada para cima); a etapa de apoio **não** conta no mínimo | Art. 36: mesma regra de 2024 | Art. 33: média das etapas em que se inscreveu, após descarte; metade das etapas realizadas, arredondando para baixo; a etapa de apoio conta |
+| Descarte | **Não há** (Art. 38: "sem descartes") | **Não há** (Art. 38: "sem descartes") | 1 etapa, se o campeonato tiver mais de 3 etapas realizadas (Art. 34) |
+| Penalidade de não registrar chegada | Art. 20, Parágrafo Único (etapa não passível de descarte) | Art. 20, Parágrafo Único (idem) | Art. 23, Parágrafo Único |
+| Clubes | Art. 37 e Art. 39: 3 melhores atletas filiados por categoria, por etapa; só clubes filiados à FECORI (Art. 40); atletas distintos | Art. 37 e Art. 39 (idem) | Art. 35: 3 melhores filiados por categoria, por etapa; clubes filiados à CBO; atletas distintos |
+| Desempate individual | Art. 38, Parágrafo Único: mais 1ºs lugares, depois 2ºs e assim por diante; melhor resultado no último confronto direto; maior idade | Art. 38, Parágrafo Único (idem) | Art. 34, § 2º: melhor resultado no último percurso, percursos anteriores sucessivamente; maior idade |
+| Desempate de clubes | Art. 39, Parágrafo Único: mais 1ºs lugares, depois 2ºs | Art. 39, Parágrafo Único (idem) | Art. 35, Parágrafo Único (idem) |
+| Premiação final | Art. 42, § 2º | Art. 42, § 1º | Art. 39, § 1º |
+| Premiação dos atletas | Art. 42: troféu para o 1º, medalhas para 2º e 3º | Art. 42: medalhas (troféu só para clubes, Art. 41) | Art. 38: medalhas (troféu só para clubes, Art. 39) |
 
 ## Regras de Negócio
 As regras abaixo descrevem o comportamento comum e, onde diferem, indicam o ano. Os artigos citados sem ano são os de 2026; a tabela acima traz os de 2025.

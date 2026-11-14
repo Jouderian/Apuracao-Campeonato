@@ -22,6 +22,7 @@ from src.motorCalculo.pontuacao import (
     temDireitoDescarteCCO,
 )
 from src.motorCalculo.regulamentos import (
+    REGRAS_CCO_2024,
     REGRAS_CCO_2025,
     REGRAS_CCO_2026,
     RegulamentoNaoMapeadoError,
@@ -55,15 +56,17 @@ def _fichas(resultado) -> dict:
 
 
 class TestRegistroDeRegras(unittest.TestCase):
-    def test_2025_e_2026_estao_registrados_com_seus_artigos(self):
+    def test_2024_2025_e_2026_estao_registrados_com_seus_artigos(self):
+        self.assertIs(obterRegras(2024), REGRAS_CCO_2024)
         self.assertIs(obterRegras(2025), REGRAS_CCO_2025)
         self.assertIs(obterRegras(2026, "cco"), REGRAS_CCO_2026)
-        self.assertEqual(anosMapeados(), [2025, 2026])
+        self.assertEqual(anosMapeados(), [2024, 2025, 2026])
+        self.assertEqual(REGRAS_CCO_2024.artigos.voluntarios, "Art. 36")
         self.assertEqual(REGRAS_CCO_2025.artigos.voluntarios, "Art. 36")
         self.assertEqual(REGRAS_CCO_2026.artigos.voluntarios, "Art. 33")
 
     def test_ano_sem_regras_e_recusado_sem_usar_ano_vizinho(self):
-        for ano in (2024, 2027):
+        for ano in (2023, 2027):
             with self.assertRaises(RegulamentoNaoMapeadoError) as ctx:
                 obterRegras(ano)
             self.assertIn(str(ano), str(ctx.exception))
@@ -75,7 +78,7 @@ class TestRegistroDeRegras(unittest.TestCase):
 
     def test_cli_recusa_ano_sem_regras_antes_de_ler_dados(self):
         erro = io.StringIO()
-        with mock.patch("sys.argv", ["apurarCampeonato.py", "--ano", "2024"]), redirect_stderr(erro):
+        with mock.patch("sys.argv", ["apurarCampeonato.py", "--ano", "2023"]), redirect_stderr(erro):
             self.assertEqual(apurarCampeonato.main(), 1)
         self.assertIn("Regulamento não mapeado", erro.getvalue())
 
@@ -86,14 +89,16 @@ class TestRegistroDeRegras(unittest.TestCase):
 
 
 class TestRegrasDeCadaAno(unittest.TestCase):
-    def test_2025_nunca_tem_descarte_e_2026_so_com_mais_de_3_etapas(self):
+    def test_2024_e_2025_nunca_tem_descarte_e_2026_so_com_mais_de_3_etapas(self):
         for etapas in (1, 3, 4, 8):
+            self.assertFalse(temDireitoDescarteCCO(etapas, REGRAS_CCO_2024))
             self.assertFalse(temDireitoDescarteCCO(etapas, REGRAS_CCO_2025))
         self.assertFalse(temDireitoDescarteCCO(3, REGRAS_CCO_2026))
         self.assertTrue(temDireitoDescarteCCO(4, REGRAS_CCO_2026))
 
-    def test_minimo_de_metade_arredonda_para_baixo_em_2026_e_para_cima_em_2025(self):
+    def test_minimo_de_metade_arredonda_para_baixo_em_2026_e_para_cima_em_2024_e_2025(self):
         self.assertEqual([calcularMinimoMetadeEtapas(n, REGRAS_CCO_2026) for n in (3, 4, 5)], [1, 2, 2])
+        self.assertEqual([calcularMinimoMetadeEtapas(n, REGRAS_CCO_2024) for n in (3, 4, 5)], [2, 2, 3])
         self.assertEqual([calcularMinimoMetadeEtapas(n, REGRAS_CCO_2025) for n in (3, 4, 5)], [2, 2, 3])
 
     def test_tabela_de_pontos_de_2025(self):
