@@ -27,6 +27,7 @@ description: Índice da base de conhecimento do projeto — decisões arquitetur
 | Página | Resumo |
 | :--- | :--- |
 | [Esquema do Banco Access](schema-access.md) | Mapeamento das tabelas, colunas e códigos de status do arquivo `.mdb`/`.accdb` do software de apuração |
+| [Dicionário de dados da análise de desempenho](dicionario-dados-analise.md) | Tabelas, colunas, unidades, regras de leitura e consultas de exemplo da base SQLite de análise de desempenho |
 
 ## Onde mais procurar
 
